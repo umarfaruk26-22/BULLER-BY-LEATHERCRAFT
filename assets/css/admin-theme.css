@@ -1,0 +1,241 @@
+/* ==========================================================================
+   BULLER LEATHER — EXECUTIVE ADMINISTRATIVE DASHBOARD THEME
+   ========================================================================== */
+
+:root {
+    --admin-sidebar-bg: #140d07;
+    --admin-sidebar-hover: #23160e;
+    --admin-sidebar-active: #2f1d13;
+    --admin-gold: #c5a880;
+    --admin-gold-light: #dfc298;
+    --admin-bg: #f8f6f2;
+    --admin-card-border: #e9e4db;
+    --admin-text: #222222;
+}
+
+body.admin-body {
+    background-color: var(--admin-bg);
+    color: var(--admin-text);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 260px;
+    background-color: var(--admin-sidebar-bg);
+    min-height: 100vh;
+    border-right: 1px solid rgba(197, 168, 128, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar-brand {
+    padding: 1.6rem 1rem 1.4rem;
+    border-bottom: 1px solid rgba(197, 168, 128, 0.18);
+    background: #0d0804;
+    text-align: center;
+}
+
+.admin-sidebar-brand .navbar-brand-logo {
+    display: inline-flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    line-height: 1.1;
+    text-decoration: none !important;
+    padding: 2px 0;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+.admin-sidebar-brand .navbar-brand-logo .brand-main {
+    display: block !important;
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    margin-right: -0.28em; /* Perfectly cancels trailing letter-spacing for dead-center balance */
+    color: var(--admin-gold-light, #dfc298) !important;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+}
+
+.admin-sidebar-brand .navbar-brand-logo:hover .brand-main {
+    color: #ffffff !important;
+}
+
+.admin-sidebar-brand .navbar-brand-logo .brand-sub {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.24em;
+    margin-right: -0.24em; /* Perfectly cancels trailing letter-spacing */
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--admin-gold, #c5a880) !important;
+    margin-top: 4px;
+    white-space: nowrap;
+    opacity: 0.95;
+    text-decoration: none !important;
+}
+
+.admin-sidebar-brand .navbar-brand-logo .brand-sub::before,
+.admin-sidebar-brand .navbar-brand-logo .brand-sub::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+    vertical-align: middle;
+}
+
+.admin-sidebar-brand .admin-role-badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 0.60rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9b49a;
+    background: rgba(197, 168, 128, 0.1);
+    border: 1px solid rgba(197, 168, 128, 0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.admin-nav-link {
+    color: #bbb;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+}
+
+.admin-nav-link:hover {
+    background-color: var(--admin-sidebar-hover);
+    color: #fff;
+    border-left-color: var(--admin-gold);
+}
+
+.admin-nav-link.active {
+    background-color: var(--admin-sidebar-active);
+    color: var(--admin-gold-light);
+    border-left-color: var(--admin-gold);
+    font-weight: 600;
+}
+
+.admin-nav-heading {
+    padding: 1.2rem 1.25rem 0.4rem;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #777;
+    font-weight: 700;
+}
+
+/* Main Content Wrapper */
+.admin-main-wrapper {
+    margin-left: 260px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--admin-card-border);
+    padding: 0.85rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+.admin-content-area {
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+/* KPI Cards */
+.kpi-card {
+    background: #fff;
+    border: 1px solid var(--admin-card-border);
+    padding: 1.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.kpi-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #777;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.kpi-value {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #140d07;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.02em;
+}
+
+/* Consistent, clean modern numerals for administrative tables, badges, amounts */
+.table td, 
+.table th,
+.kpi-card small,
+.badge,
+.order-num,
+.currency-amount {
+    font-variant-numeric: tabular-nums lining-nums;
+}
+
+.kpi-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    .admin-sidebar.show {
+        transform: translateX(0);
+    }
+    .admin-main-wrapper {
+        margin-left: 0;
+    }
+}

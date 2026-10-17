@@ -1,0 +1,15 @@
+{
+    "name": "buller-leather/international-ecommerce",
+    "description": "Buller Leather - International Luxury Leather Goods E-Commerce Platform",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "razorpay/razorpay": "^2.9",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

@@ -1,0 +1,36 @@
+<?php
+/**
+ * BULLER LEATHER — GLOBAL CONFIGURATION
+ */
+
+// Error Reporting
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
+// Base Paths & URLs
+define('APP_NAME', 'Buller Leather');
+define('APP_TAGLINE', 'Generational Leather Craftsmanship & Heritage Luxury');
+define('APP_VERSION', '1.0.0');
+
+// Database Credentials (XAMPP / MySQL)
+define('DB_HOST', 'localhost');
+define('DB_PORT', '3306');
+define('DB_NAME', 'buller_leather_db');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_CHARSET', 'utf8mb4');
+
+// Base URL calculation
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? 80) == 443) ? "https://" : "http://";
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptName = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+$baseUrl = rtrim($protocol . $host . $scriptName, '/');
+define('BASE_URL', $baseUrl);
+
+// Sessions
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Timezone
+date_default_timezone_set('UTC');
