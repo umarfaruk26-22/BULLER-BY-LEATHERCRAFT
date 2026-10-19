@@ -375,9 +375,19 @@ a:hover {
 }
 
 .nav-action-account-dropdown .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
     right: 0 !important;
     left: auto !important;
+    margin-top: 0.5rem !important;
     max-width: 92vw;
+    min-width: 260px;
+}
+
+.nav-action-account-dropdown .dropdown-menu.show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .dropdown-menu-buller {
@@ -1226,6 +1236,107 @@ table td.text-end {
     opacity: 1;
 }
 
+/* Customer Reviews Uniform Equal Box Sizes */
+.patron-review-card {
+    min-height: 310px;
+    height: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    border-radius: 8px;
+    border: 1px solid var(--color-border) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.patron-review-card .review-body-wrapper {
+    min-height: 90px;
+    padding: 0 0.5rem;
+}
+
+/* Cinematic Luxury Hero Banner (Mobile & Desktop) */
+.hero-slider-section {
+    position: relative;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.hero-slider-section .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(18, 11, 6, 0.94) 0%, rgba(18, 11, 6, 0.85) 55%, rgba(18, 11, 6, 0.6) 100%);
+    z-index: 1;
+}
+.hero-slider-section .hero-content {
+    position: relative;
+    z-index: 2;
+}
+.hero-subtitle {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    background: rgba(197, 168, 128, 0.16);
+    border: 1px solid rgba(197, 168, 128, 0.35);
+    border-radius: 50px;
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-gold-bright);
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+}
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+}
+.hero-description {
+    font-size: clamp(0.92rem, 1.8vw, 1.08rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.86);
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+.hero-actions-group .btn {
+    padding: 0.85rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.hero-trust-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(197, 168, 128, 0.25);
+}
+.hero-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+.hero-trust-item .trust-title {
+    display: block;
+    color: #ffffff;
+    font-size: 0.88rem;
+    line-height: 1.2;
+}
+.hero-trust-item .trust-desc {
+    display: block;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.74rem;
+}
+.hero-trust-divider {
+    border-left: 1px solid rgba(197, 168, 128, 0.3);
+    padding-left: 1.5rem;
+}
+
 /* Search Modal Styles */
 .search-modal-input-group {
     transition: var(--transition-smooth);
@@ -1337,6 +1448,68 @@ table td.text-end {
         line-height: 1.6 !important;
     }
 
+    /* Hero Banner Mobile Styling */
+    .hero-slider-section {
+        min-height: auto !important;
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.75rem !important;
+        background-position: 70% center !important;
+    }
+    .hero-slider-section .hero-overlay {
+        background: linear-gradient(180deg, rgba(18, 11, 6, 0.88) 0%, rgba(18, 11, 6, 0.95) 100%) !important;
+    }
+    .hero-title {
+        font-size: clamp(1.85rem, 7.5vw, 2.4rem) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.85rem !important;
+    }
+    .hero-description {
+        font-size: 0.88rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 1.25rem !important;
+    }
+    .hero-actions-group {
+        flex-direction: column !important;
+        width: 100%;
+        gap: 0.65rem !important;
+    }
+    .hero-actions-group .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 0.75rem 1.25rem !important;
+        font-size: 0.9rem !important;
+    }
+    .hero-trust-bar {
+        margin-top: 1.5rem !important;
+        padding-top: 1.25rem !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.6rem !important;
+    }
+    .hero-trust-item {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(197, 168, 128, 0.25);
+        border-radius: 8px;
+        padding: 0.6rem 0.85rem;
+    }
+    .hero-trust-divider {
+        border-left: none !important;
+        padding-left: 0 !important;
+    }
+
+    /* Patron Review Cards Mobile Equal Box */
+    .patron-review-card {
+        min-height: 280px !important;
+        padding: 1.5rem 1.15rem !important;
+    }
+    .patron-review-card .review-body-wrapper {
+        min-height: 95px !important;
+    }
+    .patron-review-card .review-card-title {
+        font-size: 1.08rem !important;
+    }
+
     /* Patron reviews controls on mobile */
     #patronReviewsCarousel .carousel-control-prev,
     #patronReviewsCarousel .carousel-control-next {
@@ -1374,21 +1547,6 @@ table td.text-end {
     .cart-drawer {
         width: 100% !important;
         max-width: 100vw !important;
-    }
-    .hero-slider-section {
-        padding: 3rem 0;
-    }
-    .hero-title {
-        font-size: clamp(1.85rem, 6.5vw, 2.25rem) !important;
-        line-height: 1.2;
-        margin-bottom: 1rem;
-    }
-    .hero-description {
-        font-size: 0.95rem;
-        margin-bottom: 1.5rem;
-    }
-    .hero-trust-bar {
-        gap: 0.75rem !important;
     }
     #mainProductPhoto {
         max-height: 380px !important;

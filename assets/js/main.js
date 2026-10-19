@@ -221,30 +221,43 @@ function initHeaderActionButtons() {
         openCartDrawer();
     });
 
-    // 3. Client Account Dropdown Trigger (fail-safe)
-    document.addEventListener('click', (e) => {
-        const accountBtn = e.target.closest('#bullerAccountBtn, .nav-action-account');
-        if (accountBtn) {
-            e.preventDefault();
-            e.stopPropagation();
-            const dropdownEl = accountBtn.closest('.dropdown');
-            if (!dropdownEl) return;
-            const menu = dropdownEl.querySelector('.dropdown-menu');
+    // 3. Client Account Dropdown Trigger (Rock-solid for both Mobile & Desktop)
+    const initAccountDropdown = () => {
+        document.addEventListener('click', (e) => {
+            const accountBtn = e.target.closest('#bullerAccountBtn, .nav-action-account');
+            if (accountBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const parentDropdown = accountBtn.closest('.nav-action-account-dropdown');
+                if (!parentDropdown) return;
+                const menu = parentDropdown.querySelector('.dropdown-menu');
+                if (!menu) return;
 
-            if (typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
-                const bsDropdown = bootstrap.Dropdown.getOrCreateInstance(accountBtn);
-                bsDropdown.toggle();
-            } else if (menu) {
-                menu.classList.toggle('show');
+                const isShown = menu.classList.contains('show');
+                // Close other open menus
+                document.querySelectorAll('.dropdown-menu.show').forEach(m => {
+                    if (m !== menu) m.classList.remove('show');
+                });
+
+                if (isShown) {
+                    menu.classList.remove('show');
+                    accountBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    menu.classList.add('show');
+                    accountBtn.setAttribute('aria-expanded', 'true');
+                }
+            } else {
+                // Click outside closes any open account dropdown
+                if (!e.target.closest('.nav-action-account-dropdown')) {
+                    const openMenus = document.querySelectorAll('.nav-action-account-dropdown .dropdown-menu.show');
+                    openMenus.forEach(m => m.classList.remove('show'));
+                    const accBtn = document.getElementById('bullerAccountBtn');
+                    if (accBtn) accBtn.setAttribute('aria-expanded', 'false');
+                }
             }
-        } else {
-            // Click outside closes any open account dropdown
-            if (!e.target.closest('.nav-action-account-dropdown')) {
-                const openMenus = document.querySelectorAll('.nav-action-account-dropdown .dropdown-menu.show');
-                openMenus.forEach(m => m.classList.remove('show'));
-            }
-        }
-    });
+        });
+    };
+    initAccountDropdown();
 
     // 4. Keyboard accessibility: Escape closes search or cart
     document.addEventListener('keydown', (e) => {

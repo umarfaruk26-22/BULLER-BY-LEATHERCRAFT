@@ -11,7 +11,7 @@ $activeCountry = MarketContext::getCountry();
 <!-- 1. CINEMATIC LUXURY HERO BANNER -->
 <section class="hero-slider-section" style="background-image: url('<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>');">
     <div class="hero-overlay"></div>
-    <div class="container hero-content py-5">
+    <div class="container hero-content py-4 py-md-5">
         <div class="row align-items-center">
             <div class="col-lg-8 col-xl-7">
                 <span class="hero-subtitle">
@@ -24,7 +24,7 @@ $activeCountry = MarketContext::getCountry();
                 <p class="hero-description">
                     Buller Leather crafts heirloom-grade outerwear, executive luggage, and accessories from the finest European full-grain hides. Every piece is constructed to withstand decades and age with peerless patina.
                 </p>
-                <div class="d-flex flex-wrap gap-3">
+                <div class="hero-actions-group d-flex flex-wrap gap-2 gap-sm-3">
                     <a href="<?= url('shop') ?>" class="btn btn-buller-gold btn-lg">
                         Explore Master Curations <i class="bi bi-arrow-right ms-2"></i>
                     </a>
@@ -33,20 +33,27 @@ $activeCountry = MarketContext::getCountry();
                     </a>
                 </div>
 
-                <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 mt-5 pt-3 hero-trust-bar">
+                <div class="hero-trust-bar mt-4 mt-md-5 pt-3">
                     <div class="hero-trust-item">
-                        <strong class="trust-title"><i class="bi bi-shield-check text-warning"></i> 100% Full-Grain</strong>
-                        <span class="trust-desc">Hand-Selected European Hides</span>
+                        <i class="bi bi-shield-check text-warning fs-5"></i>
+                        <div>
+                            <strong class="trust-title">100% Full-Grain</strong>
+                            <span class="trust-desc">European Hides</span>
+                        </div>
                     </div>
                     <div class="hero-trust-item hero-trust-divider">
-                        <strong class="trust-title"><i class="bi bi-award text-warning"></i> Lifetime Warranty</strong>
-                        <span class="trust-desc">On Hardware & Structural Stitching</span>
+                        <i class="bi bi-award text-warning fs-5"></i>
+                        <div>
+                            <strong class="trust-title">Lifetime Warranty</strong>
+                            <span class="trust-desc">Hardware & Stitching</span>
+                        </div>
                     </div>
                     <div class="hero-trust-item hero-trust-divider">
-                        <strong class="trust-title">
-                            <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?> Localized Market
-                        </strong>
-                        <span class="trust-desc"><?= e($activeCountry['name']) ?> &bull; <?= e($activeCountry['currency_code']) ?> Delivery</span>
+                        <span class="fs-5"><?= country_flag($activeCountry['code'], $activeCountry['name'], 22) ?></span>
+                        <div>
+                            <strong class="trust-title"><?= e($activeCountry['name']) ?> Market</strong>
+                            <span class="trust-desc"><?= e($activeCountry['currency_code']) ?> Delivery</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,19 +197,21 @@ $activeCountry = MarketContext::getCountry();
                     <div class="carousel-item <?= $idx === 0 ? 'active' : '' ?>">
                         <div class="row justify-content-center">
                             <div class="col-lg-8 col-md-10 col-12">
-                                <div class="p-4 p-md-5 bg-white shadow-soft rounded-2 text-center position-relative mx-auto" style="border: 1px solid var(--color-border); max-width: 720px;">
-                                    <div class="text-warning mb-3">
+                                <div class="patron-review-card p-4 p-md-5 bg-white shadow-soft rounded-2 text-center position-relative mx-auto" style="border: 1px solid var(--color-border); max-width: 720px;">
+                                    <div class="text-warning mb-2 mb-md-3">
                                         <?php for ($i = 0; $i < $rev['rating']; $i++): ?>
                                             <i class="bi bi-star-fill me-1"></i>
                                         <?php endfor; ?>
                                     </div>
-                                    <h4 class="font-serif mb-2 mb-md-3" style="font-size: clamp(1.15rem, 2.5vw, 1.35rem); color: var(--color-espresso-deep); font-weight: 700;">
+                                    <h4 class="font-serif mb-2 mb-md-3 review-card-title" style="font-size: clamp(1.1rem, 2.5vw, 1.35rem); color: var(--color-espresso-deep); font-weight: 700;">
                                         "<?= e($rev['review_title']) ?>"
                                     </h4>
-                                    <p class="text-muted mb-4" style="line-height: 1.8; font-size: clamp(0.86rem, 2vw, 0.98rem);">
-                                        <?= e($rev['review_body']) ?>
-                                    </p>
-                                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 pt-3 border-top small text-muted" style="border-color: var(--color-border) !important;">
+                                    <div class="review-body-wrapper flex-grow-1 d-flex align-items-center justify-content-center my-3">
+                                        <p class="text-muted mb-0" style="line-height: 1.75; font-size: clamp(0.86rem, 2vw, 0.98rem);">
+                                            <?= e($rev['review_body']) ?>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 pt-3 border-top small text-muted mt-auto" style="border-color: var(--color-border) !important;">
                                         <i class="bi bi-patch-check-fill text-success"></i>
                                         <strong style="color: var(--color-espresso-deep);"><?= e($rev['user_name']) ?></strong>
                                         <span>&bull; Verified Client (<?= e($rev['country_name']) ?>)</span>

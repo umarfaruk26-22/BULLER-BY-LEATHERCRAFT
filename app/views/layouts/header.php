@@ -83,8 +83,13 @@ $currentUser = Auth::user();
     <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg buller-navbar sticky-top">
         <div class="container-fluid px-xl-5 px-lg-4 px-3 d-flex align-items-center justify-content-between">
+            <!-- Mobile Left Hamburger Toggler (Visible ONLY on mobile/tablet d-lg-none) -->
+            <button class="navbar-toggler border-0 p-1 me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#bullerNavDrawer" aria-controls="bullerNavDrawer" aria-label="Open Navigation Panel">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
             <!-- Brand Logo -->
-            <a class="navbar-brand navbar-brand-logo me-2 me-xl-4 order-1" href="<?= url('') ?>" title="Buller Leather - Return to Storefront">
+            <a class="navbar-brand navbar-brand-logo me-auto me-lg-4" href="<?= url('') ?>" title="Buller Leather - Return to Storefront">
                 <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon">
                 <div class="brand-text-group">
                     <span class="brand-main">BULLER</span>
@@ -92,16 +97,16 @@ $currentUser = Auth::user();
                 </div>
             </a>
 
-            <!-- Action Icons & Mobile Hamburger (Always visible on right side of top bar) -->
+            <!-- Action Icons (Right side of navbar on both mobile and desktop) -->
             <div class="d-flex align-items-center gap-1 gap-xl-2 nav-actions-wrapper ms-auto ms-lg-0 order-2 order-lg-3">
                 <!-- 1. Search Trigger -->
                 <button type="button" id="bullerSearchBtn" class="btn nav-actions-icon nav-action-search" data-bs-toggle="modal" data-bs-target="#searchModal" title="Search Curations" aria-label="Search">
                     <i class="bi bi-search"></i>
                 </button>
 
-                <!-- 2. Account Dropdown (Visible on BOTH mobile and desktop navbar) -->
+                <!-- 2. Account Dropdown (Directly clickable on both mobile and desktop) -->
                 <div class="dropdown nav-action-account-dropdown">
-                    <button type="button" id="bullerAccountBtn" class="btn nav-actions-icon nav-action-account dropdown-toggle-custom" data-bs-toggle="dropdown" aria-expanded="false" title="Client Account" aria-label="Account">
+                    <button type="button" id="bullerAccountBtn" class="btn nav-actions-icon nav-action-account" aria-expanded="false" title="Client Account" aria-label="Account">
                         <i class="bi bi-person"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-buller shadow-lg border-0 p-2" aria-labelledby="bullerAccountBtn" style="min-width: 250px;">
@@ -162,11 +167,6 @@ $currentUser = Auth::user();
                     <span class="badge-counter cart-count-badge" style="display: <?= $cartCount > 0 ? 'flex' : 'none' ?>;">
                         <?= $cartCount ?>
                     </span>
-                </button>
-
-                <!-- 5. Mobile Hamburger Toggler (Triggers Left Drawer Panel) -->
-                <button class="navbar-toggler border-0 p-1 ms-1 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#bullerNavDrawer" aria-controls="bullerNavDrawer" aria-label="Open Navigation Panel">
-                    <i class="bi bi-list fs-2 text-dark"></i>
                 </button>
             </div>
 
