@@ -12,12 +12,14 @@ define('APP_NAME', 'Buller Leather');
 define('APP_TAGLINE', 'Generational Leather Craftsmanship & Heritage Luxury');
 define('APP_VERSION', '1.0.0');
 
-// Database Credentials (XAMPP / MySQL)
+// Database Credentials (XAMPP / MySQL & Live Hostinger)
+$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'nexalogictechno.com') !== false);
+
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
-define('DB_NAME', 'buller_leather_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', $isLive ? 'u121474497_buller' : 'buller_leather_db');
+define('DB_USER', $isLive ? 'u121474497_buller' : 'root');
+define('DB_PASS', $isLive ? 'Umarfaruk#26' : '');
 define('DB_CHARSET', 'utf8mb4');
 
 // Base URL calculation (Supports Hostinger SSL & Cloudflare)
