@@ -4,11 +4,11 @@
 -- Character Set: utf8mb4, Collation: utf8mb4_unicode_ci
 -- =====================================================================
 
-CREATE DATABASE IF NOT EXISTS `buller_leather_db` 
-CHARACTER SET utf8mb4 
-COLLATE utf8mb4_unicode_ci;
+-- CREATE DATABASE IF NOT EXISTS `buller_leather_db` 
+-- CHARACTER SET utf8mb4 
+-- COLLATE utf8mb4_unicode_ci;
 
-USE `buller_leather_db`;
+-- USE `buller_leather_db`;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -355,4 +355,21 @@ CREATE TABLE `system_settings` (
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX `idx_settings_key` (`setting_key`),
     INDEX `idx_settings_group` (`group_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------
+-- 17. CONTACT INQUIRIES
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `contact_inquiries` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `country_code` VARCHAR(10) NOT NULL,
+    `full_name` VARCHAR(150) NOT NULL,
+    `email` VARCHAR(150) NOT NULL,
+    `phone` VARCHAR(50) NULL,
+    `inquiry_type` VARCHAR(100) NOT NULL,
+    `subject` VARCHAR(255) NOT NULL,
+    `message` TEXT NOT NULL,
+    `status` ENUM('new', 'in_progress', 'resolved') DEFAULT 'new',
+    `ip_address` VARCHAR(45) NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

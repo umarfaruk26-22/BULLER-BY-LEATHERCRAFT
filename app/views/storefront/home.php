@@ -54,48 +54,86 @@ $activeCountry = MarketContext::getCountry();
     </div>
 </section>
 
-<!-- 2. SHOP BY CATEGORY -->
-<section class="py-5" style="background-color: var(--color-cream);">
-    <div class="container py-4">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5">
-            <div>
-                <span class="text-uppercase small text-muted" style="letter-spacing: 0.18em;">The Buller Ateliers</span>
-                <h2 class="font-serif mt-1" style="font-size: 2.3rem; color: var(--color-espresso-deep);">Curated Disciplines</h2>
-            </div>
-            <a href="<?= url('shop') ?>" class="text-uppercase fw-semibold small mt-3 mt-md-0" style="color: var(--color-cognac); letter-spacing: 0.1em;">
-                View All Categories <i class="bi bi-arrow-right ms-1"></i>
-            </a>
-        </div>
-
-        <div class="row g-4">
-            <?php foreach ($categories as $cat): ?>
-                <div class="col-lg-4 col-md-6">
-                    <a href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>" class="category-card">
-                        <img src="<?= asset($cat['image_url']) ?>" alt="<?= e($cat['name']) ?>" loading="lazy">
-                        <div class="category-card-overlay">
-                            <h3 class="category-card-title"><?= e($cat['name']) ?></h3>
-                            <p class="small text-light mb-2 text-truncate" style="opacity: 0.85;"><?= e($cat['description']) ?></p>
-                            <span class="category-card-explore">
-                                Discover Atelier <i class="bi bi-arrow-right"></i>
-                            </span>
-                        </div>
-                    </a>
+<!-- 2. SHOP BY CATEGORY (Dropdown & Curated Disciplines — No Photos) -->
+<section class="py-4 py-md-5 category-dropdown-section" style="background-color: var(--color-cream); border-bottom: 1px solid var(--color-border);">
+    <div class="container py-2 py-md-3">
+        <div class="category-dropdown-card p-3 p-md-4 p-lg-5 bg-white border rounded-2 shadow-soft" style="border-color: var(--color-border);">
+            <div class="row align-items-center g-3 g-md-4">
+                <div class="col-lg-5">
+                    <span class="text-uppercase small fw-bold" style="color: var(--color-gold-dark); letter-spacing: 0.18em; font-size: 0.72rem;">The Buller Ateliers</span>
+                    <h2 class="font-serif mt-1 mb-2" style="font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--color-espresso-deep);">Curated Disciplines</h2>
+                    <p class="text-muted small mb-0" style="line-height: 1.6;">Explore heirloom full-grain leather goods categorized by artisanal specialty and leathercraft discipline.</p>
                 </div>
-            <?php endforeach; ?>
+                
+                <div class="col-lg-7">
+                    <!-- Category Dropdown Selector for Desktop & Mobile -->
+                    <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 mb-3">
+                        <div class="dropdown flex-grow-1">
+                            <button class="btn btn-outline-dark dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center py-2 px-3 category-select-btn" type="button" id="categoryDropdownSelector" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--color-gold); background: #ffffff; min-height: 46px;">
+                                <span class="text-truncate"><i class="bi bi-grid me-2 text-warning"></i> Select Atelier Discipline...</span>
+                                <i class="bi bi-chevron-down ms-2 small"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-buller shadow-lg border-0 w-100 py-2" aria-labelledby="categoryDropdownSelector">
+                                <li><a class="dropdown-item py-2 px-3 fw-bold" href="<?= url('shop') ?>"><i class="bi bi-grid-3x3-gap me-2 text-warning"></i> All Curations (Complete Atelier)</a></li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <?php 
+                                $catIcons = [
+                                    'leather-jackets' => 'bi-tag',
+                                    'bags-briefcases' => 'bi-briefcase',
+                                    'wallets-accessories' => 'bi-wallet2',
+                                    'handcrafted-belts' => 'bi-slash-circle',
+                                    'footwear-boots' => 'bi-boot',
+                                    'travel-accessories' => 'bi-compass'
+                                ];
+                                foreach ($categories as $cat): 
+                                    $icon = $catIcons[$cat['slug']] ?? 'bi-box-seam';
+                                ?>
+                                    <li>
+                                        <a class="dropdown-item py-2 px-3 d-flex justify-content-between align-items-center" href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>">
+                                            <span><i class="bi <?= $icon ?> me-2 text-gold"></i> <?= e($cat['name']) ?></span>
+                                            <i class="bi bi-arrow-right small text-muted"></i>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item py-2 px-3 text-danger fw-semibold" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-2 text-warning"></i> Privé Archive Sale</a></li>
+                            </ul>
+                        </div>
+                        <a href="<?= url('shop') ?>" class="btn btn-buller-primary py-2 px-3 text-nowrap d-inline-flex align-items-center justify-content-center gap-1" style="min-height: 46px;">
+                            <span>View All</span> <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Quick-access discipline text pill badges (NO PHOTOS) -->
+                    <div class="d-flex flex-wrap gap-2 pt-1">
+                        <a href="<?= url('shop') ?>" class="category-text-pill"><i class="bi bi-grid-fill me-1 text-warning"></i> All</a>
+                        <?php foreach ($categories as $cat): 
+                            $icon = $catIcons[$cat['slug']] ?? 'bi-box-seam';
+                        ?>
+                            <a href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>" class="category-text-pill">
+                                <i class="bi <?= $icon ?> me-1 text-gold"></i> <?= e($cat['name']) ?>
+                            </a>
+                        <?php endforeach; ?>
+                        <a href="<?= url('shop?filter=sale') ?>" class="category-text-pill text-danger border-danger">
+                            <i class="bi bi-stars me-1 text-danger"></i> Privé Sale
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- 3. ATELIER BESTSELLERS (Consolidated Single Section) -->
-<section class="py-5" id="bestsellers">
-    <div class="container py-4">
-        <div class="text-center max-w-700 mx-auto mb-5">
+<!-- 3. ATELIER BESTSELLERS (Consolidated Single Section, 2-col on Mobile) -->
+<section class="py-4 py-md-5" id="bestsellers">
+    <div class="container py-2 py-md-4">
+        <div class="text-center max-w-700 mx-auto mb-4 mb-md-5">
             <span class="text-uppercase small" style="color: var(--color-cognac); letter-spacing: 0.2em; font-weight: 600;">Client Favorites &bull; Hand-Selected For <?= e($activeCountry['name']) ?></span>
-            <h2 class="font-serif mt-1" style="font-size: 2.5rem; color: var(--color-espresso-deep);">Atelier Bestsellers</h2>
-            <p class="text-muted">Our most revered full-grain creations, chosen by discerning clients worldwide and mastercrafted to endure generations.</p>
+            <h2 class="font-serif mt-1" style="font-size: clamp(1.75rem, 4vw, 2.5rem); color: var(--color-espresso-deep);">Atelier Bestsellers</h2>
+            <p class="text-muted small">Our most revered full-grain creations, chosen by discerning clients worldwide and mastercrafted to endure generations.</p>
         </div>
 
-        <div class="row g-4">
+        <div class="row g-2 g-sm-3 g-md-4">
             <?php foreach ($bestsellerProducts as $p): 
                 $pricing = MarketContext::evaluatePricing(
                     (float)$p['original_price'],
@@ -105,16 +143,16 @@ $activeCountry = MarketContext::getCountry();
                 );
                 $isWishlisted = Wishlist::has((int)$p['id']);
             ?>
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card">
+                <div class="col-6 col-md-6 col-lg-3 mb-2 mb-md-3">
+                    <div class="product-card h-100">
                         <div class="product-image-wrapper">
                             <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
                             
                             <div class="product-badges">
                                 <?php if ($pricing['is_discounted']): ?>
-                                    <span class="badge-luxury badge-sale">-<?= $pricing['discount_percent'] ?>% Privé</span>
+                                    <span class="badge-luxury badge-sale">-<?= $pricing['discount_percent'] ?>%</span>
                                 <?php endif; ?>
-                                <span class="badge-luxury badge-bestseller">Bestseller</span>
+                                <span class="badge-luxury badge-bestseller d-none d-sm-inline-block">Bestseller</span>
                             </div>
 
                             <button class="wishlist-toggle-btn <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $p['id'] ?>" title="Save to Wishlist">
@@ -144,7 +182,7 @@ $activeCountry = MarketContext::getCountry();
             <?php endforeach; ?>
         </div>
 
-        <div class="text-center mt-5">
+        <div class="text-center mt-4 mt-md-5">
             <a href="<?= url('shop') ?>" class="btn btn-buller-primary btn-lg">
                 Explore All Master Curations <i class="bi bi-arrow-right ms-2"></i>
             </a>
@@ -152,45 +190,54 @@ $activeCountry = MarketContext::getCountry();
     </div>
 </section>
 
-<!-- 4. ART OF BULLER CRAFTSMANSHIP (Story & Heritage) -->
-<section class="craftsmanship-section">
-    <div class="container">
-        <div class="row align-items-center g-5">
+<!-- 4. ART OF BULLER CRAFTSMANSHIP (Story & Heritage — Mobile Optimized) -->
+<section class="craftsmanship-section py-4 py-md-5">
+    <div class="container py-2 py-md-3">
+        <div class="row align-items-center g-4 g-lg-5">
             <div class="col-lg-6">
-                <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">The Buller Philosophy</span>
-                <h2 class="font-serif mt-2 mb-4" style="font-size: 2.6rem; color: #fff;">
+                <div class="d-inline-flex align-items-center gap-2 mb-2">
+                    <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Crest" style="height: 20px; width: auto;">
+                    <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">The Buller Philosophy</span>
+                </div>
+                <h2 class="font-serif mt-2 mb-3 mb-md-4" style="font-size: clamp(1.75rem, 4vw, 2.6rem); color: #fff; line-height: 1.2;">
                     Rejecting Obsolescence. <br>
                     <span style="color: var(--color-gold);">Embracing Eternity.</span>
                 </h2>
-                <p class="text-light mb-4" style="line-height: 1.8; opacity: 0.85;">
+                <p class="text-light mb-4" style="line-height: 1.75; opacity: 0.88; font-size: clamp(0.88rem, 2vw, 0.98rem);">
                     In an era saturated by disposable synthetics and bonded leathers, Buller Leather stands as a resolute guardian of traditional craftsmanship. We reject shortcuts, speed tanning, and chrome-based chemicals.
                 </p>
 
                 <div class="craftsmanship-pillar">
                     <div class="pillar-number">01</div>
-                    <h4 class="pillar-title">Full-Grain Vegetable Tanned Hides</h4>
-                    <p class="pillar-desc">Only the unbuffed top layer of the hide is chosen, steeped in natural tree barks and chestnut extracts over 60 days to retain natural grain signatures.</p>
+                    <div class="pillar-content">
+                        <h4 class="pillar-title">Full-Grain Vegetable Tanned Hides</h4>
+                        <p class="pillar-desc">Only the unbuffed top layer of the hide is chosen, steeped in natural tree barks and chestnut extracts over 60 days to retain natural grain signatures.</p>
+                    </div>
                 </div>
 
                 <div class="craftsmanship-pillar">
                     <div class="pillar-number">02</div>
-                    <h4 class="pillar-title">Saddle-Stitched By Master Artisans</h4>
-                    <p class="pillar-desc">Constructed using dual-needle hand saddle stitches and waxed linen threads that will not unravel even if an individual stitch suffers surface abrasion.</p>
+                    <div class="pillar-content">
+                        <h4 class="pillar-title">Saddle-Stitched By Master Artisans</h4>
+                        <p class="pillar-desc">Constructed using dual-needle hand saddle stitches and waxed linen threads that will not unravel even if an individual stitch suffers surface abrasion.</p>
+                    </div>
                 </div>
 
                 <div class="craftsmanship-pillar mb-0">
                     <div class="pillar-number">03</div>
-                    <h4 class="pillar-title">Solid Forged Brass & Japanese Zips</h4>
-                    <p class="pillar-desc">Fitted with sandcast solid brass buckles, hand-burnished rivets, and custom-forged YKK antique brass zippers engineered for millions of cycles.</p>
+                    <div class="pillar-content">
+                        <h4 class="pillar-title">Solid Forged Brass & Japanese Zips</h4>
+                        <p class="pillar-desc">Fitted with sandcast solid brass buckles, hand-burnished rivets, and custom-forged YKK antique brass zippers engineered for millions of cycles.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <div class="position-relative">
-                    <img src="<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>" alt="Buller Leather Atelier Workbench" class="img-fluid shadow-deep rounded-1" style="border: 2px solid var(--color-gold);">
-                    <div class="p-4 bg-dark border position-absolute bottom-0 start-0 m-4 shadow-lg d-none d-md-block" style="border-color: var(--color-gold) !important; max-width: 300px;">
-                        <span class="text-gold font-serif fs-3 fw-bold d-block">100%</span>
-                        <span class="small text-light">Uncompromised European Tannery Provenance</span>
+                <div class="position-relative mt-3 mt-lg-0 text-center">
+                    <img src="<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>" alt="Buller Leather Atelier Workbench" class="img-fluid shadow-deep rounded-1 w-100" style="border: 2px solid var(--color-gold); max-height: 480px; object-fit: cover;">
+                    <div class="p-3 p-sm-4 bg-dark border position-absolute bottom-0 start-0 m-2 m-sm-4 shadow-lg text-start" style="border-color: var(--color-gold) !important; max-width: 280px; background: rgba(18, 11, 6, 0.92) !important; backdrop-filter: blur(8px);">
+                        <span class="text-gold font-serif fs-3 fw-bold d-block" style="line-height: 1;">100%</span>
+                        <span class="small text-light" style="font-size: 0.78rem;">Uncompromised European Tannery Provenance</span>
                     </div>
                 </div>
             </div>
@@ -198,37 +245,59 @@ $activeCountry = MarketContext::getCountry();
     </div>
 </section>
 
-<!-- 4. VERIFIED PATRON REVIEWS -->
-<section class="py-5" style="background-color: var(--color-cream); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
-    <div class="container py-4">
-        <div class="text-center max-w-700 mx-auto mb-5">
+<!-- 5. VERIFIED PATRON REVIEWS (Horizontal Slide Carousel with 5s Delay) -->
+<section class="py-4 py-md-5 patron-reviews-section" style="background-color: var(--color-cream); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container py-2 py-md-4">
+        <div class="text-center max-w-700 mx-auto mb-4 mb-md-5">
             <span class="text-uppercase small" style="color: var(--color-gold-dark); letter-spacing: 0.2em; font-weight: 600;">Worldwide Acclaim</span>
-            <h2 class="font-serif mt-1" style="font-size: 2.3rem; color: var(--color-espresso-deep);">From Our Discerning Patrons</h2>
+            <h2 class="font-serif mt-1" style="font-size: clamp(1.65rem, 4vw, 2.3rem); color: var(--color-espresso-deep);">From Our Discerning Patrons</h2>
+            <p class="text-muted small mb-0">Direct impressions from patrons across our international ateliers.</p>
         </div>
 
-        <div class="row g-4">
-            <?php foreach ($reviews as $rev): ?>
-                <div class="col-md-4">
-                    <div class="p-4 bg-white shadow-soft h-100 d-flex flex-column" style="border: 1px solid var(--color-border);">
-                        <div class="text-warning mb-3">
-                            <?php for ($i = 0; $i < $rev['rating']; $i++): ?>
-                                <i class="bi bi-star-fill"></i>
-                            <?php endfor; ?>
-                        </div>
-                        <h5 class="font-serif mb-2" style="font-size: 1.1rem; color: var(--color-espresso-deep); font-weight: 700;">
-                            "<?= e($rev['review_title']) ?>"
-                        </h5>
-                        <p class="small text-muted mb-4 flex-grow-1" style="line-height: 1.7;">
-                            <?= e($rev['review_body']) ?>
-                        </p>
-                        <div class="d-flex align-items-center gap-2 pt-3 border-top small text-muted">
-                            <i class="bi bi-patch-check-fill text-success"></i>
-                            <strong><?= e($rev['user_name']) ?></strong>
-                            <span>&bull; Verified Client (<?= e($rev['country_name']) ?>)</span>
+        <div id="patronReviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="hover">
+            <div class="carousel-inner">
+                <?php foreach ($reviews as $idx => $rev): ?>
+                    <div class="carousel-item <?= $idx === 0 ? 'active' : '' ?>">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-md-10 col-12">
+                                <div class="p-4 p-md-5 bg-white shadow-soft rounded-2 text-center position-relative mx-auto" style="border: 1px solid var(--color-border); max-width: 720px;">
+                                    <div class="text-warning mb-3">
+                                        <?php for ($i = 0; $i < $rev['rating']; $i++): ?>
+                                            <i class="bi bi-star-fill me-1"></i>
+                                        <?php endfor; ?>
+                                    </div>
+                                    <h4 class="font-serif mb-2 mb-md-3" style="font-size: clamp(1.15rem, 2.5vw, 1.35rem); color: var(--color-espresso-deep); font-weight: 700;">
+                                        "<?= e($rev['review_title']) ?>"
+                                    </h4>
+                                    <p class="text-muted mb-4" style="line-height: 1.8; font-size: clamp(0.86rem, 2vw, 0.98rem);">
+                                        <?= e($rev['review_body']) ?>
+                                    </p>
+                                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 pt-3 border-top small text-muted" style="border-color: var(--color-border) !important;">
+                                        <i class="bi bi-patch-check-fill text-success"></i>
+                                        <strong style="color: var(--color-espresso-deep);"><?= e($rev['user_name']) ?></strong>
+                                        <span>&bull; Verified Client (<?= e($rev['country_name']) ?>)</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Carousel Nav Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#patronReviewsCarousel" data-bs-slide="prev" aria-label="Previous Review">
+                <span class="carousel-nav-btn"><i class="bi bi-chevron-left"></i></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#patronReviewsCarousel" data-bs-slide="next" aria-label="Next Review">
+                <span class="carousel-nav-btn"><i class="bi bi-chevron-right"></i></span>
+            </button>
+
+            <!-- Indicators -->
+            <div class="carousel-indicators position-relative mt-4 mb-0">
+                <?php foreach ($reviews as $idx => $rev): ?>
+                    <button type="button" data-bs-target="#patronReviewsCarousel" data-bs-slide-to="<?= $idx ?>" class="<?= $idx === 0 ? 'active' : '' ?>" aria-current="<?= $idx === 0 ? 'true' : 'false' ?>" aria-label="Review <?= $idx + 1 ?>"></button>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 </section>

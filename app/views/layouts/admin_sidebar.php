@@ -5,8 +5,12 @@ $currentRoute = $_GET['route'] ?? '';
 ?>
 
 <div class="admin-sidebar">
-    <div class="admin-sidebar-brand text-center">
+    <div class="admin-sidebar-brand text-center position-relative">
+        <button type="button" class="btn btn-sm btn-link text-white position-absolute top-0 end-0 m-2 d-lg-none" onclick="document.querySelector('.admin-sidebar').classList.remove('show'); const bd = document.querySelector('.admin-sidebar-backdrop'); if(bd) bd.classList.remove('show');" aria-label="Close Sidebar" style="text-decoration: none; opacity: 0.8;">
+            <i class="bi bi-x-lg fs-5"></i>
+        </button>
         <a href="<?= url('') ?>" class="navbar-brand-logo text-decoration-none" title="Buller Leather - Return to Storefront">
+            <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon-admin">
             <span class="brand-main">BULLER</span>
             <span class="brand-sub">By leathercraft</span>
         </a>

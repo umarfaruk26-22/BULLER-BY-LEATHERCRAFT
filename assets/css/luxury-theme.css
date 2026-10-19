@@ -32,12 +32,20 @@
 }
 
 /* Base Reset & Typography */
+html {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+}
+
 body {
     font-family: var(--font-sans);
     background-color: var(--color-ivory);
     color: var(--color-charcoal);
     line-height: 1.65;
     overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6, .font-serif {
@@ -111,24 +119,46 @@ a:hover {
 
 .navbar-brand-logo {
     display: inline-flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-    text-align: center !important;
-    line-height: 1.1;
-    text-decoration: none;
+    gap: 12px;
+    text-decoration: none !important;
     padding: 2px 0;
     margin: 0;
     vertical-align: middle;
+    transition: var(--transition-smooth);
+}
+
+.navbar-brand-logo .brand-logo-icon {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+    flex-shrink: 0;
+}
+
+.navbar-brand-logo:hover .brand-logo-icon {
+    transform: scale(1.05);
+}
+
+.navbar-brand-logo .brand-text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    line-height: 1.1;
+    text-align: left;
 }
 
 .navbar-brand-logo .brand-main {
     display: block !important;
     font-family: var(--font-brand);
-    font-size: 1.65rem;
+    font-size: 1.55rem;
     font-weight: 700;
-    letter-spacing: 0.28em;
-    margin-right: -0.28em; /* Perfectly cancels trailing letter-spacing for dead-center balance */
+    letter-spacing: 0.26em;
+    margin-right: -0.26em; /* Perfectly cancels trailing letter-spacing for dead-center balance */
     color: var(--color-espresso-deep);
     white-space: nowrap;
     transition: var(--transition-smooth);
@@ -141,45 +171,67 @@ a:hover {
 .navbar-brand-logo .brand-sub {
     display: inline-flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    gap: 7px;
+    justify-content: flex-start !important;
+    gap: 6px;
     font-family: var(--font-sans);
-    font-size: 0.58rem;
-    letter-spacing: 0.24em;
-    margin-right: -0.24em; /* Perfectly cancels trailing letter-spacing */
+    font-size: 0.56rem;
+    letter-spacing: 0.22em;
+    margin-right: -0.22em; /* Perfectly cancels trailing letter-spacing */
     font-weight: 600;
     text-transform: uppercase;
     color: var(--color-gold-dark);
     margin-top: 3px;
     white-space: nowrap;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .navbar-brand-logo .brand-sub::before,
 .navbar-brand-logo .brand-sub::after {
     content: '';
     display: inline-block;
-    width: 12px;
+    width: 10px;
     height: 1px;
     background: currentColor;
     opacity: 0.45;
 }
 
+/* Stacked variant for vertical contexts (e.g. auth cards, footer or modals) */
+.navbar-brand-logo.navbar-brand-logo-stacked {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 6px;
+}
+
+.navbar-brand-logo.navbar-brand-logo-stacked .brand-text-group {
+    align-items: center;
+    text-align: center;
+}
+
+.navbar-brand-logo.navbar-brand-logo-stacked .brand-sub {
+    justify-content: center !important;
+}
+
 @media (max-width: 576px) {
+    .navbar-brand-logo {
+        gap: 8px;
+    }
+    .navbar-brand-logo .brand-logo-icon {
+        height: 32px;
+    }
     .navbar-brand-logo .brand-main {
-        font-size: 1.32rem;
-        letter-spacing: 0.22em;
-        margin-right: -0.22em;
+        font-size: 1.25rem;
+        letter-spacing: 0.2em;
+        margin-right: -0.2em;
     }
     .navbar-brand-logo .brand-sub {
-        font-size: 0.52rem;
-        letter-spacing: 0.18em;
-        margin-right: -0.18em;
-        gap: 5px;
+        font-size: 0.5rem;
+        letter-spacing: 0.16em;
+        margin-right: -0.16em;
+        gap: 4px;
     }
     .navbar-brand-logo .brand-sub::before,
     .navbar-brand-logo .brand-sub::after {
-        width: 8px;
+        width: 7px;
     }
 }
 
@@ -906,6 +958,30 @@ table td.text-end {
     font-size: 0.88rem;
 }
 
+.buller-footer .navbar-brand-logo {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px;
+}
+
+.buller-footer .navbar-brand-logo .brand-logo-icon {
+    height: 44px;
+}
+
+.buller-footer .navbar-brand-logo .brand-main {
+    color: var(--color-gold-bright) !important;
+}
+
+.buller-footer .navbar-brand-logo:hover .brand-main {
+    color: #ffffff !important;
+}
+
+.buller-footer .navbar-brand-logo .brand-sub {
+    color: var(--color-gold) !important;
+}
+
 .buller-footer .text-muted,
 .buller-footer p.text-muted,
 .buller-footer span.text-muted,
@@ -1036,9 +1112,307 @@ table td.text-end {
         font-size: 2.5rem;
     }
     .navbar-collapse {
-        background: #fff;
-        padding: 1.5rem;
-        box-shadow: var(--shadow-medium);
-        margin-top: 1rem;
+        background: #ffffff;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 10px 30px rgba(18, 11, 6, 0.12);
+        margin-top: 0.75rem;
+        border-radius: 4px;
+        border: 1px solid var(--color-border);
+    }
+}
+
+/* Mobile Left Navigation Drawer */
+.buller-mobile-drawer {
+    width: 310px !important;
+    max-width: 84vw !important;
+    border-right: 1px solid var(--color-gold) !important;
+    box-shadow: 10px 0 35px rgba(18, 11, 6, 0.25) !important;
+}
+.mobile-drawer-link {
+    color: var(--color-espresso-deep) !important;
+    transition: var(--transition-smooth);
+    font-size: 0.92rem;
+}
+.mobile-drawer-link:hover, .mobile-drawer-link.active {
+    background-color: var(--color-cream) !important;
+    color: var(--color-cognac) !important;
+}
+
+/* Category Dropdown Console & Text Pills (No Photos) */
+.category-dropdown-card {
+    border-top: 3px solid var(--color-gold) !important;
+}
+.category-select-btn {
+    transition: var(--transition-smooth);
+    color: var(--color-espresso-deep);
+    font-size: 0.9rem;
+}
+.category-select-btn:hover {
+    background-color: var(--color-cream) !important;
+    border-color: var(--color-cognac) !important;
+    color: var(--color-espresso-deep);
+}
+.category-text-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-espresso-deep);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+.category-text-pill:hover {
+    background: var(--color-espresso-deep);
+    color: #ffffff !important;
+    border-color: var(--color-gold);
+    transform: translateY(-1px);
+}
+
+/* Customer Reviews Horizontal Slider Carousel */
+#patronReviewsCarousel .carousel-item {
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+.carousel-nav-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--color-espresso-deep);
+    color: var(--color-gold-bright);
+    border: 1px solid var(--color-gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(18, 11, 6, 0.2);
+}
+.carousel-nav-btn:hover {
+    background: var(--color-cognac);
+    color: #ffffff;
+    transform: scale(1.08);
+}
+#patronReviewsCarousel .carousel-control-prev,
+#patronReviewsCarousel .carousel-control-next {
+    width: 50px;
+    opacity: 0.9;
+}
+#patronReviewsCarousel .carousel-indicators [data-bs-target] {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-gold-dark);
+    opacity: 0.4;
+    border: 0;
+    margin: 0 4px;
+    transition: var(--transition-smooth);
+}
+#patronReviewsCarousel .carousel-indicators .active {
+    width: 22px;
+    border-radius: 8px;
+    background-color: var(--color-cognac);
+    opacity: 1;
+}
+
+/* Search Modal Styles */
+.search-modal-input-group {
+    transition: var(--transition-smooth);
+}
+.buller-search-input {
+    font-size: 1.05rem;
+    color: var(--color-espresso-deep);
+}
+.buller-search-input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Mobile Screens (Tablets & Phones < 768px) */
+@media (max-width: 767.98px) {
+    /* 2-Column Product Grid Optimization */
+    .product-card {
+        border-radius: 4px;
+    }
+    .product-image-wrapper {
+        padding-top: 100% !important; /* Square 1:1 on mobile */
+    }
+    .product-card-body {
+        padding: 0.65rem 0.5rem !important;
+    }
+    .product-leather-type {
+        font-size: 0.62rem !important;
+        margin-bottom: 2px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .product-card-title {
+        font-size: 0.82rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 0.35rem !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.1em;
+    }
+    .product-card-pricing {
+        gap: 0.35rem !important;
+        margin-bottom: 0.5rem !important;
+        flex-wrap: wrap;
+    }
+    .price-current {
+        font-size: 0.88rem !important;
+    }
+    .price-original {
+        font-size: 0.68rem !important;
+    }
+    .btn-quick-add {
+        font-size: 0.68rem !important;
+        padding: 0.35rem 0.4rem !important;
+        border-radius: 3px !important;
+        letter-spacing: 0 !important;
+    }
+    .wishlist-toggle-btn {
+        width: 28px !important;
+        height: 28px !important;
+        top: 6px !important;
+        right: 6px !important;
+        font-size: 0.72rem !important;
+    }
+    .product-badges {
+        top: 6px !important;
+        left: 6px !important;
+        gap: 3px !important;
+    }
+    .badge-luxury {
+        font-size: 0.58rem !important;
+        padding: 2px 5px !important;
+    }
+    .related-prod-img-wrapper {
+        height: 160px !important;
+    }
+
+    /* Philosophy Section on Mobile */
+    .craftsmanship-section {
+        padding: 3rem 0 !important;
+    }
+    .craftsmanship-pillar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 1.25rem;
+    }
+    .pillar-number {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 50%;
+        background: rgba(197, 168, 128, 0.2);
+        color: var(--color-gold-bright);
+        font-size: 0.85rem !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+    .pillar-title {
+        font-size: 0.98rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    .pillar-desc {
+        font-size: 0.82rem !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Patron reviews controls on mobile */
+    #patronReviewsCarousel .carousel-control-prev,
+    #patronReviewsCarousel .carousel-control-next {
+        display: none; /* Mobile uses indicators and touch swipe */
+    }
+
+    /* Contact Country Pills Horizontal Touch Scroll */
+    .contact-country-pills {
+        overflow-x: auto;
+        flex-wrap: nowrap !important;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .contact-country-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 0.82rem;
+    }
+
+    /* Footer Mobile Tweaks */
+    .footer-links-list li {
+        margin-bottom: 0.4rem;
+    }
+    .footer-links-list .footer-link {
+        font-size: 0.82rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-actions-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.05rem;
+    }
+    .cart-drawer {
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+    .hero-slider-section {
+        padding: 3rem 0;
+    }
+    .hero-title {
+        font-size: clamp(1.85rem, 6.5vw, 2.25rem) !important;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    .hero-description {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+    .hero-trust-bar {
+        gap: 0.75rem !important;
+    }
+    #mainProductPhoto {
+        max-height: 380px !important;
+    }
+    .dropdown-menu-buller {
+        max-width: calc(100vw - 20px) !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+    .buller-search-input {
+        font-size: 0.92rem !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .navbar-brand-logo {
+        gap: 6px;
+    }
+    .navbar-brand-logo .brand-logo-icon {
+        height: 28px;
+    }
+    .navbar-brand-logo .brand-main {
+        font-size: 1.15rem;
+        letter-spacing: 0.18em;
+        margin-right: -0.18em;
+    }
+    .navbar-brand-logo .brand-sub {
+        font-size: 0.48rem;
+        letter-spacing: 0.14em;
+        margin-right: -0.14em;
+    }
+    .navbar-brand-logo .brand-sub::before,
+    .navbar-brand-logo .brand-sub::after {
+        width: 5px;
     }
 }

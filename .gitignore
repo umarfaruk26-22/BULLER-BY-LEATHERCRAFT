@@ -16,3 +16,6 @@ error_log
 # Local test / scratch files
 scratch/
 .tempmediaStorage/
+*.zip
+render_icon.html
+test_favicon.html

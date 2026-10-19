@@ -18,20 +18,20 @@ require __DIR__ . '/../layouts/header.php';
 
 <section class="py-5" style="background-color: var(--color-ivory);">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-baseline mb-4 pb-2 border-bottom">
-            <h1 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: 2.2rem;">Saved Atelier Curations</h1>
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-baseline mb-4 pb-2 border-bottom gap-2">
+            <h1 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: clamp(1.5rem, 4vw, 2.2rem);">Saved Atelier Curations</h1>
             <span class="text-muted small d-inline-flex align-items-center gap-1">Viewing prices in <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?> <strong><?= e($activeCountry['name']) ?> (<?= e($activeCountry['currency_code']) ?>)</strong></span>
         </div>
 
         <?php if (empty($products)): ?>
-            <div class="text-center py-5 bg-white border p-5 shadow-soft">
-                <i class="bi bi-heart text-muted" style="font-size: 3.5rem;"></i>
-                <h3 class="font-serif mt-3" style="color: var(--color-espresso-deep);">Your Wishlist Is Empty</h3>
+            <div class="text-center py-5 bg-white border p-4 p-md-5 shadow-soft rounded-2">
+                <i class="bi bi-heart text-muted" style="font-size: 3rem;"></i>
+                <h3 class="font-serif mt-3" style="color: var(--color-espresso-deep); font-size: clamp(1.3rem, 3vw, 1.8rem);">Your Wishlist Is Empty</h3>
                 <p class="text-muted small mb-4">Click the heart icon on any leather piece to save it to your private portfolio.</p>
                 <a href="<?= url('shop') ?>" class="btn btn-buller-primary btn-lg">Explore Master Curations</a>
             </div>
         <?php else: ?>
-            <div class="row g-4">
+            <div class="row g-2 g-sm-3 g-md-4">
                 <?php foreach ($products as $p): 
                     $pricing = MarketContext::evaluatePricing(
                         (float)$p['original_price'],
@@ -40,8 +40,8 @@ require __DIR__ . '/../layouts/header.php';
                         $p['discount_end_date']
                     );
                 ?>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="product-card">
+                    <div class="col-6 col-md-6 col-lg-3 mb-2 mb-md-3">
+                        <div class="product-card h-100">
                             <div class="product-image-wrapper">
                                 <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
                                 <button class="wishlist-toggle-btn active" data-product-id="<?= $p['id'] ?>" title="Remove from Wishlist">

@@ -15,8 +15,13 @@ require __DIR__ . '/../layouts/header.php';
             <div class="col-md-8 col-lg-6">
                 <div class="bg-white border shadow-soft p-4 p-md-5" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
                     <div class="text-center mb-4">
-                        <span class="brand-main d-block fs-3" style="font-family: var(--font-brand); color: var(--color-espresso-deep); letter-spacing: 0.18em; font-weight: 700;">BULLER</span>
-                        <span class="small d-block text-muted" style="letter-spacing: 0.16em; font-weight: 600; font-size: 0.72rem; color: var(--color-gold-dark) !important;">By leathercraft</span>
+                        <a href="<?= url('') ?>" class="navbar-brand-logo navbar-brand-logo-stacked text-decoration-none" title="Buller Leather - Return to Storefront">
+                            <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon mb-2" style="height: 52px;">
+                            <div class="brand-text-group">
+                                <span class="brand-main fs-3">BULLER</span>
+                                <span class="brand-sub">By leathercraft</span>
+                            </div>
+                        </a>
                     </div>
 
                     <?php if (has_flash('register_error')): ?>

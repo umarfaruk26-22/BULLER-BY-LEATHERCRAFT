@@ -11,6 +11,14 @@ $currentRoute = $_GET['route'] ?? '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($pageTitle) ? e($pageTitle) . ' | Buller Admin Portal' : 'Buller Leather | Management Portal' ?></title>
     
+    <!-- Favicon (High-Contrast Medallion) -->
+    <?php
+    $favDiskPath = dirname(__DIR__, 3) . '/assets/images/buller-favicon.svg';
+    $favVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
+    ?>
+    <link rel="icon" type="image/svg+xml" href="<?= asset('assets/images/buller-favicon.svg') ?>?v=<?= $favVer ?>">
+    <link rel="alternate icon" type="image/svg+xml" href="<?= asset('assets/images/buller-favicon.svg') ?>?v=<?= $favVer ?>">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,40 +47,43 @@ $currentRoute = $_GET['route'] ?? '';
 
     <?php require __DIR__ . '/admin_sidebar.php'; ?>
 
+    <div class="admin-sidebar-backdrop d-lg-none" onclick="document.querySelector('.admin-sidebar').classList.remove('show'); this.classList.remove('show');"></div>
+
     <div class="admin-main-wrapper">
         <!-- Topbar -->
         <header class="admin-topbar">
-            <div class="d-flex align-items-center gap-3">
-                <button class="btn btn-outline-dark btn-sm d-lg-none" type="button" onclick="document.querySelector('.admin-sidebar').classList.toggle('show');">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-dark btn-sm d-lg-none p-1 px-2" type="button" onclick="document.querySelector('.admin-sidebar').classList.toggle('show'); document.querySelector('.admin-sidebar-backdrop').classList.toggle('show');" aria-label="Toggle navigation">
                     <i class="bi bi-list fs-5"></i>
                 </button>
-                <h4 class="mb-0 font-serif fs-5 fw-bold" style="color: var(--color-espresso-deep);">
+                <h4 class="mb-0 font-serif fw-bold text-truncate admin-topbar-title" style="color: var(--color-espresso-deep); font-size: 1.05rem; max-width: 140px;">
                     <?= isset($pageTitle) ? e($pageTitle) : 'Atelier Administration' ?>
                 </h4>
             </div>
 
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2 gap-sm-3">
                 <?php if (isset($permittedCountries) && count($permittedCountries) > 1): ?>
                     <!-- Scoped Country Selector -->
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="small text-muted text-nowrap d-none d-sm-inline">Market Scope:</span>
-                        <select class="form-select form-select-sm" style="min-width: 160px;" onchange="switchAdminMarket(this.value)">
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="small text-muted text-nowrap d-none d-md-inline">Market:</span>
+                        <select class="form-select form-select-sm" style="max-width: 120px;" onchange="switchAdminMarket(this.value)">
                             <?php foreach ($permittedCountries as $pc): ?>
                                 <option value="<?= $pc['id'] ?>" <?= (isset($selectedCountryId) && $selectedCountryId == $pc['id']) ? 'selected' : '' ?>>
-                                    [<?= e($pc['code']) ?>] <?= e($pc['name']) ?> (<?= e($pc['currency_code']) ?>)
+                                    <?= e($pc['code']) ?> (<?= e($pc['currency_symbol']) ?>)
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 <?php endif; ?>
 
-                <a href="<?= url('') ?>" target="_blank" class="btn btn-outline-dark btn-sm" title="View Storefront">
-                    <i class="bi bi-eye me-1"></i> <span class="d-none d-md-inline">Preview Storefront</span>
+                <a href="<?= url('') ?>" target="_blank" class="btn btn-outline-dark btn-sm p-1 px-2" title="Preview Storefront">
+                    <i class="bi bi-eye"></i> <span class="d-none d-md-inline ms-1">Storefront</span>
                 </a>
                 
                 <div class="dropdown">
-                    <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle me-1"></i> <?= e(Auth::user()['name']) ?>
+                    <button class="btn btn-dark btn-sm dropdown-toggle d-flex align-items-center gap-1 p-1 px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="<?= e(Auth::user()['name']) ?>">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="d-none d-md-inline text-truncate" style="max-width: 130px;"><?= e(Auth::user()['name']) ?></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 small">
                         <li><span class="dropdown-item-text text-muted"><?= e(Auth::user()['email']) ?></span></li>

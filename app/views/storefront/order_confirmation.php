@@ -12,8 +12,8 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
         <div class="max-w-800 mx-auto">
             <!-- Success Banner -->
             <div class="p-4 p-md-5 bg-white border shadow-soft text-center mb-4" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
-                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background-color: var(--color-cream); color: var(--color-gold-dark);">
-                    <i class="bi bi-patch-check-fill fs-1"></i>
+                <div class="mb-3">
+                    <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Atelier Crest" style="height: 62px; width: auto;">
                 </div>
                 <h1 class="font-serif mb-2" style="font-size: 2.3rem; color: var(--color-espresso-deep);">Thank You For Your Patronage</h1>
                 <p class="text-muted mb-3">Your order has been officially registered with the Buller Leather Atelier.</p>

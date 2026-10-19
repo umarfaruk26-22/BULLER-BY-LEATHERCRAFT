@@ -12,13 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['success' => false, 'message' => 'Method not allowed.'], 405);
 }
 
-// Check if logged-in customer is attempting to switch market
-if (Auth::isCountryLocked()) {
-    $active = MarketContext::getCountry();
+// Market switching is strictly prohibited after registration
+if (!Auth::isSuperAdmin()) {
     json_response([
         'success' => false,
         'locked' => true,
-        'message' => 'Your regional market is fixed to your registered country (' . $active['name'] . ') to maintain accurate localized pricing and tax calculation.'
+        'message' => 'Regional market switching is disabled. Country is permanently bound upon VIP registration.'
     ], 403);
 }
 

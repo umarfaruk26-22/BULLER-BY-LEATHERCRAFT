@@ -135,10 +135,10 @@ require __DIR__ . '/../layouts/header.php';
 ?>
 
 <!-- Contact Hero Section -->
-<section class="position-relative py-5 overflow-hidden" style="background: linear-gradient(135deg, var(--color-espresso-deep) 0%, var(--color-espresso) 100%); color: var(--color-ivory);">
+<section class="position-relative py-4 py-md-5 overflow-hidden" style="background: linear-gradient(135deg, var(--color-espresso-deep) 0%, var(--color-espresso) 100%); color: var(--color-ivory);">
     <div class="position-absolute top-0 start-0 w-100 h-100 opacity-20" style="background-image: radial-gradient(var(--color-gold) 1px, transparent 1px); background-size: 28px 28px;"></div>
     
-    <div class="container position-relative py-4">
+    <div class="container position-relative py-2 py-md-4">
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="<?= url('') ?>" class="text-decoration-none text-gold-bright small"><i class="bi bi-house-door me-1"></i> Home</a></li>
@@ -146,26 +146,26 @@ require __DIR__ . '/../layouts/header.php';
             </ol>
         </nav>
 
-        <div class="row align-items-center g-4">
+        <div class="row align-items-center g-3 g-md-4">
             <div class="col-lg-8">
-                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill" style="background: rgba(197, 168, 128, 0.15); border: 1px solid rgba(197, 168, 128, 0.35);">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-2 mb-md-3 rounded-pill" style="background: rgba(197, 168, 128, 0.15); border: 1px solid rgba(197, 168, 128, 0.35);">
                     <i class="bi bi-compass text-warning" style="font-size: 0.85rem;"></i>
-                    <span class="text-uppercase fw-semibold" style="letter-spacing: 0.22em; font-size: 0.72rem; color: var(--color-gold-bright);">GLOBAL CONCIERGE NETWORK</span>
+                    <span class="text-uppercase fw-semibold" style="letter-spacing: 0.22em; font-size: 0.68rem; color: var(--color-gold-bright);">GLOBAL CONCIERGE NETWORK</span>
                 </div>
-                <h1 class="display-5 font-serif fw-bold mb-3" style="letter-spacing: 0.02em; line-height: 1.2; color: #ffffff;">
+                <h1 class="font-serif fw-bold mb-2 mb-md-3" style="letter-spacing: 0.02em; line-height: 1.2; color: #ffffff; font-size: clamp(1.75rem, 5vw, 2.8rem);">
                     Connect With Our <br><span style="color: var(--color-gold-bright); font-style: italic;">Regional Ateliers</span>
                 </h1>
-                <p class="lead text-light mb-0" style="line-height: 1.8; opacity: 0.9; max-width: 650px; font-size: 1.05rem;">
+                <p class="lead text-light mb-0" style="line-height: 1.7; opacity: 0.9; max-width: 650px; font-size: clamp(0.9rem, 2vw, 1.05rem);">
                     Whether commissioning a bespoke leather garment, arranging an executive gifting order, or requesting private salon access, our regional client directors stand at your service.
                 </p>
             </div>
-            <div class="col-lg-4 text-lg-end">
-                <div class="p-3 rounded-2 text-start d-inline-block" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(197, 168, 128, 0.25); min-width: 260px;">
-                    <div class="small text-gold fw-semibold mb-1" style="letter-spacing: 0.1em; font-size: 0.72rem; text-transform: uppercase;">
+            <div class="col-lg-4 text-start text-lg-end mt-3 mt-lg-0">
+                <div class="p-3 rounded-2 text-start d-inline-block w-100" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(197, 168, 128, 0.25); max-width: 320px;">
+                    <div class="small text-gold fw-semibold mb-1" style="letter-spacing: 0.1em; font-size: 0.7rem; text-transform: uppercase;">
                         <i class="bi bi-clock-history me-1"></i> Global Response Promise
                     </div>
                     <div class="fw-bold text-white fs-6">Under 4 Business Hours</div>
-                    <div class="small text-light-50 mt-1" style="font-size: 0.76rem;">Dedicated senior concierge attention with zero automated bot queues.</div>
+                    <div class="small text-light-50 mt-1" style="font-size: 0.74rem;">Dedicated senior concierge attention with zero automated bot queues.</div>
                 </div>
             </div>
         </div>
@@ -173,11 +173,11 @@ require __DIR__ . '/../layouts/header.php';
 </section>
 
 <!-- Country Tabs Selector Bar -->
-<section class="py-3 border-bottom sticky-top-country" style="background-color: var(--color-cream); border-color: var(--color-border) !important;">
+<section class="py-2 py-md-3 border-bottom sticky-top-country" style="background-color: var(--color-cream); border-color: var(--color-border) !important;">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 gap-md-3">
             <div class="d-flex align-items-center gap-2">
-                <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 0.15em; font-size: 0.75rem;">
+                <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 0.12em; font-size: 0.72rem;">
                     Select Regional Atelier:
                 </span>
             </div>
@@ -186,10 +186,10 @@ require __DIR__ . '/../layouts/header.php';
             <div class="nav nav-pills contact-country-pills d-flex flex-wrap gap-2" id="countryPills">
                 <?php foreach ($regionalAteliers as $code => $at): ?>
                     <button type="button" 
-                            class="btn contact-country-btn <?= ($code === $selectedCountryCode) ? 'active' : '' ?>" 
+                            class="btn contact-country-btn py-1 py-sm-2 px-2 px-sm-3 <?= ($code === $selectedCountryCode) ? 'active' : '' ?>" 
                             data-country="<?= $code ?>"
                             onclick="switchContactCountry('<?= $code ?>')">
-                        <img src="<?= asset('assets/images/flags/' . $at['flag'] . '.png') ?>" alt="<?= $at['name'] ?>" width="20" height="15" class="rounded-1 shadow-xs me-2">
+                        <img src="<?= asset('assets/images/flags/' . $at['flag'] . '.png') ?>" alt="<?= $at['name'] ?>" width="18" height="13" class="rounded-1 shadow-xs me-1 me-sm-2">
                         <span class="country-name"><?= $at['name'] ?></span>
                         <span class="country-city text-muted small ms-1">(<?= $at['city'] ?>)</span>
                     </button>
@@ -200,37 +200,37 @@ require __DIR__ . '/../layouts/header.php';
 </section>
 
 <!-- Main Contact Area: Atelier Details & Localized Form -->
-<section class="py-5" style="background-color: var(--color-ivory);">
-    <div class="container py-3">
+<section class="py-4 py-md-5" style="background-color: var(--color-ivory);">
+    <div class="container py-2 py-md-3">
 
         <!-- Flash Message Banners -->
         <?php if (has_flash('contact_success')): ?>
-            <div class="alert alert-success border-0 shadow-soft p-4 mb-5 rounded-2 d-flex align-items-start gap-3" id="inquiryConfirmed" style="background-color: #f0fdf4; border-left: 4px solid #16a34a !important;">
-                <i class="bi bi-check-circle-fill text-success fs-3 mt-1"></i>
+            <div class="alert alert-success border-0 shadow-soft p-3 p-md-4 mb-4 mb-md-5 rounded-2 d-flex align-items-start gap-3" id="inquiryConfirmed" style="background-color: #f0fdf4; border-left: 4px solid #16a34a !important;">
+                <i class="bi bi-check-circle-fill text-success fs-4 mt-1"></i>
                 <div>
-                    <h5 class="fw-bold text-success mb-1 font-serif">Inquiry Registered With Regional Atelier</h5>
-                    <p class="text-dark mb-0" style="line-height: 1.6;"><?= flash('contact_success') ?></p>
+                    <h5 class="fw-bold text-success mb-1 font-serif" style="font-size: 1.1rem;">Inquiry Registered With Regional Atelier</h5>
+                    <p class="text-dark mb-0 small" style="line-height: 1.6;"><?= flash('contact_success') ?></p>
                 </div>
             </div>
         <?php endif; ?>
 
         <?php if (has_flash('contact_error')): ?>
-            <div class="alert alert-danger border-0 shadow-soft p-4 mb-5 rounded-2 d-flex align-items-start gap-3" style="background-color: #fef2f2; border-left: 4px solid #dc2626 !important;">
-                <i class="bi bi-exclamation-triangle-fill text-danger fs-3 mt-1"></i>
+            <div class="alert alert-danger border-0 shadow-soft p-3 p-md-4 mb-4 mb-md-5 rounded-2 d-flex align-items-start gap-3" style="background-color: #fef2f2; border-left: 4px solid #dc2626 !important;">
+                <i class="bi bi-exclamation-triangle-fill text-danger fs-4 mt-1"></i>
                 <div>
-                    <h5 class="fw-bold text-danger mb-1 font-serif">Submission Notice</h5>
-                    <p class="text-dark mb-0"><?= flash('contact_error') ?></p>
+                    <h5 class="fw-bold text-danger mb-1 font-serif" style="font-size: 1.1rem;">Submission Notice</h5>
+                    <p class="text-dark mb-0 small"><?= flash('contact_error') ?></p>
                 </div>
             </div>
         <?php endif; ?>
 
-        <div class="row g-5">
+        <div class="row g-4 g-lg-5">
             <!-- Left Column: Country-Specific Atelier Profile -->
             <div class="col-lg-5">
-                <div class="atelier-info-card bg-white p-4 p-md-5 border shadow-soft rounded-2 position-relative" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
+                <div class="atelier-info-card bg-white p-3 p-sm-4 p-md-5 border shadow-soft rounded-2 position-relative" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
                     
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="badge px-3 py-2 text-uppercase fw-semibold" id="atelierBadge" style="background: rgba(140, 74, 47, 0.1); color: var(--color-cognac); letter-spacing: 0.15em; font-size: 0.7rem;">
+                        <span class="badge px-2 px-sm-3 py-2 text-uppercase fw-semibold" id="atelierBadge" style="background: rgba(140, 74, 47, 0.1); color: var(--color-cognac); letter-spacing: 0.12em; font-size: 0.68rem;">
                             <?= e($currentAtelier['badge']) ?>
                         </span>
                         <img id="atelierFlagImg" src="<?= asset('assets/images/flags/' . $currentAtelier['flag'] . '.png') ?>" alt="Flag" width="28" height="20" class="rounded shadow-xs">
@@ -338,28 +338,28 @@ require __DIR__ . '/../layouts/header.php';
 
             <!-- Right Column: Regional Contact Form -->
             <div class="col-lg-7">
-                <div class="bg-white p-4 p-md-5 border shadow-soft rounded-2" style="border-color: var(--color-border);">
+                <div class="bg-white p-3 p-sm-4 p-md-5 border shadow-soft rounded-2" style="border-color: var(--color-border);">
                     
                     <!-- Destination Atelier Indicator -->
-                    <div class="p-3 mb-4 rounded-1 d-flex align-items-center justify-content-between" style="background-color: var(--color-cream); border-left: 3px solid var(--color-cognac);">
+                    <div class="p-3 mb-4 rounded-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2" style="background-color: var(--color-cream); border-left: 3px solid var(--color-cognac);">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-envelope-paper-heart text-gold fs-4"></i>
                             <div>
                                 <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Direct Dispatch Destination</span>
-                                <strong class="text-dark font-serif" id="formDestinationNotice">
+                                <strong class="text-dark font-serif" id="formDestinationNotice" style="font-size: clamp(0.88rem, 2vw, 1rem);">
                                     <?= e($currentAtelier['name']) ?> Atelier (<?= e($currentAtelier['city']) ?>) Desk
                                 </strong>
                             </div>
                         </div>
-                        <span class="badge text-uppercase bg-dark" id="formCountryBadge" style="letter-spacing: 0.1em;">
+                        <span class="badge text-uppercase bg-dark align-self-start align-self-sm-center" id="formCountryBadge" style="letter-spacing: 0.1em; font-size: 0.68rem;">
                             <?= e($currentAtelier['code']) ?> ATELIER
                         </span>
                     </div>
 
-                    <h2 class="font-serif fw-bold mb-2" style="color: var(--color-espresso-deep); font-size: 1.85rem;">
+                    <h2 class="font-serif fw-bold mb-2" style="color: var(--color-espresso-deep); font-size: clamp(1.4rem, 3.5vw, 1.85rem);">
                         Direct Atelier Dispatch
                     </h2>
-                    <p class="text-muted small mb-4">
+                    <p class="text-muted small mb-4" style="font-size: 0.82rem; line-height: 1.6;">
                         Please provide your contact particulars below. Your inquiry is routed directly to the regional mastercraft desk and assigned to a dedicated client specialist.
                     </p>
 

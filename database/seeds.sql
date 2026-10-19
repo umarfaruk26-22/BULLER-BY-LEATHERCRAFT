@@ -3,7 +3,7 @@
 -- Default Markets, Super Admin, Country Admins, Categories, Products & Pricing
 -- =====================================================================
 
-USE `buller_leather_db`;
+-- USE `buller_leather_db`;
 
 -- ---------------------------------------------------------------------
 -- 1. COUNTRIES

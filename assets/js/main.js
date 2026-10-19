@@ -8,7 +8,20 @@ document.addEventListener('DOMContentLoaded', () => {
     initWishlistEvents();
     initNavbarScroll();
     initHeaderActionButtons();
+    initReviewsCarousel();
 });
+
+// Patron Reviews Carousel Auto-play (5000ms delay)
+function initReviewsCarousel() {
+    const carouselEl = document.getElementById('patronReviewsCarousel');
+    if (!carouselEl || typeof bootstrap === 'undefined' || !bootstrap.Carousel) return;
+    new bootstrap.Carousel(carouselEl, {
+        interval: 5000,
+        ride: 'carousel',
+        pause: 'hover',
+        touch: true
+    });
+}
 
 // Navbar scroll shadow
 function initNavbarScroll() {

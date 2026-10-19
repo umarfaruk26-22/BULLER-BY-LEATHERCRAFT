@@ -669,7 +669,7 @@ require __DIR__ . '/../layouts/header.php';
                     <h2 class="font-serif mt-1" style="color: var(--color-espresso-deep); font-size: 2.2rem;">You May Also Admire</h2>
                 </div>
 
-                <div class="row g-4">
+                <div class="row g-2 g-sm-3 g-md-4">
                     <?php foreach ($relatedProducts as $rel): 
                         $relPrice = MarketContext::evaluatePricing(
                             (float)$rel['original_price'],
@@ -678,9 +678,9 @@ require __DIR__ . '/../layouts/header.php';
                             $rel['discount_end_date']
                         );
                     ?>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="product-card h-100 bg-white border p-3 shadow-soft d-flex flex-column justify-content-between" style="border-color: var(--color-border);">
-                                <div class="position-relative mb-3 overflow-hidden" style="height: 260px;">
+                        <div class="col-6 col-md-6 col-lg-3 mb-2 mb-md-3">
+                            <div class="product-card h-100 bg-white border p-2 p-sm-3 shadow-soft d-flex flex-column justify-content-between" style="border-color: var(--color-border);">
+                                <div class="position-relative mb-2 mb-sm-3 overflow-hidden related-prod-img-wrapper">
                                     <a href="<?= url('product?slug=' . urlencode($rel['slug'])) ?>">
                                         <img src="<?= asset($rel['primary_image']) ?>" alt="<?= e($rel['title']) ?>" class="w-100 h-100" style="object-fit: cover; transition: transform 0.4s ease;">
                                     </a>
@@ -691,27 +691,27 @@ require __DIR__ . '/../layouts/header.php';
                                     <?php endif; ?>
                                 </div>
 
-                                <div>
-                                    <span class="text-muted small text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.1em;"><?= e($rel['category_name']) ?></span>
-                                    <h5 class="font-serif mt-1 mb-2" style="font-size: 1.1rem; line-height: 1.3;">
+                                <div class="flex-grow-1">
+                                    <span class="text-muted small text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.08em;"><?= e($rel['category_name']) ?></span>
+                                    <h5 class="font-serif mt-1 mb-2" style="font-size: clamp(0.88rem, 2vw, 1.05rem); line-height: 1.3;">
                                         <a href="<?= url('product?slug=' . urlencode($rel['slug'])) ?>" class="text-decoration-none" style="color: var(--color-espresso-deep);">
                                             <?= e($rel['title']) ?>
                                         </a>
                                     </h5>
                                 </div>
 
-                                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mt-2 pt-2 border-top gap-1">
                                     <div>
-                                        <strong class="font-serif fs-6" style="color: var(--color-espresso-deep);">
+                                        <strong class="font-serif" style="color: var(--color-espresso-deep); font-size: clamp(0.85rem, 2vw, 1rem);">
                                             <?= $relPrice['formatted_final'] ?>
                                         </strong>
                                         <?php if ($relPrice['is_discounted']): ?>
-                                            <small class="text-muted text-decoration-line-through d-block" style="font-size: 0.75rem;">
+                                            <small class="text-muted text-decoration-line-through d-block" style="font-size: 0.72rem;">
                                                 <?= $relPrice['formatted_original'] ?>
                                             </small>
                                         <?php endif; ?>
                                     </div>
-                                    <a href="<?= url('product?slug=' . urlencode($rel['slug'])) ?>" class="btn btn-outline-dark btn-sm py-1 px-3">
+                                    <a href="<?= url('product?slug=' . urlencode($rel['slug'])) ?>" class="btn btn-outline-dark btn-sm py-1 px-2 px-sm-3 w-100 w-sm-auto mt-1 mt-sm-0" style="font-size: 0.72rem;">
                                         View Piece
                                     </a>
                                 </div>
