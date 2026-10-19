@@ -53,18 +53,8 @@ $activeCountry = MarketContext::getCountry();
                     </ul>
                 </div>
 
-                <!-- Global Market & Newsletter -->
-                <div class="col-12 col-lg-4 col-md-6">
-                    <h6 class="footer-heading">Atelier Privé Gazette</h6>
-                    <p class="mb-3 text-light-50" style="font-size: 0.85rem; line-height: 1.6; opacity: 0.85;">
-                        Receive private previews of limited-batch artisan releases and leathercraft journal insights.
-                    </p>
-                    <form onsubmit="event.preventDefault(); showToast('Subscribed', 'Thank you for joining the Buller Leather Gazette.');" class="mb-4">
-                        <div class="input-group">
-                            <input type="email" class="form-control newsletter-input" placeholder="Your executive email address" required style="font-size: 0.85rem;">
-                            <button class="btn btn-buller-gold px-3" type="submit" style="font-size: 0.78rem;">Join</button>
-                        </div>
-                    </form>
+                <!-- Regional Market Information -->
+                <div class="col-12 col-lg-4 col-md-12">
 
                     <div class="footer-market-box p-3 rounded" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(197, 168, 128, 0.25);">
                         <div class="d-flex justify-content-between align-items-center">
