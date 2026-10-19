@@ -1165,11 +1165,20 @@ table td.text-end {
     text-decoration: none;
     transition: var(--transition-smooth);
 }
-.category-text-pill:hover {
+.category-text-pill:hover,
+.category-text-pill.active {
     background: var(--color-espresso-deep);
     color: #ffffff !important;
     border-color: var(--color-gold);
     transform: translateY(-1px);
+}
+.category-text-pill.active i {
+    color: var(--color-gold) !important;
+}
+.category-text-pill.border-danger.active {
+    background: #dc3545 !important;
+    color: #ffffff !important;
+    border-color: #dc3545 !important;
 }
 
 /* Customer Reviews Horizontal Slider Carousel */

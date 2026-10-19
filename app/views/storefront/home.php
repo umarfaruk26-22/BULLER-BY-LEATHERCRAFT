@@ -54,77 +54,7 @@ $activeCountry = MarketContext::getCountry();
     </div>
 </section>
 
-<!-- 2. SHOP BY CATEGORY (Dropdown & Curated Disciplines — No Photos) -->
-<section class="py-4 py-md-5 category-dropdown-section" style="background-color: var(--color-cream); border-bottom: 1px solid var(--color-border);">
-    <div class="container py-2 py-md-3">
-        <div class="category-dropdown-card p-3 p-md-4 p-lg-5 bg-white border rounded-2 shadow-soft" style="border-color: var(--color-border);">
-            <div class="row align-items-center g-3 g-md-4">
-                <div class="col-lg-5">
-                    <span class="text-uppercase small fw-bold" style="color: var(--color-gold-dark); letter-spacing: 0.18em; font-size: 0.72rem;">The Buller Ateliers</span>
-                    <h2 class="font-serif mt-1 mb-2" style="font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--color-espresso-deep);">Curated Disciplines</h2>
-                    <p class="text-muted small mb-0" style="line-height: 1.6;">Explore heirloom full-grain leather goods categorized by artisanal specialty and leathercraft discipline.</p>
-                </div>
-                
-                <div class="col-lg-7">
-                    <!-- Category Dropdown Selector for Desktop & Mobile -->
-                    <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 mb-3">
-                        <div class="dropdown flex-grow-1">
-                            <button class="btn btn-outline-dark dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center py-2 px-3 category-select-btn" type="button" id="categoryDropdownSelector" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--color-gold); background: #ffffff; min-height: 46px;">
-                                <span class="text-truncate"><i class="bi bi-grid me-2 text-warning"></i> Select Atelier Discipline...</span>
-                                <i class="bi bi-chevron-down ms-2 small"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-buller shadow-lg border-0 w-100 py-2" aria-labelledby="categoryDropdownSelector">
-                                <li><a class="dropdown-item py-2 px-3 fw-bold" href="<?= url('shop') ?>"><i class="bi bi-grid-3x3-gap me-2 text-warning"></i> All Curations (Complete Atelier)</a></li>
-                                <li><hr class="dropdown-divider my-1"></li>
-                                <?php 
-                                $catIcons = [
-                                    'leather-jackets' => 'bi-tag',
-                                    'bags-briefcases' => 'bi-briefcase',
-                                    'wallets-accessories' => 'bi-wallet2',
-                                    'handcrafted-belts' => 'bi-slash-circle',
-                                    'footwear-boots' => 'bi-boot',
-                                    'travel-accessories' => 'bi-compass'
-                                ];
-                                foreach ($categories as $cat): 
-                                    $icon = $catIcons[$cat['slug']] ?? 'bi-box-seam';
-                                ?>
-                                    <li>
-                                        <a class="dropdown-item py-2 px-3 d-flex justify-content-between align-items-center" href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>">
-                                            <span><i class="bi <?= $icon ?> me-2 text-gold"></i> <?= e($cat['name']) ?></span>
-                                            <i class="bi bi-arrow-right small text-muted"></i>
-                                        </a>
-                                    </li>
-                                <?php endforeach; ?>
-                                <li><hr class="dropdown-divider my-1"></li>
-                                <li><a class="dropdown-item py-2 px-3 text-danger fw-semibold" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-2 text-warning"></i> Privé Archive Sale</a></li>
-                            </ul>
-                        </div>
-                        <a href="<?= url('shop') ?>" class="btn btn-buller-primary py-2 px-3 text-nowrap d-inline-flex align-items-center justify-content-center gap-1" style="min-height: 46px;">
-                            <span>View All</span> <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-
-                    <!-- Quick-access discipline text pill badges (NO PHOTOS) -->
-                    <div class="d-flex flex-wrap gap-2 pt-1">
-                        <a href="<?= url('shop') ?>" class="category-text-pill"><i class="bi bi-grid-fill me-1 text-warning"></i> All</a>
-                        <?php foreach ($categories as $cat): 
-                            $icon = $catIcons[$cat['slug']] ?? 'bi-box-seam';
-                        ?>
-                            <a href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>" class="category-text-pill">
-                                <i class="bi <?= $icon ?> me-1 text-gold"></i> <?= e($cat['name']) ?>
-                            </a>
-                        <?php endforeach; ?>
-                        <a href="<?= url('shop?filter=sale') ?>" class="category-text-pill text-danger border-danger">
-                            <i class="bi bi-stars me-1 text-danger"></i> Privé Sale
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 3. ATELIER BESTSELLERS (Consolidated Single Section, 2-col on Mobile) -->
+<!-- 2. ATELIER BESTSELLERS (Consolidated Single Section, 2-col on Mobile) -->
 <section class="py-4 py-md-5" id="bestsellers">
     <div class="container py-2 py-md-4">
         <div class="text-center max-w-700 mx-auto mb-4 mb-md-5">

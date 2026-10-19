@@ -41,8 +41,83 @@ $activeCountry = MarketContext::getCountry();
 </div>
 
 <!-- Shop Main Content -->
-<section class="py-5" style="background-color: var(--color-ivory);">
+<section class="py-4 py-md-5" style="background-color: var(--color-ivory);">
     <div class="container">
+        <!-- Top Categories Console (Dropdown & Quick Badges) -->
+        <div class="category-dropdown-card p-3 p-md-4 bg-white border rounded-2 shadow-soft mb-4" style="border-color: var(--color-border);">
+            <div class="row align-items-center g-3">
+                <div class="col-lg-3 col-md-4">
+                    <h2 class="font-serif mb-0 text-dark" style="font-size: clamp(1.35rem, 2.5vw, 1.7rem); color: var(--color-espresso-deep); font-weight: 700;">Categories</h2>
+                </div>
+                
+                <div class="col-lg-9 col-md-8">
+                    <!-- Dropdown & View All -->
+                    <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 mb-2 mb-sm-3">
+                        <div class="dropdown flex-grow-1">
+                            <button class="btn btn-outline-dark dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center py-2 px-3 category-select-btn" type="button" id="categoryDropdownSelector" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--color-gold); background: #ffffff; min-height: 44px;">
+                                <span class="text-truncate">
+                                    <i class="bi bi-grid me-2 text-warning"></i> 
+                                    <?= isset($activeCategory) ? e($activeCategory['name']) : 'Select Category...' ?>
+                                </span>
+                                <i class="bi bi-chevron-down ms-2 small"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-buller shadow-lg border-0 w-100 py-2" aria-labelledby="categoryDropdownSelector">
+                                <li>
+                                    <a class="dropdown-item py-2 px-3 <?= (!isset($_GET['category']) && empty($_GET['filter'])) ? 'active fw-bold' : '' ?>" href="<?= url('shop') ?>">
+                                        <i class="bi bi-grid-3x3-gap me-2 text-warning"></i> All Categories
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <?php 
+                                $catIcons = [
+                                    'leather-jackets' => 'bi-tag',
+                                    'bags-briefcases' => 'bi-briefcase',
+                                    'wallets-accessories' => 'bi-wallet2',
+                                    'handcrafted-belts' => 'bi-slash-circle',
+                                    'footwear-boots' => 'bi-boot',
+                                    'travel-accessories' => 'bi-compass'
+                                ];
+                                foreach ($categories as $cat): 
+                                    $icon = $catIcons[$cat['slug']] ?? 'bi-box-seam';
+                                    $isActiveCat = (($_GET['category'] ?? '') === $cat['slug']);
+                                ?>
+                                    <li>
+                                        <a class="dropdown-item py-2 px-3 d-flex justify-content-between align-items-center <?= $isActiveCat ? 'active fw-bold' : '' ?>" href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>">
+                                            <span><i class="bi <?= $icon ?> me-2 text-gold"></i> <?= e($cat['name']) ?></span>
+                                            <i class="bi bi-arrow-right small text-muted"></i>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><a class="dropdown-item py-2 px-3 text-danger fw-semibold <?= (($_GET['filter'] ?? '') === 'sale') ? 'active' : '' ?>" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-2 text-warning"></i> Sale</a></li>
+                            </ul>
+                        </div>
+                        <a href="<?= url('shop') ?>" class="btn btn-buller-primary py-2 px-3 text-nowrap d-inline-flex align-items-center justify-content-center gap-1" style="min-height: 44px;">
+                            <span>View All</span> <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Category Quick Text Pills -->
+                    <div class="d-flex flex-wrap gap-2 pt-1">
+                        <a href="<?= url('shop') ?>" class="category-text-pill <?= (!isset($_GET['category']) && empty($_GET['filter'])) ? 'active' : '' ?>">
+                            <i class="bi bi-grid-fill me-1 text-warning"></i> All
+                        </a>
+                        <?php foreach ($categories as $cat): 
+                            $icon = $catIcons[$cat['slug']] ?? 'bi-box-seam';
+                            $isActive = (($_GET['category'] ?? '') === $cat['slug']);
+                        ?>
+                            <a href="<?= url('shop?category=' . urlencode($cat['slug'])) ?>" class="category-text-pill <?= $isActive ? 'active' : '' ?>">
+                                <i class="bi <?= $icon ?> me-1 text-gold"></i> <?= e($cat['name']) ?>
+                            </a>
+                        <?php endforeach; ?>
+                        <a href="<?= url('shop?filter=sale') ?>" class="category-text-pill text-danger border-danger <?= (($_GET['filter'] ?? '') === 'sale') ? 'active' : '' ?>">
+                            <i class="bi bi-stars me-1 text-danger"></i> Sale
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4">
             <!-- Sidebar Filters -->
             <div class="col-lg-3">
