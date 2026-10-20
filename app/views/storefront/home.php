@@ -27,7 +27,7 @@ $activeCountry = MarketContext::getCountry();
                     </a>
                 </div>
 
-                <div class="hero-trust-bar mt-4 mt-md-5 pt-3">
+                <div class="hero-trust-bar">
                     <div class="hero-trust-item">
                         <i class="bi bi-shield-check text-warning fs-5"></i>
                         <div>
@@ -45,7 +45,7 @@ $activeCountry = MarketContext::getCountry();
                     <div class="hero-trust-item hero-trust-divider">
                         <span class="fs-5"><?= country_flag($activeCountry['code'], $activeCountry['name'], 22) ?></span>
                         <div>
-                            <strong class="trust-title"><?= e($activeCountry['name']) ?> Market</strong>
+                            <strong class="trust-title"><?= e($activeCountry['name']) ?><span class="d-none d-sm-inline"> Market</span></strong>
                             <span class="trust-desc"><?= e($activeCountry['currency_code']) ?> Delivery</span>
                         </div>
                     </div>

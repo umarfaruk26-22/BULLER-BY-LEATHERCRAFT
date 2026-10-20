@@ -47,39 +47,6 @@ $currentUser = Auth::user();
 </head>
 <body>
 
-    <!-- Top Announcement & Market Utility Bar -->
-    <div class="top-market-bar">
-        <div class="container-fluid px-xl-5 px-lg-4 px-3 d-flex justify-content-between align-items-center">
-            <div class="d-none d-md-block text-truncate pe-2">
-                <i class="bi bi-shield-check text-warning me-1"></i>
-                <span>Generational Craftsmanship &bull; Complimentary International Delivery Available</span>
-            </div>
-            <div class="d-flex align-items-center gap-3">
-                <div class="market-indicator d-inline-flex align-items-center gap-1 text-light small py-1 px-2 rounded" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(197, 168, 128, 0.25);">
-                    <?= country_flag($activeCountry['code'], $activeCountry['name'], 18) ?>
-                    <span class="d-none d-sm-inline opacity-75"><?= e($activeCountry['name']) ?> &bull;</span>
-                    <strong><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>
-                    <?php if (Auth::isLoggedIn()): ?>
-                        <i class="bi bi-shield-lock-fill text-gold ms-1" title="Fixed to registered profile" style="font-size: 0.7rem;"></i>
-                    <?php endif; ?>
-                </div>
-
-                <div class="border-start border-secondary ps-3 d-none d-sm-flex align-items-center gap-3">
-                    <?php if (Auth::isSuperAdmin()): ?>
-                        <a href="<?= url('superadmin/dashboard') ?>" class="text-warning small text-decoration-none fw-semibold">
-                            <i class="bi bi-speedometer2"></i> Super Admin Panel
-                        </a>
-                    <?php elseif (Auth::isCountryAdmin()): ?>
-                        <a href="<?= url('admin/dashboard') ?>" class="text-warning small text-decoration-none fw-semibold">
-                            <i class="bi bi-gear-wide-connected"></i> Country Admin Panel
-                        </a>
-                    <?php endif; ?>
-                    <a href="<?= url('contact') ?>" class="text-light small text-decoration-none">Atelier Concierge</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg buller-navbar sticky-top">
         <div class="container-fluid px-xl-5 px-lg-4 px-3 d-flex align-items-center justify-content-between">

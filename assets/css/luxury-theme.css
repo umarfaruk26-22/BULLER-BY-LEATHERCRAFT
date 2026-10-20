@@ -71,14 +71,9 @@ a:hover {
     color: var(--color-cognac);
 }
 
-/* Utility Top Bar */
+/* Utility Top Bar (Hidden globally across desktop & mobile) */
 .top-market-bar {
-    background-color: var(--color-espresso-deep);
-    color: var(--color-gold);
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(197, 168, 128, 0.15);
+    display: none !important;
 }
 
 .market-selector-btn {
@@ -1313,7 +1308,7 @@ table td.text-end {
     font-weight: 700;
     line-height: 1.15;
     color: #ffffff;
-    margin-bottom: 2rem;
+    margin-bottom: 2.25rem;
     letter-spacing: -0.01em;
 }
 .hero-description {
@@ -1322,6 +1317,9 @@ table td.text-end {
     color: rgba(255, 255, 255, 0.86);
     max-width: 600px;
     margin-bottom: 2rem;
+}
+.hero-actions-group {
+    margin-bottom: 1.125rem;
 }
 .hero-actions-group .btn {
     padding: 0.85rem 1.75rem;
@@ -1335,8 +1333,8 @@ table td.text-end {
     align-items: center;
     gap: 1.5rem;
     border-top: 1px solid rgba(197, 168, 128, 0.25);
-    margin-top: 2.75rem;
-    padding-top: 2rem;
+    margin-top: 0;
+    padding-top: 1.125rem;
 }
 .hero-trust-item {
     display: flex;
@@ -1440,9 +1438,11 @@ table td.text-end {
 
     /* Hero Banner Mobile Styling - Spacious & Luxurious (Original Grand Scale + Elegant Breathing Room) */
     .hero-slider-section {
-        min-height: 480px !important;
-        padding-top: 3rem !important;
-        padding-bottom: 3.25rem !important;
+        min-height: 520px !important;
+        padding-top: 3.5rem !important;
+        padding-bottom: 3.5rem !important;
+        padding-left: 1.15rem !important;
+        padding-right: 1.15rem !important;
         background-position: center center !important;
         display: flex !important;
         align-items: center !important;
@@ -1453,11 +1453,13 @@ table td.text-end {
     .hero-slider-section .hero-content {
         padding-top: 1.25rem !important;
         padding-bottom: 1.25rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
     }
     .hero-title {
         font-size: clamp(1.75rem, 6.8vw, 2.35rem) !important;
         line-height: 1.22 !important;
-        margin-bottom: 2rem !important;
+        margin-bottom: 2.25rem !important;
         letter-spacing: -0.01em !important;
     }
     .hero-actions-group {
@@ -1465,15 +1467,15 @@ table td.text-end {
         flex-wrap: nowrap !important;
         width: 100% !important;
         gap: 0.75rem !important;
-        margin-bottom: 2.25rem !important;
+        margin-bottom: 1.125rem !important;
     }
     .hero-actions-group .btn {
         flex: 1 1 0 !important;
         width: auto !important;
         justify-content: center !important;
         text-align: center !important;
-        padding: 0.75rem 0.9rem !important;
-        font-size: clamp(0.78rem, 3.1vw, 0.9rem) !important;
+        padding: 0.75rem 0.85rem !important;
+        font-size: clamp(0.78rem, 3.1vw, 0.88rem) !important;
         white-space: nowrap !important;
         letter-spacing: 0.02em !important;
         min-height: 48px !important;
@@ -1486,17 +1488,17 @@ table td.text-end {
     }
     .hero-trust-bar {
         margin-top: 0 !important;
-        padding-top: 1.75rem !important;
+        padding-top: 1.125rem !important;
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
-        gap: 0.65rem !important;
-        border-top: 1px solid rgba(197, 168, 128, 0.3) !important;
+        gap: 0.5rem !important;
+        border-top: 1px solid rgba(197, 168, 128, 0.28) !important;
     }
     .hero-trust-item {
         background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(197, 168, 128, 0.25) !important;
+        border: 1px solid rgba(197, 168, 128, 0.22) !important;
         border-radius: 8px !important;
-        padding: 0.8rem 0.45rem !important;
+        padding: 0.75rem 0.4rem !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -1509,13 +1511,13 @@ table td.text-end {
     }
     .hero-trust-item i,
     .hero-trust-item span.fs-5 {
-        font-size: 1.2rem !important;
+        font-size: 1.15rem !important;
         line-height: 1 !important;
         margin-bottom: 3px !important;
     }
     .hero-trust-item .trust-title {
-        font-size: 0.72rem !important;
-        line-height: 1.25 !important;
+        font-size: 0.7rem !important;
+        line-height: 1.2 !important;
         font-weight: 700 !important;
         white-space: nowrap !important;
         overflow: hidden !important;
@@ -1523,7 +1525,7 @@ table td.text-end {
         display: block !important;
     }
     .hero-trust-item .trust-desc {
-        font-size: 0.6rem !important;
+        font-size: 0.58rem !important;
         line-height: 1.15 !important;
         opacity: 0.85 !important;
         white-space: nowrap !important;
@@ -1602,25 +1604,31 @@ table td.text-end {
 }
 
 @media (max-width: 420px) {
+    .hero-slider-section {
+        padding-left: 0.85rem !important;
+        padding-right: 0.85rem !important;
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
     .hero-title {
         font-size: 1.55rem !important;
-        margin-bottom: 1.65rem !important;
+        margin-bottom: 2rem !important;
     }
     .hero-actions-group {
-        gap: 0.55rem !important;
-        margin-bottom: 1.85rem !important;
+        gap: 0.5rem !important;
+        margin-bottom: 1rem !important;
     }
     .hero-actions-group .btn {
-        padding: 0.7rem 0.5rem !important;
-        font-size: 0.78rem !important;
+        padding: 0.7rem 0.45rem !important;
+        font-size: 0.76rem !important;
         min-height: 44px !important;
     }
     .hero-trust-bar {
-        gap: 0.45rem !important;
-        padding-top: 1.4rem !important;
+        gap: 0.4rem !important;
+        padding-top: 1rem !important;
     }
     .hero-trust-item {
-        padding: 0.65rem 0.35rem !important;
+        padding: 0.65rem 0.25rem !important;
     }
     .navbar-brand-logo {
         gap: 6px;
