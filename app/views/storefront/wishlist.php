@@ -41,9 +41,11 @@ require __DIR__ . '/../layouts/header.php';
                     );
                 ?>
                     <div class="col-6 col-md-6 col-lg-3 mb-2 mb-md-3">
-                        <div class="product-card h-100">
+                        <div class="product-card h-100" data-product-url="<?= url('product?slug=' . urlencode($p['slug'])) ?>">
                             <div class="product-image-wrapper">
-                                <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
+                                <a href="<?= url('product?slug=' . urlencode($p['slug'])) ?>" class="product-image-link">
+                                    <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
+                                </a>
                                 <button class="wishlist-toggle-btn active" data-product-id="<?= $p['id'] ?>" title="Remove from Wishlist">
                                     <i class="bi bi-heart-fill"></i>
                                 </button>

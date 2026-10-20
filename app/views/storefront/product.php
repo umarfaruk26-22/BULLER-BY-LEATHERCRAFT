@@ -190,53 +190,82 @@ require __DIR__ . '/../layouts/header.php';
                         <?php endif; ?>
                     </div>
 
-                    <!-- Dynamic Size Selector (Jackets / Shoes / Belts) -->
+                    <!-- Dynamic Size & Specification Selector (All Categories) -->
                     <?php 
                         $catSlug = $product['category_slug'] ?? '';
-                        $hasSizes = in_array($catSlug, ['leather-jackets', 'shoes-boots', 'belts']);
                     ?>
-                    <?php if ($hasSizes): ?>
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <label class="form-label small fw-bold text-muted mb-0">Select Atelier Fit / Size:</label>
-                                <button type="button" class="btn btn-link p-0 small text-decoration-underline" style="color: var(--color-cognac);" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
-                                    <i class="bi bi-rulers me-1"></i> Interactive Size & Fit Guide
-                                </button>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2" id="productSizeOptions">
-                                <?php if ($catSlug === 'leather-jackets'): ?>
-                                    <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '38 / S')">38 (S)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 / M')">40 (M)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '42 / L')">42 (L)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '44 / XL')">44 (XL)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '46 / XXL')">46 (XXL)</button>
-                                <?php elseif ($catSlug === 'shoes-boots'): ?>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 7 / US 8')">UK 7 / US 8</button>
-                                    <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'UK 8 / US 9')">UK 8 / US 9</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 9 / US 10')">UK 9 / US 10</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 10 / US 11')">UK 10 / US 11</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 11 / US 12')">UK 11 / US 12</button>
-                                <?php elseif ($catSlug === 'belts'): ?>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '32 in')">32" (80cm)</button>
-                                    <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '34 in')">34" (85cm)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '36 in')">36" (90cm)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '38 in')">38" (95cm)</button>
-                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 in')">40" (100cm)</button>
-                                <?php endif; ?>
-                            </div>
-                            <input type="hidden" id="selectedProductSize" value="Standard Fitted">
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Colorway Swatch Specification -->
                     <div class="mb-4">
-                        <label class="form-label small fw-bold text-muted mb-2">Curated Leather Colorway:</label>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle border border-2 shadow-sm" style="width: 28px; height: 28px; background-color: <?= ($product['color'] === 'Espresso Brown' || $product['color'] === 'Dark Mahogany') ? '#2e1c14' : (($product['color'] === 'Cognac Tan' || str_contains($product['color'], 'Tan') || str_contains($product['color'], 'Chestnut')) ? '#9e532b' : '#1a1a1a') ?>; border-color: var(--color-gold) !important;"></div>
-                            <strong class="small text-dark font-serif" style="font-size: 1.05rem;"><?= e($product['color'] ?? 'Heritage Deep Espresso') ?></strong>
-                            <span class="badge bg-light text-muted border small">Drum-Dyed Core</span>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label small fw-bold text-muted mb-0">Select Atelier Fit / Size:</label>
+                            <button type="button" class="btn btn-link p-0 small text-decoration-underline" style="color: var(--color-cognac);" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+                                <i class="bi bi-rulers me-1"></i> Interactive Size & Fit Guide
+                            </button>
                         </div>
+
+                        <div class="d-flex flex-wrap gap-2" id="productSizeOptions">
+                            <?php if ($catSlug === 'leather-jackets'): ?>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '38 / S')">38 (S)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 / M')">40 (M)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '42 / L')">42 (L)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '44 / XL')">44 (XL)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '46 / XXL')">46 (XXL)</button>
+                            <?php elseif ($catSlug === 'shoes-boots'): ?>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 7 / US 8')">UK 7 / US 8</button>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'UK 8 / US 9')">UK 8 / US 9</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 9 / US 10')">UK 9 / US 10</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 10 / US 11')">UK 10 / US 11</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 11 / US 12')">UK 11 / US 12</button>
+                            <?php elseif ($catSlug === 'belts'): ?>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '32 in')">32" (80cm)</button>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '34 in')">34" (85cm)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '36 in')">36" (90cm)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '38 in')">38" (95cm)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 in')">40" (100cm)</button>
+                            <?php elseif (str_contains($catSlug, 'briefcase') || str_contains($catSlug, 'bag') || $product['id'] == 2): ?>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'Executive 16in Laptop Fit')">Executive 16" Laptop Fit</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Classic 14in Edition')">Classic 14" Edition</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Slimline 13in Profile')">Slimline 13" Profile</button>
+                            <?php elseif (str_contains($catSlug, 'duffel') || str_contains($catSlug, 'travel') || $product['id'] == 3): ?>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '48-Hour Weekender (45L)')">48-Hour Weekender (45L)</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Grand Voyage (60L)')">Grand Voyage (60L)</button>
+                            <?php elseif (str_contains($catSlug, 'wallet') || $product['id'] == 4): ?>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'Classic Bifold Profile (8 Cards)')">Classic Bifold Profile</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Ultra-Slim Minimalist (6 Cards)')">Ultra-Slim Minimalist</button>
+                            <?php elseif (str_contains($catSlug, 'watch') || $product['id'] == 7): ?>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '3-Timepiece Vault Edition')">3-Timepiece Vault Edition</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Dual-Timepiece Travel Case')">Dual-Timepiece Travel Case</button>
+                            <?php else: ?>
+                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'Standard Heirloom Fit')">Standard Heirloom Edition</button>
+                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Custom Atelier Fit')">Bespoke Atelier Fit</button>
+                            <?php endif; ?>
+                        </div>
+                        <input type="hidden" id="selectedProductSize" value="Standard Heirloom Edition">
+                    </div>
+
+                    <!-- Interactive Curated Colorway Selector -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label small fw-bold text-muted mb-0">Select Curated Leather Colorway:</label>
+                            <span id="selectedColorName" class="badge bg-white text-dark border shadow-sm small fw-bold" style="border-color: var(--color-gold) !important; color: var(--color-espresso-deep) !important;">
+                                <?= e($product['color'] ?? 'Heritage Deep Espresso') ?>
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center gap-2" id="productColorOptions">
+                            <button type="button" class="color-swatch-btn active" onclick="selectProductColor(this, '<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>')" title="<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>">
+                                <span class="swatch-circle" style="background-color: <?= ($product['color'] === 'Espresso Brown' || $product['color'] === 'Dark Mahogany') ? '#2e1c14' : (($product['color'] === 'Cognac Tan' || str_contains($product['color'] ?? '', 'Tan') || str_contains($product['color'] ?? '', 'Chestnut')) ? '#8c4a2f' : '#1a1a1a') ?>;"></span>
+                            </button>
+                            <button type="button" class="color-swatch-btn" onclick="selectProductColor(this, 'Tuscan Cognac Tan')" title="Tuscan Cognac Tan">
+                                <span class="swatch-circle" style="background-color: #8c4a2f;"></span>
+                            </button>
+                            <button type="button" class="color-swatch-btn" onclick="selectProductColor(this, 'Obsidian Raven Black')" title="Obsidian Raven Black">
+                                <span class="swatch-circle" style="background-color: #161616;"></span>
+                            </button>
+                            <button type="button" class="color-swatch-btn" onclick="selectProductColor(this, 'Dark Mahogany Brown')" title="Dark Mahogany Brown">
+                                <span class="swatch-circle" style="background-color: #3b2219;"></span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="selectedProductColor" value="<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>">
                     </div>
 
                     <!-- Bespoke Hot Foil Monogramming Option -->
@@ -679,7 +708,7 @@ require __DIR__ . '/../layouts/header.php';
                         );
                     ?>
                         <div class="col-6 col-md-6 col-lg-3 mb-2 mb-md-3">
-                            <div class="product-card h-100 bg-white border p-2 p-sm-3 shadow-soft d-flex flex-column justify-content-between" style="border-color: var(--color-border);">
+                            <div class="product-card h-100 bg-white border p-2 p-sm-3 shadow-soft d-flex flex-column justify-content-between" data-product-url="<?= url('product?slug=' . urlencode($rel['slug'])) ?>" style="border-color: var(--color-border);">
                                 <div class="position-relative mb-2 mb-sm-3 overflow-hidden related-prod-img-wrapper">
                                     <a href="<?= url('product?slug=' . urlencode($rel['slug'])) ?>">
                                         <img src="<?= asset($rel['primary_image']) ?>" alt="<?= e($rel['title']) ?>" class="w-100 h-100" style="object-fit: cover; transition: transform 0.4s ease;">
@@ -825,6 +854,33 @@ require __DIR__ . '/../layouts/header.php';
     border-color: var(--color-gold);
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
+.color-swatch-btn {
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    padding: 3px;
+    cursor: pointer;
+    transition: all 0.22s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.color-swatch-btn .swatch-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: block;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+}
+.color-swatch-btn:hover {
+    border-color: var(--color-gold);
+    transform: scale(1.08);
+}
+.color-swatch-btn.active {
+    border-color: var(--color-gold) !important;
+    box-shadow: 0 0 0 2px var(--color-espresso-deep), 0 0 10px rgba(197, 168, 128, 0.5);
+    transform: scale(1.08);
+}
 .active-thumb {
     border-color: var(--color-gold) !important;
     box-shadow: 0 0 0 2px var(--color-gold);
@@ -852,6 +908,16 @@ function selectProductSize(button, sizeValue) {
     button.classList.add('active');
     const sizeInput = document.getElementById('selectedProductSize');
     if (sizeInput) sizeInput.value = sizeValue;
+}
+
+// Select product colorway
+function selectProductColor(button, colorName) {
+    document.querySelectorAll('#productColorOptions .color-swatch-btn').forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+    const colorLabel = document.getElementById('selectedColorName');
+    if (colorLabel) colorLabel.textContent = colorName;
+    const colorInput = document.getElementById('selectedProductColor');
+    if (colorInput) colorInput.value = colorName;
 }
 
 // Instant Buy Now Checkout

@@ -75,9 +75,11 @@ $activeCountry = MarketContext::getCountry();
                 $isWishlisted = Wishlist::has((int)$p['id']);
             ?>
                 <div class="col-6 col-md-6 col-lg-3 mb-2 mb-md-3">
-                    <div class="product-card h-100">
+                    <div class="product-card h-100" data-product-url="<?= url('product?slug=' . urlencode($p['slug'])) ?>">
                         <div class="product-image-wrapper">
-                            <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
+                            <a href="<?= url('product?slug=' . urlencode($p['slug'])) ?>" class="product-image-link">
+                                <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
+                            </a>
                             
                             <div class="product-badges">
                                 <?php if ($pricing['is_discounted']): ?>

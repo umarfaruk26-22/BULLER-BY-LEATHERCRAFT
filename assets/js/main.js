@@ -387,3 +387,17 @@ function showToast(title, message, type = 'success') {
         toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
     }
 }
+
+// Global Product Card Click Delegation (Clicking anywhere on card opens product page)
+document.addEventListener('click', (e) => {
+    const card = e.target.closest('.product-card[data-product-url]');
+    if (!card) return;
+    if (e.target.closest('button, .btn-quick-add, .wishlist-toggle-btn, .btn-add-to-cart, a')) {
+        return;
+    }
+    const targetUrl = card.dataset.productUrl;
+    if (targetUrl) {
+        window.location.href = targetUrl;
+    }
+});
+
