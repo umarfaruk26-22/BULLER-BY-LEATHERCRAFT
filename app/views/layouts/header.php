@@ -75,10 +75,6 @@ $currentUser = Auth::user();
                     <i class="bi bi-chevron-down ms-1" style="font-size: 0.65rem; color: var(--color-gold) !important;"></i>
                 </button>
 
-                <!-- Mobile Compact Flag/Market Trigger (Mobile View Only d-lg-none) -->
-                <button type="button" class="btn nav-actions-icon d-lg-none d-inline-flex align-items-center justify-content-center p-1" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" title="Region: <?= e($activeCountry['name']) ?> (<?= e($activeCountry['currency_code']) ?>)" aria-label="Selected Region" style="width: 36px; height: 36px;">
-                    <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
-                </button>
 
                 <!-- 1. Search Trigger -->
                 <button type="button" id="bullerSearchBtn" class="btn nav-actions-icon nav-action-search" data-bs-toggle="modal" data-bs-target="#searchModal" title="Search Curations" aria-label="Search">
