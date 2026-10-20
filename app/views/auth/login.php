@@ -59,24 +59,7 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
                     </form>
 
-                    <!-- Quick Demo Credentials Selector for Testing -->
-                    <div class="mt-4 pt-3 border-top small">
-                        <span class="fw-bold text-muted d-block mb-2">⚡ Quick Test Credentials:</span>
-                        <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-outline-dark btn-sm text-start" onclick="document.querySelector('input[name=email]').value='superadmin@bullerleather.com'; document.querySelector('input[name=password]').value='BullerAdmin@2026!';">
-                                <strong>Super Admin:</strong> superadmin@bullerleather.com
-                            </button>
-                            <button type="button" class="btn btn-outline-dark btn-sm text-start" onclick="document.querySelector('input[name=email]').value='admin.in@bullerleather.com'; document.querySelector('input[name=password]').value='IndiaAdmin@2026!';">
-                                <strong>India Admin:</strong> admin.in@bullerleather.com
-                            </button>
-                            <button type="button" class="btn btn-outline-dark btn-sm text-start" onclick="document.querySelector('input[name=email]').value='admin.west@bullerleather.com'; document.querySelector('input[name=password]').value='WestAdmin@2026!';">
-                                <strong>West Admin (US & UK):</strong> admin.west@bullerleather.com
-                            </button>
-                            <button type="button" class="btn btn-outline-dark btn-sm text-start" onclick="document.querySelector('input[name=email]').value='customer@example.com'; document.querySelector('input[name=password]').value='Customer@2026!';">
-                                <strong>Customer:</strong> customer@example.com
-                            </button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
