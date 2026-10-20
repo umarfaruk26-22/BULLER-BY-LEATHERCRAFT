@@ -54,12 +54,12 @@ $activeCountry = MarketContext::getCountry();
                     <!-- Dropdown & View All -->
                     <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 mb-2 mb-sm-3">
                         <div class="dropdown flex-grow-1">
-                            <button class="btn btn-outline-dark dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center py-2 px-3 category-select-btn" type="button" id="categoryDropdownSelector" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--color-gold); background: #ffffff; min-height: 44px;">
+                            <button class="btn btn-outline-dark w-100 text-start d-flex justify-content-between align-items-center py-2 px-3 category-select-btn" type="button" id="categoryDropdownSelector" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--color-gold); background: #ffffff; min-height: 44px;">
                                 <span class="text-truncate">
                                     <i class="bi bi-grid me-2 text-warning"></i> 
                                     <?= isset($activeCategory) ? e($activeCategory['name']) : 'Select Category...' ?>
                                 </span>
-                                <i class="bi bi-chevron-down ms-2 small"></i>
+                                <i class="bi bi-chevron-down ms-2 small text-muted"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-buller shadow-lg border-0 w-100 py-2" aria-labelledby="categoryDropdownSelector">
                                 <li>
@@ -123,14 +123,14 @@ $activeCountry = MarketContext::getCountry();
             <div class="col-lg-3">
                 <!-- Mobile Filter Toggle Button -->
                 <div class="d-lg-none mb-3">
-                    <button class="btn btn-outline-dark w-100 d-flex justify-content-between align-items-center py-2 px-3 bg-white shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#shopFilterSidebar" aria-expanded="false" aria-controls="shopFilterSidebar">
+                    <button class="btn btn-outline-dark w-100 d-flex justify-content-between align-items-center py-2 px-3 bg-white shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#shopFilterSidebar" aria-expanded="false" aria-controls="shopFilterSidebar" style="border-color: var(--color-border); min-height: 44px;">
                         <span><i class="bi bi-funnel me-2 text-warning"></i> Filter Curations & Categories</span>
                         <i class="bi bi-chevron-down"></i>
                     </button>
                 </div>
 
                 <div class="collapse d-lg-block" id="shopFilterSidebar">
-                    <div class="p-4 bg-white border shadow-soft sticky-top mb-4 mb-lg-0" style="top: 100px; border-color: var(--color-border); z-index: 10;">
+                    <div class="p-3 p-md-4 bg-white border shadow-soft rounded-2 shop-sidebar-sticky mb-4 mb-lg-0" style="border-color: var(--color-border);">
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                             <h5 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: 1.15rem;">Filter Ateliers</h5>
                             <a href="<?= url('shop') ?>" class="text-muted small text-decoration-none">Reset</a>

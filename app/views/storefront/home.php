@@ -11,7 +11,7 @@ $activeCountry = MarketContext::getCountry();
 <!-- 1. CINEMATIC LUXURY HERO BANNER -->
 <section class="hero-slider-section" style="background-image: url('<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>');">
     <div class="hero-overlay"></div>
-    <div class="container hero-content py-4 py-md-5">
+    <div class="container hero-content py-3 py-md-5">
         <div class="row align-items-center">
             <div class="col-lg-8 col-xl-7">
                 <span class="hero-subtitle">
@@ -26,10 +26,10 @@ $activeCountry = MarketContext::getCountry();
                 </p>
                 <div class="hero-actions-group d-flex flex-wrap gap-2 gap-sm-3">
                     <a href="<?= url('shop') ?>" class="btn btn-buller-gold btn-lg">
-                        Explore Master Curations <i class="bi bi-arrow-right ms-2"></i>
+                        Explore <span class="d-none d-sm-inline">Master </span>Curations <i class="bi bi-arrow-right ms-1 ms-sm-2"></i>
                     </a>
                     <a href="<?= url('about') ?>" class="btn btn-buller-outline-light btn-lg">
-                        Our Atelier Heritage
+                        <span class="d-none d-sm-inline">Our </span>Atelier Heritage
                     </a>
                 </div>
 
@@ -127,62 +127,7 @@ $activeCountry = MarketContext::getCountry();
     </div>
 </section>
 
-<!-- 4. ART OF BULLER CRAFTSMANSHIP (Story & Heritage — Mobile Optimized) -->
-<section class="craftsmanship-section py-4 py-md-5">
-    <div class="container py-2 py-md-3">
-        <div class="row align-items-center g-4 g-lg-5">
-            <div class="col-lg-6">
-                <div class="d-inline-flex align-items-center gap-2 mb-2">
-                    <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Crest" style="height: 20px; width: auto;">
-                    <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">The Buller Philosophy</span>
-                </div>
-                <h2 class="font-serif mt-2 mb-3 mb-md-4" style="font-size: clamp(1.75rem, 4vw, 2.6rem); color: #fff; line-height: 1.2;">
-                    Rejecting Obsolescence. <br>
-                    <span style="color: var(--color-gold);">Embracing Eternity.</span>
-                </h2>
-                <p class="text-light mb-4" style="line-height: 1.75; opacity: 0.88; font-size: clamp(0.88rem, 2vw, 0.98rem);">
-                    In an era saturated by disposable synthetics and bonded leathers, Buller Leather stands as a resolute guardian of traditional craftsmanship. We reject shortcuts, speed tanning, and chrome-based chemicals.
-                </p>
-
-                <div class="craftsmanship-pillar">
-                    <div class="pillar-number">01</div>
-                    <div class="pillar-content">
-                        <h4 class="pillar-title">Full-Grain Vegetable Tanned Hides</h4>
-                        <p class="pillar-desc">Only the unbuffed top layer of the hide is chosen, steeped in natural tree barks and chestnut extracts over 60 days to retain natural grain signatures.</p>
-                    </div>
-                </div>
-
-                <div class="craftsmanship-pillar">
-                    <div class="pillar-number">02</div>
-                    <div class="pillar-content">
-                        <h4 class="pillar-title">Saddle-Stitched By Master Artisans</h4>
-                        <p class="pillar-desc">Constructed using dual-needle hand saddle stitches and waxed linen threads that will not unravel even if an individual stitch suffers surface abrasion.</p>
-                    </div>
-                </div>
-
-                <div class="craftsmanship-pillar mb-0">
-                    <div class="pillar-number">03</div>
-                    <div class="pillar-content">
-                        <h4 class="pillar-title">Solid Forged Brass & Japanese Zips</h4>
-                        <p class="pillar-desc">Fitted with sandcast solid brass buckles, hand-burnished rivets, and custom-forged YKK antique brass zippers engineered for millions of cycles.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="position-relative mt-3 mt-lg-0 text-center">
-                    <img src="<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>" alt="Buller Leather Atelier Workbench" class="img-fluid shadow-deep rounded-1 w-100" style="border: 2px solid var(--color-gold); max-height: 480px; object-fit: cover;">
-                    <div class="p-3 p-sm-4 bg-dark border position-absolute bottom-0 start-0 m-2 m-sm-4 shadow-lg text-start" style="border-color: var(--color-gold) !important; max-width: 280px; background: rgba(18, 11, 6, 0.92) !important; backdrop-filter: blur(8px);">
-                        <span class="text-gold font-serif fs-3 fw-bold d-block" style="line-height: 1;">100%</span>
-                        <span class="small text-light" style="font-size: 0.78rem;">Uncompromised European Tannery Provenance</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 5. VERIFIED PATRON REVIEWS (Horizontal Slide Carousel with 5s Delay) -->
+<!-- 3. VERIFIED PATRON REVIEWS (Horizontal Slide Carousel with 5s Delay) -->
 <section class="py-4 py-md-5 patron-reviews-section" style="background-color: var(--color-cream); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container py-2 py-md-4">
         <div class="text-center max-w-700 mx-auto mb-4 mb-md-5">
