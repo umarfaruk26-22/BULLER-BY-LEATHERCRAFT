@@ -94,7 +94,7 @@ $activeCountry = MarketContext::getCountry();
     <!-- Buller Leather Main Client Logic -->
     <?php
     $jsDiskPath = dirname(__DIR__, 3) . '/assets/js/main.js';
-    $jsVersion = file_exists($jsDiskPath) ? filemtime($jsDiskPath) : time();
+    $jsVersion = time();
     ?>
     <script src="<?= asset('assets/js/main.js') ?>?v=<?= $jsVersion ?>"></script>
 </body>

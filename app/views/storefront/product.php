@@ -17,15 +17,15 @@ require __DIR__ . '/../layouts/header.php';
 ?>
 
 <!-- Breadcrumbs Navigation -->
-<div class="bg-white border-bottom py-3">
-    <div class="container small text-muted">
+<div class="bg-white border-bottom py-2 py-md-3">
+    <div class="container small text-muted pdp-breadcrumbs">
         <a href="<?= url('') ?>" class="text-muted text-decoration-none">Home</a>
-        <span class="mx-2">&bull;</span>
+        <span class="mx-1 mx-md-2 text-muted">&bull;</span>
         <a href="<?= url('shop') ?>" class="text-muted text-decoration-none">Collections</a>
-        <span class="mx-2">&bull;</span>
+        <span class="mx-1 mx-md-2 text-muted">&bull;</span>
         <a href="<?= url('shop?category=' . urlencode($product['category_slug'])) ?>" class="text-muted text-decoration-none"><?= e($product['category_name']) ?></a>
-        <span class="mx-2">&bull;</span>
-        <span class="text-dark fw-semibold"><?= e($product['title']) ?></span>
+        <span class="mx-1 mx-md-2 text-muted">&bull;</span>
+        <span class="text-dark fw-semibold active-crumb"><?= e($product['title']) ?></span>
     </div>
 </div>
 
@@ -46,25 +46,25 @@ require __DIR__ . '/../layouts/header.php';
 </div>
 
 <!-- Product Detail Stage -->
-<section class="py-5" style="background-color: var(--color-ivory);">
+<section class="py-3 py-md-5" style="background-color: var(--color-ivory);">
     <div class="container">
-        <div class="row g-5">
+        <div class="row g-3 g-md-5">
             <!-- Left: Multi-Angle Photography Showcase -->
             <div class="col-lg-7">
                 <div class="position-sticky" style="top: 100px;">
                     <!-- Main Master Showcase Display -->
-                    <div class="position-relative bg-white border p-3 p-md-4 shadow-soft mb-3" style="border-color: var(--color-border); border-radius: 2px;">
+                    <div class="position-relative bg-white border p-2 p-md-4 shadow-soft mb-2 mb-md-3" style="border-color: var(--color-border); border-radius: 2px;">
                         <img id="mainProductPhoto" src="<?= asset($product['primary_image']) ?>" alt="<?= e($product['title']) ?>" class="img-fluid w-100" style="max-height: 580px; object-fit: contain; transition: transform 0.3s ease;">
                         
                         <!-- Luxury Product Badges -->
-                        <div class="product-badges" style="top: 1.5rem; left: 1.5rem;">
+                        <div class="product-badges pdp-badges">
                             <?php if ($pricing['is_discounted']): ?>
-                                <span class="badge-luxury badge-sale mb-1 d-block shadow-sm">-<?= $pricing['discount_percent'] ?>% Privé Privilege</span>
+                                <span class="badge-luxury badge-sale mb-1 shadow-sm">-<?= $pricing['discount_percent'] ?>% Privé Privilege</span>
                             <?php endif; ?>
                             <?php if ($product['is_bestseller']): ?>
-                                <span class="badge-luxury badge-bestseller mb-1 d-block shadow-sm"><i class="bi bi-award-fill me-1"></i> Signature Masterpiece</span>
+                                <span class="badge-luxury badge-bestseller mb-1 shadow-sm"><i class="bi bi-award-fill me-1"></i> Signature Masterpiece</span>
                             <?php endif; ?>
-                            <span class="badge-luxury mb-1 d-block shadow-sm" style="background: rgba(26, 18, 11, 0.88); color: var(--color-gold); border: 1px solid var(--color-gold);">
+                            <span class="badge-luxury mb-1 shadow-sm badge-hide" style="background: rgba(26, 18, 11, 0.88); color: var(--color-gold); border: 1px solid var(--color-gold);">
                                 <i class="bi bi-shield-check me-1"></i> 100% Full-Grain Hide
                             </span>
                         </div>
@@ -78,10 +78,10 @@ require __DIR__ . '/../layouts/header.php';
 
                     <!-- Interactive Angle Thumbnails Strip -->
                     <?php if (!empty($galleryImages)): ?>
-                        <div class="d-flex flex-wrap gap-2 mb-4">
+                        <div class="pdp-thumbnails-strip d-flex gap-2 mb-3 mb-md-4">
                             <?php foreach ($galleryImages as $idx => $img): ?>
                                 <div class="product-thumb-box border bg-white cursor-pointer <?= ($idx === 0) ? 'active-thumb' : '' ?>" 
-                                     style="width: 85px; height: 85px; padding: 3px; transition: all 0.2s ease; border-color: <?= ($idx === 0) ? 'var(--color-gold) !important; box-shadow: 0 0 0 1px var(--color-gold);' : 'var(--color-border);' ?>"
+                                     style="border-color: <?= ($idx === 0) ? 'var(--color-gold) !important; box-shadow: 0 0 0 1px var(--color-gold);' : 'var(--color-border);' ?>"
                                      onclick="switchProductPhoto(this, '<?= asset($img['image_url']) ?>')">
                                     <img src="<?= asset($img['image_url']) ?>" alt="<?= e($img['alt_text'] ?? $product['title']) ?>" class="w-100 h-100" style="object-fit: cover;">
                                 </div>
@@ -89,8 +89,8 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
                     <?php endif; ?>
 
-                    <!-- Craftsmanship Certification Banner -->
-                    <div class="p-3 bg-white border shadow-soft d-flex align-items-center justify-content-between rounded-1 small text-muted" style="border-color: var(--color-border);">
+                    <!-- Craftsmanship Certification Banner (Desktop sticky column only) -->
+                    <div class="p-3 bg-white border shadow-soft d-none d-lg-flex align-items-center justify-content-between rounded-1 small text-muted" style="border-color: var(--color-border);">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-patch-check-fill text-warning fs-5"></i>
                             <div>
@@ -115,12 +115,12 @@ require __DIR__ . '/../layouts/header.php';
                     </div>
 
                     <!-- Product Main Title -->
-                    <h1 class="font-serif mt-1 mb-2" style="font-size: 2.3rem; color: var(--color-espresso-deep); line-height: 1.18;">
+                    <h1 class="font-serif pdp-title mt-1 mb-2">
                         <?= e($product['title']) ?>
                     </h1>
 
                     <!-- SKU & Patron Ratings Summary -->
-                    <div class="d-flex flex-wrap align-items-center gap-3 text-muted small mb-3 pb-2 border-bottom">
+                    <div class="d-flex flex-wrap align-items-center gap-2 gap-md-3 text-muted small mb-3 pb-2 border-bottom">
                         <div>SKU: <strong class="text-dark"><?= e($product['sku']) ?></strong></div>
                         <span>&bull;</span>
                         <div class="d-flex align-items-center gap-1">
@@ -136,13 +136,13 @@ require __DIR__ . '/../layouts/header.php';
                     </div>
 
                     <!-- Localized Pricing Card -->
-                    <div class="p-4 bg-white border shadow-soft mb-4 position-relative" style="border-color: var(--color-border); border-left: 4px solid var(--color-gold) !important;">
-                        <div class="d-flex align-items-baseline gap-3">
-                            <span class="fs-2 fw-bold" style="color: var(--color-espresso-deep); font-size: 2.2rem; font-family: var(--font-sans); font-variant-numeric: tabular-nums;">
+                    <div class="p-3 p-md-4 bg-white border shadow-soft mb-3 mb-md-4 position-relative" style="border-color: var(--color-border); border-left: 4px solid var(--color-gold) !important;">
+                        <div class="d-flex flex-wrap align-items-baseline gap-2 gap-md-3">
+                            <span class="pdp-price-value fw-bold">
                                 <?= $pricing['formatted_final'] ?>
                             </span>
                             <?php if ($pricing['is_discounted']): ?>
-                                <span class="fs-5 text-muted text-decoration-line-through">
+                                <span class="fs-6 fs-md-5 text-muted text-decoration-line-through">
                                     <?= $pricing['formatted_original'] ?>
                                 </span>
                                 <span class="badge bg-danger px-2 py-1 small">
@@ -150,7 +150,7 @@ require __DIR__ . '/../layouts/header.php';
                                 </span>
                             <?php endif; ?>
                         </div>
-                        <div class="text-muted small mt-2 d-flex flex-column gap-1">
+                        <div class="text-muted small mt-2 d-flex flex-column gap-1" style="font-size: 0.8rem;">
                             <div>
                                 <i class="bi bi-shield-check text-success me-1"></i>
                                 Includes localized <strong><?= e($activeCountry['tax_name']) ?> (<?= $activeCountry['tax_rate_percent'] ?>%)</strong>. Formatted in <strong><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>.
@@ -162,7 +162,7 @@ require __DIR__ . '/../layouts/header.php';
                     </div>
 
                     <!-- Regional Stock & Availability Status -->
-                    <div class="mb-4 p-3 bg-white border rounded-1" style="border-color: var(--color-border);">
+                    <div class="mb-3 mb-md-4 p-2 p-md-3 bg-white border rounded-1" style="border-color: var(--color-border);">
                         <?php if ((int)$product['stock_quantity'] > 5): ?>
                             <div class="d-flex align-items-center gap-2 text-success small fw-semibold">
                                 <i class="bi bi-check-circle-fill fs-5"></i>
@@ -297,91 +297,103 @@ require __DIR__ . '/../layouts/header.php';
                     </div>
 
                     <!-- Purchase & Bag Action Buttons -->
-                    <div class="d-flex flex-column gap-2 mb-4">
-                        <div class="d-flex gap-3">
+                    <div class="pdp-actions-container d-flex flex-column gap-2 mb-3 mb-md-4">
+                        <div class="d-flex align-items-stretch gap-2 gap-sm-3 pdp-action-group">
                             <!-- Quantity Counter -->
-                            <div class="d-flex align-items-center border bg-white rounded-1" style="border-color: var(--color-border);">
-                                <button type="button" class="btn btn-link text-dark px-3 py-2 text-decoration-none" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;">-</button>
-                                <input type="number" id="productQty" class="form-control text-center border-0 p-0 fw-bold" value="1" min="1" max="<?= max(1, (int)$product['stock_quantity']) ?>" style="width: 45px;">
-                                <button type="button" class="btn btn-link text-dark px-3 py-2 text-decoration-none" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) < <?= max(1, (int)$product['stock_quantity']) ?>) input.value = parseInt(input.value) + 1;">+</button>
+                            <div class="pdp-qty-box d-flex align-items-center border bg-white rounded-1" style="border-color: var(--color-border); height: 48px;">
+                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;">&minus;</button>
+                                <input type="number" id="productQty" class="form-control text-center border-0 p-0 fw-bold" value="1" min="1" max="<?= max(1, (int)$product['stock_quantity']) ?>" style="width: 38px; font-size: 0.95rem;">
+                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) < <?= max(1, (int)$product['stock_quantity']) ?>) input.value = parseInt(input.value) + 1;">&#43;</button>
                             </div>
 
                             <!-- Add to Bag Button -->
-                            <button type="button" class="btn btn-buller-gold flex-grow-1 py-3 btn-add-to-cart fw-bold" data-product-id="<?= $product['id'] ?>" onclick="this.dataset.quantity = document.getElementById('productQty').value;">
-                                <i class="bi bi-bag-plus me-2"></i> Add To Shopping Bag
+                            <button type="button" class="btn btn-buller-gold flex-grow-1 py-2 py-md-3 btn-add-to-cart fw-bold d-flex align-items-center justify-content-center" data-product-id="<?= $product['id'] ?>" onclick="this.dataset.quantity = document.getElementById('productQty').value;" style="min-height: 48px; font-size: 0.92rem; letter-spacing: 0.05em;">
+                                <i class="bi bi-bag-plus me-2 fs-5"></i> <span>Add To Bag</span>
                             </button>
 
                             <!-- Wishlist Toggle Button -->
-                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn position-static px-3 <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations">
+                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations" style="width: 48px !important; height: 48px !important; min-width: 48px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
                                 <i class="bi <?= $isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart' ?> fs-5"></i>
                             </button>
                         </div>
 
                         <!-- Instant Buy Now Button -->
-                        <button type="button" class="btn btn-dark w-100 py-3 text-uppercase fw-bold shadow-sm" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.1em;" onclick="instantBuyNow(<?= $product['id'] ?>)">
+                        <button type="button" class="btn btn-dark w-100 py-3 text-uppercase fw-bold shadow-sm d-flex align-items-center justify-content-center" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.1em; min-height: 48px; font-size: 0.88rem;" onclick="instantBuyNow(<?= $product['id'] ?>)">
                             <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Instant Privé Checkout
                         </button>
                     </div>
 
                     <!-- Atelier Guarantees & Pillars -->
                     <div class="p-3 bg-white border text-muted small shadow-soft" style="border-color: var(--color-border); border-radius: 2px;">
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <i class="bi bi-shield-check text-warning fs-4"></i>
+                        <div class="d-flex align-items-center gap-2 gap-md-3 mb-2">
+                            <i class="bi bi-shield-check text-warning fs-5"></i>
                             <div>
                                 <strong class="text-dark d-block">Buller Generational Guarantee</strong>
-                                <span>Unconditional lifetime structural warranty on leather hide, stitching, and hardware.</span>
+                                <span style="font-size: 0.8rem;">Unconditional lifetime structural warranty on leather hide, stitching, and hardware.</span>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <i class="bi bi-airplane text-dark fs-4"></i>
+                        <div class="d-flex align-items-center gap-2 gap-md-3 mb-2">
+                            <i class="bi bi-airplane text-dark fs-5"></i>
                             <div>
                                 <strong class="text-dark d-block">Priority Express Air Cargo</strong>
-                                <span>Dispatched via DHL / Blue Dart with full customs clearance and real-time live AWB tracking.</span>
+                                <span style="font-size: 0.8rem;">Dispatched via DHL / Blue Dart with full customs clearance and real-time live AWB tracking.</span>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <i class="bi bi-arrow-repeat text-dark fs-4"></i>
+                        <div class="d-flex align-items-center gap-2 gap-md-3">
+                            <i class="bi bi-arrow-repeat text-dark fs-5"></i>
                             <div>
                                 <strong class="text-dark d-block"><?= (int)$activeCountry['return_window_days'] ?>-Day Complimentary Exchanges</strong>
-                                <span>Complimentary sizing exchanges and returns within <?= (int)$activeCountry['return_window_days'] ?> days of receipt in <?= e($activeCountry['name']) ?>.</span>
+                                <span style="font-size: 0.8rem;">Complimentary sizing exchanges and returns within <?= (int)$activeCountry['return_window_days'] ?> days of receipt in <?= e($activeCountry['name']) ?>.</span>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Craftsmanship Certification Banner (Mobile placement below actions & guarantees) -->
+                    <div class="p-3 bg-white border shadow-soft d-flex d-lg-none align-items-center justify-content-between rounded-1 small text-muted mt-3" style="border-color: var(--color-border);">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-patch-check-fill text-warning fs-5"></i>
+                            <div>
+                                <strong class="text-dark d-block">Hand-Inspected Masterpiece</strong>
+                                <span style="font-size: 0.8rem;">Certified authentic vegetable pit-tanned hide</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-light text-dark border">Lot: <?= e($product['sku']) ?></span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Technical Deep-Dive Documentation Tabs -->
-        <div class="mt-5 pt-4">
-            <ul class="nav nav-tabs justify-content-center border-bottom" style="border-color: var(--color-border) !important;" id="productDetailTabs" role="tablist">
+        <div class="mt-4 mt-md-5 pt-2 pt-md-4">
+            <ul class="nav nav-tabs justify-content-start justify-content-md-center border-bottom mobile-pdp-tabs" style="border-color: var(--color-border) !important;" id="productDetailTabs" role="tablist">
                 <li class="nav-item">
-                    <button class="nav-link active font-serif px-4 py-3 text-uppercase fw-semibold" id="descTab-tab" style="letter-spacing: 0.1em; color: var(--color-espresso-deep);" data-bs-toggle="tab" data-bs-target="#descTab">
+                    <button class="nav-link active font-serif text-uppercase fw-semibold" id="descTab-tab" data-bs-toggle="tab" data-bs-target="#descTab">
                         Atelier Architecture
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link font-serif px-4 py-3 text-uppercase fw-semibold" id="specsTab-tab" style="letter-spacing: 0.1em; color: var(--color-espresso-deep);" data-bs-toggle="tab" data-bs-target="#specsTab">
+                    <button class="nav-link font-serif text-uppercase fw-semibold" id="specsTab-tab" data-bs-toggle="tab" data-bs-target="#specsTab">
                         Hide & Materials Matrix
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link font-serif px-4 py-3 text-uppercase fw-semibold" id="careTab-tab" style="letter-spacing: 0.1em; color: var(--color-espresso-deep);" data-bs-toggle="tab" data-bs-target="#careTab">
+                    <button class="nav-link font-serif text-uppercase fw-semibold" id="careTab-tab" data-bs-toggle="tab" data-bs-target="#careTab">
                         Heritage Preservation
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link font-serif px-4 py-3 text-uppercase fw-semibold" id="deliveryTab-tab" style="letter-spacing: 0.1em; color: var(--color-espresso-deep);" data-bs-toggle="tab" data-bs-target="#deliveryTab">
+                    <button class="nav-link font-serif text-uppercase fw-semibold" id="deliveryTab-tab" data-bs-toggle="tab" data-bs-target="#deliveryTab">
                         <?= e($activeCountry['name']) ?> Delivery & Customs
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link font-serif px-4 py-3 text-uppercase fw-semibold" id="reviewsTab-tab" style="letter-spacing: 0.1em; color: var(--color-espresso-deep);" data-bs-toggle="tab" data-bs-target="#reviewsTab">
+                    <button class="nav-link font-serif text-uppercase fw-semibold" id="reviewsTab-tab" data-bs-toggle="tab" data-bs-target="#reviewsTab">
                         Patron Reviews (<?= count($reviews) ?>)
                     </button>
                 </li>
             </ul>
 
-            <div class="tab-content p-4 p-md-5 bg-white border border-top-0 shadow-soft" style="border-color: var(--color-border);">
+            <div class="tab-content p-3 p-md-5 bg-white border border-top-0 shadow-soft" style="border-color: var(--color-border);">
                 <!-- Tab 1: Description -->
                 <div class="tab-pane fade show active" id="descTab">
                     <div class="max-w-800 mx-auto">
@@ -833,16 +845,117 @@ require __DIR__ . '/../layouts/header.php';
 
 <style>
 /* Product Detail Styling */
+.pdp-breadcrumbs {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.pdp-breadcrumbs::-webkit-scrollbar {
+    display: none;
+}
+.pdp-breadcrumbs .active-crumb {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: bottom;
+}
+@media (min-width: 768px) {
+    .pdp-breadcrumbs .active-crumb {
+        max-width: none;
+    }
+}
+
+.pdp-title {
+    font-size: clamp(1.4rem, 5vw, 2.25rem);
+    color: var(--color-espresso-deep);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.pdp-price-value {
+    color: var(--color-espresso-deep);
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+
+/* Badges on main showcase */
+.pdp-badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.pdp-badges .badge-luxury {
+    font-size: 0.62rem;
+    padding: 3px 8px;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+}
+@media (min-width: 768px) {
+    .pdp-badges {
+        top: 1.25rem;
+        left: 1.25rem;
+        gap: 6px;
+    }
+    .pdp-badges .badge-luxury {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+    }
+}
+
+/* Gallery Thumbnails Strip */
+.pdp-thumbnails-strip {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+.pdp-thumbnails-strip::-webkit-scrollbar {
+    display: none;
+}
+.pdp-thumbnails-strip .product-thumb-box {
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
+    padding: 2px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+@media (min-width: 768px) {
+    .pdp-thumbnails-strip .product-thumb-box {
+        flex: 0 0 85px;
+        width: 85px;
+        height: 85px;
+        padding: 3px;
+    }
+}
+
+/* Size Pills */
 .size-pill-btn {
     border: 1px solid var(--color-border);
     background: #ffffff;
     color: var(--color-espresso-deep);
-    padding: 8px 16px;
-    font-size: 0.85rem;
+    padding: 6px 14px;
+    font-size: 0.82rem;
     font-weight: 600;
     border-radius: 2px;
     transition: all 0.2s ease;
     cursor: pointer;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .size-pill-btn:hover {
     border-color: var(--color-gold);
@@ -854,11 +967,13 @@ require __DIR__ . '/../layouts/header.php';
     border-color: var(--color-gold);
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
+
+/* Color Swatches */
 .color-swatch-btn {
     background: transparent;
     border: 2px solid transparent;
     border-radius: 50%;
-    padding: 3px;
+    padding: 2px;
     cursor: pointer;
     transition: all 0.22s ease-in-out;
     display: inline-flex;
@@ -866,8 +981,8 @@ require __DIR__ . '/../layouts/header.php';
     justify-content: center;
 }
 .color-swatch-btn .swatch-circle {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     display: block;
     box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
@@ -878,15 +993,102 @@ require __DIR__ . '/../layouts/header.php';
 }
 .color-swatch-btn.active {
     border-color: var(--color-gold) !important;
-    box-shadow: 0 0 0 2px var(--color-espresso-deep), 0 0 10px rgba(197, 168, 128, 0.5);
+    box-shadow: 0 0 0 2px var(--color-espresso-deep), 0 0 8px rgba(197, 168, 128, 0.4);
     transform: scale(1.08);
 }
+
+/* Active Thumb Highlight */
 .active-thumb {
     border-color: var(--color-gold) !important;
     box-shadow: 0 0 0 2px var(--color-gold);
 }
 .cursor-pointer {
     cursor: pointer;
+}
+
+/* Action Bar PDP wishlist & quantity override */
+.pdp-action-group {
+    min-height: 48px;
+}
+.pdp-qty-box {
+    flex: 0 0 auto;
+}
+.pdp-wishlist-btn {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    top: auto !important;
+    right: auto !important;
+    font-size: 1.15rem !important;
+    border-radius: 2px !important;
+    padding: 0 !important;
+    border: 1px solid var(--color-border) !important;
+    background: #ffffff !important;
+}
+.pdp-wishlist-btn:hover {
+    border-color: var(--color-gold) !important;
+    background: var(--color-ivory) !important;
+}
+
+/* Mobile Tabs Horizontal Swipeable Pill Bar */
+@media (max-width: 767.98px) {
+    #mainProductPhoto {
+        max-height: 360px !important;
+    }
+    .mobile-pdp-tabs {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        gap: 0.45rem !important;
+        padding-bottom: 0.6rem !important;
+        border-bottom: 1px solid var(--color-border) !important;
+        justify-content: flex-start !important;
+    }
+    .mobile-pdp-tabs::-webkit-scrollbar {
+        display: none !important;
+    }
+    .mobile-pdp-tabs .nav-item {
+        flex: 0 0 auto !important;
+    }
+    .mobile-pdp-tabs .nav-link {
+        padding: 0.5rem 0.9rem !important;
+        font-size: 0.76rem !important;
+        letter-spacing: 0.04em !important;
+        border-radius: 20px !important;
+        border: 1px solid var(--color-border) !important;
+        background: #ffffff !important;
+        color: var(--color-espresso-deep) !important;
+        white-space: nowrap !important;
+        margin-bottom: 0 !important;
+    }
+    .mobile-pdp-tabs .nav-link.active {
+        background-color: var(--color-espresso-deep) !important;
+        color: var(--color-gold) !important;
+        border-color: var(--color-espresso-deep) !important;
+        box-shadow: 0 2px 6px rgba(18, 11, 6, 0.15) !important;
+    }
+    .tab-content .table th,
+    .tab-content .table td {
+        padding: 0.45rem 0.6rem !important;
+        font-size: 0.8rem !important;
+    }
+}
+@media (min-width: 768px) {
+    .mobile-pdp-tabs .nav-link {
+        padding: 0.9rem 1.4rem;
+        letter-spacing: 0.08em;
+        color: var(--color-espresso-deep);
+        border: none;
+        border-bottom: 2px solid transparent;
+    }
+    .mobile-pdp-tabs .nav-link.active {
+        border-bottom-color: var(--color-gold);
+        color: var(--color-espresso-deep);
+        background: transparent;
+    }
 }
 </style>
 

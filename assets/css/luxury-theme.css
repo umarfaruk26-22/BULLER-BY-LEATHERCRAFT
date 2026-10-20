@@ -1504,14 +1504,14 @@ table td.text-end {
         border-radius: 3px !important;
         letter-spacing: 0 !important;
     }
-    .wishlist-toggle-btn {
+    .product-card .wishlist-toggle-btn {
         width: 28px !important;
         height: 28px !important;
         top: 6px !important;
         right: 6px !important;
         font-size: 0.72rem !important;
     }
-    .product-badges {
+    .product-card .product-badges {
         top: 6px !important;
         left: 6px !important;
         gap: 3px !important;
@@ -1522,6 +1522,119 @@ table td.text-end {
     }
     .related-prod-img-wrapper {
         height: 160px !important;
+    }
+
+    /* Product Details Page (PDP) Mobile Optimization */
+    .pdp-breadcrumbs {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .pdp-breadcrumbs::-webkit-scrollbar {
+        display: none;
+    }
+    .pdp-breadcrumbs .active-crumb {
+        max-width: 170px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+    #mainProductPhoto {
+        max-height: 360px !important;
+    }
+    .pdp-badges {
+        position: absolute;
+        top: 0.75rem !important;
+        left: 0.75rem !important;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 4px !important;
+    }
+    .pdp-badges .badge-luxury {
+        font-size: 0.62rem !important;
+        padding: 3px 8px !important;
+        letter-spacing: 0.05em !important;
+        border-radius: 2px !important;
+    }
+    .pdp-thumbnails-strip {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+    }
+    .pdp-thumbnails-strip::-webkit-scrollbar {
+        display: none;
+    }
+    .pdp-thumbnails-strip .product-thumb-box {
+        flex: 0 0 62px;
+        width: 62px;
+        height: 62px;
+        padding: 2px;
+        border-radius: 2px;
+    }
+    .pdp-title {
+        font-size: clamp(1.4rem, 5.2vw, 2.2rem) !important;
+        line-height: 1.2 !important;
+    }
+    .pdp-price-value {
+        font-size: clamp(1.6rem, 5.5vw, 2.2rem) !important;
+        line-height: 1.1 !important;
+    }
+    .pdp-action-group {
+        min-height: 48px;
+    }
+    .pdp-wishlist-btn {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        max-width: 48px !important;
+        top: auto !important;
+        right: auto !important;
+        font-size: 1.15rem !important;
+        border-radius: 2px !important;
+        padding: 0 !important;
+        border: 1px solid var(--color-border) !important;
+        background: #ffffff !important;
+    }
+    .mobile-pdp-tabs {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        gap: 0.45rem !important;
+        padding-bottom: 0.6rem !important;
+        border-bottom: 1px solid var(--color-border) !important;
+        justify-content: flex-start !important;
+    }
+    .mobile-pdp-tabs::-webkit-scrollbar {
+        display: none !important;
+    }
+    .mobile-pdp-tabs .nav-item {
+        flex: 0 0 auto !important;
+    }
+    .mobile-pdp-tabs .nav-link {
+        padding: 0.5rem 0.9rem !important;
+        font-size: 0.76rem !important;
+        letter-spacing: 0.04em !important;
+        border-radius: 20px !important;
+        border: 1px solid var(--color-border) !important;
+        background: #ffffff !important;
+        color: var(--color-espresso-deep) !important;
+        white-space: nowrap !important;
+        margin-bottom: 0 !important;
+    }
+    .mobile-pdp-tabs .nav-link.active {
+        background-color: var(--color-espresso-deep) !important;
+        color: var(--color-gold) !important;
+        border-color: var(--color-espresso-deep) !important;
+        box-shadow: 0 2px 6px rgba(18, 11, 6, 0.15) !important;
     }
 
     /* Hero Banner Mobile Styling - Horizontally Sleek & Panoramic (Desktop-like wide ratio + scaled content) */

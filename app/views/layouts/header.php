@@ -32,7 +32,7 @@ $currentUser = Auth::user();
     
     <?php
     $cssDiskPath = dirname(__DIR__, 3) . '/assets/css/luxury-theme.css';
-    $cssVersion = file_exists($cssDiskPath) ? filemtime($cssDiskPath) : '1.0.0';
+    $cssVersion = time();
     ?>
     <!-- Custom Luxury Design System -->
     <link rel="stylesheet" href="<?= asset('assets/css/luxury-theme.css') ?>?v=<?= $cssVersion ?>">
@@ -67,12 +67,17 @@ $currentUser = Auth::user();
             <!-- Action Icons (Right side of navbar on both mobile and desktop) -->
             <div class="d-flex align-items-center gap-1 gap-xl-2 nav-actions-wrapper ms-auto ms-lg-0 order-2 order-lg-3">
                 <!-- Market & Regional Selector Pill (Desktop View >= 992px) -->
-                <button type="button" class="btn buller-market-pill-btn d-none d-lg-inline-flex align-items-center gap-2 me-1 me-xl-2" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" title="Select Shopping Region & Currency" aria-label="Selected Region">
+                <button type="button" class="btn buller-market-pill-btn d-none d-lg-inline-flex align-items-center gap-2 me-1 me-xl-2" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" style="background-color: #1a1410 !important; border: 1px solid rgba(197, 168, 128, 0.45) !important; color: #ffffff !important; border-radius: 8px !important; padding: 0.38rem 0.85rem !important; font-size: 0.8rem !important; box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important; white-space: nowrap !important;" title="Select Shopping Region & Currency" aria-label="Selected Region">
                     <?= country_flag($activeCountry['code'], $activeCountry['name'], 18) ?>
-                    <span class="buller-market-pill-name"><?= e($activeCountry['name']) ?></span>
-                    <span class="buller-market-pill-dot">&bull;</span>
-                    <strong class="buller-market-pill-currency"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>
-                    <i class="bi bi-chevron-down ms-1 text-muted" style="font-size: 0.65rem;"></i>
+                    <span class="buller-market-pill-name" style="color: #ded6cb !important; font-weight: 500 !important;"><?= e($activeCountry['name']) ?></span>
+                    <span class="buller-market-pill-dot" style="color: rgba(197, 168, 128, 0.75) !important;">&bull;</span>
+                    <strong class="buller-market-pill-currency" style="color: #ffffff !important; font-weight: 700 !important;"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>
+                    <i class="bi bi-chevron-down ms-1" style="font-size: 0.65rem; color: var(--color-gold) !important;"></i>
+                </button>
+
+                <!-- Mobile Compact Flag/Market Trigger (Mobile View Only d-lg-none) -->
+                <button type="button" class="btn nav-actions-icon d-lg-none d-inline-flex align-items-center justify-content-center p-1" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" title="Region: <?= e($activeCountry['name']) ?> (<?= e($activeCountry['currency_code']) ?>)" aria-label="Selected Region" style="width: 36px; height: 36px;">
+                    <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
                 </button>
 
                 <!-- 1. Search Trigger -->
@@ -202,16 +207,16 @@ $currentUser = Auth::user();
             <div class="p-3">
                 <!-- Active Regional Market Pill (Mobile View in Drawer where all pages are) -->
                 <div class="mb-3">
-                    <button type="button" class="btn buller-market-pill-btn buller-market-pill-drawer w-100 d-flex align-items-center justify-content-between py-2 px-3" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" title="Select Shopping Region & Currency" aria-label="Selected Region">
+                    <button type="button" class="btn buller-market-pill-btn buller-market-pill-drawer w-100 d-flex align-items-center justify-content-between py-2 px-3" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" style="background: linear-gradient(135deg, #1a1410 0%, #221812 100%) !important; border: 1px solid rgba(197, 168, 128, 0.45) !important; color: #ffffff !important; border-radius: 10px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;" title="Select Shopping Region & Currency" aria-label="Selected Region">
                         <div class="d-flex align-items-center gap-2">
                             <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
                             <div class="text-start" style="line-height: 1.25;">
-                                <div class="buller-market-pill-name" style="font-size: 0.84rem;"><?= e($activeCountry['name']) ?></div>
-                                <div class="buller-market-pill-currency" style="font-size: 0.74rem;"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</div>
+                                <div class="buller-market-pill-name" style="font-size: 0.84rem; color: #ded6cb !important; font-weight: 600 !important;"><?= e($activeCountry['name']) ?></div>
+                                <div class="buller-market-pill-currency" style="font-size: 0.74rem; color: #ffffff !important; font-weight: 700 !important;"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <span class="badge border small" style="background: rgba(255, 255, 255, 0.08); border-color: rgba(197, 168, 128, 0.3) !important; font-size: 0.68rem; color: var(--color-gold);">
+                            <span class="badge border small" style="background: rgba(255, 255, 255, 0.08) !important; border-color: rgba(197, 168, 128, 0.4) !important; font-size: 0.68rem !important; color: var(--color-gold) !important;">
                                 Change <i class="bi bi-chevron-right ms-1"></i>
                             </span>
                         </div>
