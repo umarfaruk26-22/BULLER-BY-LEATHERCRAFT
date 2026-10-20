@@ -11,51 +11,16 @@ $activeCountry = MarketContext::getCountry();
 <!-- 1. CINEMATIC LUXURY HERO BANNER -->
 <section class="hero-slider-section" style="background-image: url('<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>');">
     <div class="hero-overlay"></div>
-    <div class="container hero-content py-3 py-md-5">
+    <div class="container hero-content py-4 py-md-5">
         <div class="row align-items-center">
             <div class="col-lg-8 col-xl-7">
-                <span class="hero-subtitle">
-                    <i class="bi bi-gem text-gold me-2"></i> Mastercrafted In Limited Batches
-                </span>
                 <h1 class="hero-title">
                     Generational Leather. <br>
                     <span style="color: var(--color-gold-bright); font-style: italic;">Forged For Decades.</span>
                 </h1>
-                <p class="hero-description">
+                <p class="hero-description mb-0">
                     Buller Leather crafts heirloom-grade outerwear, executive luggage, and accessories from the finest European full-grain hides. Every piece is constructed to withstand decades and age with peerless patina.
                 </p>
-                <div class="hero-actions-group d-flex flex-wrap gap-2 gap-sm-3">
-                    <a href="<?= url('shop') ?>" class="btn btn-buller-gold btn-lg">
-                        Explore <span class="d-none d-sm-inline">Master </span>Curations <i class="bi bi-arrow-right ms-1 ms-sm-2"></i>
-                    </a>
-                    <a href="<?= url('about') ?>" class="btn btn-buller-outline-light btn-lg">
-                        <span class="d-none d-sm-inline">Our </span>Atelier Heritage
-                    </a>
-                </div>
-
-                <div class="hero-trust-bar mt-4 mt-md-5 pt-3">
-                    <div class="hero-trust-item">
-                        <i class="bi bi-shield-check text-warning fs-5"></i>
-                        <div>
-                            <strong class="trust-title">100% Full-Grain</strong>
-                            <span class="trust-desc">European Hides</span>
-                        </div>
-                    </div>
-                    <div class="hero-trust-item hero-trust-divider">
-                        <i class="bi bi-award text-warning fs-5"></i>
-                        <div>
-                            <strong class="trust-title">Lifetime Warranty</strong>
-                            <span class="trust-desc">Hardware & Stitching</span>
-                        </div>
-                    </div>
-                    <div class="hero-trust-item hero-trust-divider">
-                        <span class="fs-5"><?= country_flag($activeCountry['code'], $activeCountry['name'], 22) ?></span>
-                        <div>
-                            <strong class="trust-title"><?= e($activeCountry['name']) ?> Market</strong>
-                            <span class="trust-desc"><?= e($activeCountry['currency_code']) ?> Delivery</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
