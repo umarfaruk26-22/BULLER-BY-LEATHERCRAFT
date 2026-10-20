@@ -11,7 +11,7 @@ $activeCountry = MarketContext::getCountry();
 <!-- 1. CINEMATIC LUXURY HERO BANNER -->
 <section class="hero-slider-section" style="background-image: url('<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>');">
     <div class="hero-overlay"></div>
-    <div class="container hero-content py-4 py-md-5">
+    <div class="container hero-content py-md-5">
         <div class="row align-items-center">
             <div class="col-lg-8 col-xl-7">
                 <h1 class="hero-title">
