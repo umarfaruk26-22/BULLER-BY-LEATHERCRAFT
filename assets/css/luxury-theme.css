@@ -1443,12 +1443,14 @@ table td.text-end {
         padding-bottom: 3.5rem !important;
         padding-left: 1.15rem !important;
         padding-right: 1.15rem !important;
+        background-size: cover !important;
         background-position: center center !important;
+        background-repeat: no-repeat !important;
         display: flex !important;
         align-items: center !important;
     }
     .hero-slider-section .hero-overlay {
-        background: linear-gradient(180deg, rgba(18, 11, 6, 0.88) 0%, rgba(18, 11, 6, 0.95) 100%) !important;
+        background: linear-gradient(90deg, rgba(18, 11, 6, 0.94) 0%, rgba(18, 11, 6, 0.85) 55%, rgba(18, 11, 6, 0.6) 100%) !important;
     }
     .hero-slider-section .hero-content {
         padding-top: 1.25rem !important;
