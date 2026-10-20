@@ -1439,9 +1439,9 @@ table td.text-end {
 
     /* Hero Banner Mobile Styling - Horizontally Sleek & Panoramic (Desktop-like wide ratio + scaled content) */
     .hero-slider-section {
-        min-height: 320px !important;
-        padding-top: 1.15rem !important;
-        padding-bottom: 1.15rem !important;
+        min-height: 340px !important;
+        padding-top: 1.25rem !important;
+        padding-bottom: 1.25rem !important;
         padding-left: 0.85rem !important;
         padding-right: 0.85rem !important;
         background-size: cover !important;
@@ -1465,9 +1465,9 @@ table td.text-end {
         text-align: center !important;
     }
     .hero-title {
-        font-size: clamp(1.12rem, 4vw, 1.32rem) !important;
-        line-height: 1.2 !important;
-        margin-bottom: 0.7rem !important;
+        font-size: clamp(1.5rem, 5.8vw, 1.95rem) !important;
+        line-height: 1.18 !important;
+        margin-bottom: 0.85rem !important;
         letter-spacing: -0.01em !important;
         text-align: center !important;
     }
@@ -1621,15 +1621,16 @@ table td.text-end {
 
 @media (max-width: 420px) {
     .hero-slider-section {
-        min-height: 300px !important;
+        min-height: 320px !important;
         padding-left: 0.65rem !important;
         padding-right: 0.65rem !important;
-        padding-top: 0.95rem !important;
-        padding-bottom: 0.95rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
     }
     .hero-title {
-        font-size: 1.08rem !important;
-        margin-bottom: 0.55rem !important;
+        font-size: 1.42rem !important;
+        line-height: 1.18 !important;
+        margin-bottom: 0.7rem !important;
     }
     .hero-actions-group {
         gap: 0.35rem !important;
