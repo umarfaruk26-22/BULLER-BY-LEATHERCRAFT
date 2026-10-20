@@ -1278,7 +1278,7 @@ table td.text-end {
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    min-height: 480px;
+    min-height: 580px;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -1439,8 +1439,8 @@ table td.text-end {
     /* Hero Banner Mobile Styling - Compact & Proportional (Desktop Look & Feel) */
     .hero-slider-section {
         min-height: auto !important;
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.25rem !important;
         background-position: center center !important;
     }
     .hero-slider-section .hero-overlay {
@@ -1450,18 +1450,32 @@ table td.text-end {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
     }
-    .hero-title {
-        font-size: clamp(1.45rem, 5.8vw, 1.95rem) !important;
-        line-height: 1.2 !important;
+    .hero-subtitle {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.12em !important;
+        padding: 0.2rem 0.6rem !important;
         margin-bottom: 0.5rem !important;
+        display: inline-flex !important;
+    }
+    .hero-subtitle i {
+        font-size: 0.72rem !important;
+    }
+    .hero-title {
+        font-size: clamp(1.4rem, 5.6vw, 1.85rem) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.45rem !important;
         letter-spacing: -0.01em !important;
     }
     .hero-description {
-        font-size: 0.82rem !important;
-        line-height: 1.5 !important;
-        margin-bottom: 0 !important;
+        font-size: 0.8rem !important;
+        line-height: 1.45 !important;
+        margin-bottom: 0.85rem !important;
         opacity: 0.88 !important;
         max-width: 100% !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     .hero-actions-group {
         flex-direction: row !important;
