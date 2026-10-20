@@ -1313,7 +1313,7 @@ table td.text-end {
     font-weight: 700;
     line-height: 1.15;
     color: #ffffff;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.65rem;
     letter-spacing: -0.01em;
 }
 .hero-description {
@@ -1463,7 +1463,7 @@ table td.text-end {
     .hero-title {
         font-size: clamp(1.4rem, 5.6vw, 1.85rem) !important;
         line-height: 1.2 !important;
-        margin-bottom: 0.45rem !important;
+        margin-bottom: 0.85rem !important;
         letter-spacing: -0.01em !important;
     }
     .hero-description {

@@ -14,16 +14,10 @@ $activeCountry = MarketContext::getCountry();
     <div class="container hero-content py-3 py-md-5">
         <div class="row align-items-center">
             <div class="col-lg-8 col-xl-7">
-                <span class="hero-subtitle">
-                    <i class="bi bi-gem text-gold me-2"></i> Mastercrafted In Limited Batches
-                </span>
                 <h1 class="hero-title">
                     Generational Leather. <br>
                     <span style="color: var(--color-gold-bright); font-style: italic;">Forged For Decades.</span>
                 </h1>
-                <p class="hero-description">
-                    Buller Leather crafts heirloom-grade outerwear, executive luggage, and accessories from the finest European full-grain hides. Every piece is constructed to withstand decades and age with peerless patina.
-                </p>
                 <div class="hero-actions-group d-flex flex-wrap gap-2 gap-sm-3">
                     <a href="<?= url('shop') ?>" class="btn btn-buller-gold btn-lg">
                         Explore <span class="d-none d-sm-inline">Master </span>Curations <i class="bi bi-arrow-right ms-1 ms-sm-2"></i>
