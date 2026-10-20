@@ -43,3 +43,14 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Timezone
 date_default_timezone_set('UTC');
+
+// Case-safe App\Core autoloader for Linux environments
+spl_autoload_register(function ($class) {
+    if (str_starts_with($class, 'App\\Core\\')) {
+        $className = substr($class, 9); // length of "App\Core\"
+        $file = __DIR__ . '/../core/' . $className . '.php';
+        if (file_exists($file)) {
+            require_once $file;
+        }
+    }
+});
