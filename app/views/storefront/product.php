@@ -105,100 +105,56 @@ require __DIR__ . '/../layouts/header.php';
 
             <!-- Right: Commercial Specifications & Interactive Purchase Engine -->
             <div class="col-lg-5">
-                <div class="ps-lg-3">
-                    <!-- Brand Origin Tag -->
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-uppercase small fw-bold" style="letter-spacing: 0.25em; color: var(--color-gold-dark); font-size: 0.75rem;">
-                            Buller Atelier &bull; <?= e($product['leather_type'] ?? 'Prime European Hide') ?>
-                        </span>
-                        <?= country_flag($activeCountry['code'], $activeCountry['name'], 22) ?>
-                    </div>
-
-                    <!-- Product Main Title -->
-                    <h1 class="font-serif pdp-title mt-1 mb-2">
-                        <?= e($product['title']) ?>
-                    </h1>
-
-                    <!-- SKU & Patron Ratings Summary -->
-                    <div class="d-flex flex-wrap align-items-center gap-2 gap-md-3 text-muted small mb-3 pb-2 border-bottom">
-                        <div>SKU: <strong class="text-dark"><?= e($product['sku']) ?></strong></div>
-                        <span>&bull;</span>
-                        <div class="d-flex align-items-center gap-1">
-                            <div class="text-warning small">
-                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                    <i class="bi bi-star<?= ($i <= round($avgRating)) ? '-fill' : '' ?>"></i>
-                                <?php endfor; ?>
-                            </div>
-                            <a href="#reviewsTab" onclick="document.querySelector('#reviewsTab-tab').click();" class="text-muted text-decoration-underline ms-1">
-                                <?= $avgRating ?> (<?= count($reviews) ?> Reviews)
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Localized Pricing Card -->
-                    <div class="p-3 p-md-4 bg-white border shadow-soft mb-3 mb-md-4 position-relative" style="border-color: var(--color-border); border-left: 4px solid var(--color-gold) !important;">
-                        <div class="d-flex flex-wrap align-items-baseline gap-2 gap-md-3">
-                            <span class="pdp-price-value fw-bold">
-                                <?= $pricing['formatted_final'] ?>
+                <div class="ps-lg-3 pdp-details-col">
+                    <!-- 1. Header Block: Brand Origin Tag, Title, SKU & Ratings & Mobile Stock Badge -->
+                    <div class="pdp-header-block mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-1 mb-md-2">
+                            <span class="text-uppercase small fw-bold" style="letter-spacing: 0.2em; color: var(--color-gold-dark); font-size: 0.72rem;">
+                                Buller Atelier &bull; <?= e($product['leather_type'] ?? 'Prime European Hide') ?>
                             </span>
-                            <?php if ($pricing['is_discounted']): ?>
-                                <span class="fs-6 fs-md-5 text-muted text-decoration-line-through">
-                                    <?= $pricing['formatted_original'] ?>
-                                </span>
-                                <span class="badge bg-danger px-2 py-1 small">
-                                    Save <?= MarketContext::formatPrice($pricing['original_price'] - $pricing['final_price']) ?> (<?= $pricing['discount_percent'] ?>% OFF)
-                                </span>
-                            <?php endif; ?>
+                            <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
                         </div>
-                        <div class="text-muted small mt-2 d-flex flex-column gap-1" style="font-size: 0.8rem;">
-                            <div>
-                                <i class="bi bi-shield-check text-success me-1"></i>
-                                Includes localized <strong><?= e($activeCountry['tax_name']) ?> (<?= $activeCountry['tax_rate_percent'] ?>%)</strong>. Formatted in <strong><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>.
+
+                        <h1 class="font-serif pdp-title mt-1 mb-2">
+                            <?= e($product['title']) ?>
+                        </h1>
+
+                        <div class="d-flex flex-wrap align-items-center gap-2 text-muted small mb-2 mb-md-3 pb-2 border-bottom">
+                            <div>SKU: <strong class="text-dark"><?= e($product['sku']) ?></strong></div>
+                            <span>&bull;</span>
+                            <div class="d-flex align-items-center gap-1">
+                                <div class="text-warning small" style="font-size: 0.75rem;">
+                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="bi bi-star<?= ($i <= round($avgRating)) ? '-fill' : '' ?>"></i>
+                                    <?php endfor; ?>
+                                </div>
+                                <a href="#reviewsTab" onclick="document.querySelector('#reviewsTab-tab').click();" class="text-muted text-decoration-underline ms-1" style="font-size: 0.78rem;">
+                                    <?= $avgRating ?> (<?= count($reviews) ?> Reviews)
+                                </a>
                             </div>
-                            <div class="text-success fw-semibold">
-                                <i class="bi bi-truck me-1"></i> Complimentary International Air Delivery to <?= e($activeCountry['name']) ?> included.
+                            <div class="ms-auto d-inline-block d-lg-none">
+                                <?php if ((int)$product['stock_quantity'] > 0): ?>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.68rem; padding: 2px 7px;">
+                                        <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 0.68rem; padding: 2px 7px;">
+                                        Sold Out
+                                    </span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Regional Stock & Availability Status -->
-                    <div class="mb-3 mb-md-4 p-2 p-md-3 bg-white border rounded-1" style="border-color: var(--color-border);">
-                        <?php if ((int)$product['stock_quantity'] > 5): ?>
-                            <div class="d-flex align-items-center gap-2 text-success small fw-semibold">
-                                <i class="bi bi-check-circle-fill fs-5"></i>
-                                <div>
-                                    <strong class="d-block text-dark">In Stock & Prepared for Dispatch</strong>
-                                    <span><?= (int)$product['stock_quantity'] ?> units available in <?= e($activeCountry['name']) ?> regional fulfillment center.</span>
-                                </div>
-                            </div>
-                        <?php elseif ((int)$product['stock_quantity'] > 0): ?>
-                            <div class="d-flex align-items-center gap-2 text-warning-emphasis small fw-semibold">
-                                <i class="bi bi-fire text-danger fs-5"></i>
-                                <div>
-                                    <strong class="d-block text-danger">Limited Atelier Vault Inventory</strong>
-                                    <span>Only <?= (int)$product['stock_quantity'] ?> pieces remaining for <?= e($activeCountry['name']) ?> patrons.</span>
-                                </div>
-                            </div>
-                        <?php else: ?>
-                            <div class="d-flex align-items-center gap-2 text-danger small fw-semibold">
-                                <i class="bi bi-x-circle-fill fs-5"></i>
-                                <div>
-                                    <strong class="d-block text-danger">Currently Reserved / Out of Stock</strong>
-                                    <span>This piece is awaiting next tanning release for <?= e($activeCountry['name']) ?>.</span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- Dynamic Size & Specification Selector (All Categories) -->
+                    <!-- 2. Dynamic Size & Specification Selector -->
                     <?php 
                         $catSlug = $product['category_slug'] ?? '';
                     ?>
-                    <div class="mb-4">
+                    <div class="pdp-size-block mb-3 mb-md-4">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <label class="form-label small fw-bold text-muted mb-0">Select Atelier Fit / Size:</label>
-                            <button type="button" class="btn btn-link p-0 small text-decoration-underline" style="color: var(--color-cognac);" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
-                                <i class="bi bi-rulers me-1"></i> Interactive Size & Fit Guide
+                            <button type="button" class="btn btn-link p-0 small text-decoration-underline" style="color: var(--color-cognac); font-size: 0.78rem;" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+                                <i class="bi bi-rulers me-1"></i> Size Guide
                             </button>
                         </div>
 
@@ -242,11 +198,11 @@ require __DIR__ . '/../layouts/header.php';
                         <input type="hidden" id="selectedProductSize" value="Standard Heirloom Edition">
                     </div>
 
-                    <!-- Interactive Curated Colorway Selector -->
-                    <div class="mb-4">
+                    <!-- 3. Interactive Curated Colorway Selector -->
+                    <div class="pdp-color-block mb-3 mb-md-4">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <label class="form-label small fw-bold text-muted mb-0">Select Curated Leather Colorway:</label>
-                            <span id="selectedColorName" class="badge bg-white text-dark border shadow-sm small fw-bold" style="border-color: var(--color-gold) !important; color: var(--color-espresso-deep) !important;">
+                            <span id="selectedColorName" class="badge bg-white text-dark border shadow-sm small fw-bold" style="border-color: var(--color-gold) !important; color: var(--color-espresso-deep) !important; font-size: 0.72rem;">
                                 <?= e($product['color'] ?? 'Heritage Deep Espresso') ?>
                             </span>
                         </div>
@@ -268,24 +224,93 @@ require __DIR__ . '/../layouts/header.php';
                         <input type="hidden" id="selectedProductColor" value="<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>">
                     </div>
 
-                    <!-- Bespoke Hot Foil Monogramming Option -->
-                    <div class="mb-4">
-                        <div class="p-3 bg-white border rounded-1 shadow-sm" style="border-color: var(--color-border);">
+                    <!-- 4. Localized Pricing (Compact on mobile, full on desktop) -->
+                    <div class="pdp-pricing-block p-3 p-md-4 bg-white border shadow-soft mb-3 mb-md-4 position-relative">
+                        <div class="d-flex flex-wrap align-items-baseline gap-2 gap-md-3">
+                            <span class="pdp-price-value fw-bold">
+                                <?= $pricing['formatted_final'] ?>
+                            </span>
+                            <?php if ($pricing['is_discounted']): ?>
+                                <span class="pdp-price-orig fs-6 fs-md-5 text-muted text-decoration-line-through">
+                                    <?= $pricing['formatted_original'] ?>
+                                </span>
+                                <span class="badge bg-danger pdp-price-badge px-2 py-1 small">
+                                    Save <?= MarketContext::formatPrice($pricing['original_price'] - $pricing['final_price']) ?> (<?= $pricing['discount_percent'] ?>% OFF)
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="text-muted small mt-2 d-none d-lg-flex flex-column gap-1" style="font-size: 0.8rem;">
+                            <div>
+                                <i class="bi bi-shield-check text-success me-1"></i>
+                                Includes localized <strong><?= e($activeCountry['tax_name']) ?> (<?= $activeCountry['tax_rate_percent'] ?>%)</strong>. Formatted in <strong><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>.
+                            </div>
+                            <div class="text-success fw-semibold">
+                                <i class="bi bi-truck me-1"></i> Complimentary International Air Delivery to <?= e($activeCountry['name']) ?> included.
+                            </div>
+                        </div>
+                        <div class="pdp-price-subtext d-lg-none mt-1 text-muted small">
+                            <i class="bi bi-shield-check text-success me-1"></i><?= e($activeCountry['tax_name']) ?> Included &bull; <i class="bi bi-truck text-success me-1"></i>Free Express Air Delivery
+                        </div>
+                    </div>
+
+                    <!-- 5. Purchase & Bag Action Buttons (Aligned) -->
+                    <div class="pdp-actions-container d-flex flex-column gap-2 mb-3 mb-md-4">
+                        <div class="d-flex align-items-stretch gap-2 gap-sm-3 pdp-action-group">
+                            <!-- Quantity Counter -->
+                            <div class="pdp-qty-box d-flex align-items-center border bg-white rounded-1" style="border-color: var(--color-border); height: 46px;">
+                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;">&minus;</button>
+                                <input type="number" id="productQty" class="form-control text-center border-0 p-0 fw-bold" value="1" min="1" max="<?= max(1, (int)$product['stock_quantity']) ?>" style="width: 36px; font-size: 0.95rem;">
+                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) < <?= max(1, (int)$product['stock_quantity']) ?>) input.value = parseInt(input.value) + 1;">&#43;</button>
+                            </div>
+
+                            <!-- Add to Bag Button -->
+                            <button type="button" class="btn btn-buller-gold flex-grow-1 py-2 py-md-3 btn-add-to-cart fw-bold d-flex align-items-center justify-content-center" data-product-id="<?= $product['id'] ?>" onclick="this.dataset.quantity = document.getElementById('productQty').value;" style="min-height: 46px; font-size: 0.92rem; letter-spacing: 0.05em;">
+                                <i class="bi bi-bag-plus me-2 fs-5"></i> <span>Add To Bag</span>
+                            </button>
+
+                            <!-- Wishlist Toggle Button -->
+                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations" style="width: 46px !important; height: 46px !important; min-width: 46px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
+                                <i class="bi <?= $isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart' ?> fs-5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Instant Buy Now Button -->
+                        <button type="button" class="btn btn-dark w-100 py-3 btn-instant-buy text-uppercase fw-bold shadow-sm d-flex align-items-center justify-content-center" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.1em; min-height: 46px; font-size: 0.88rem;" onclick="instantBuyNow(<?= $product['id'] ?>)">
+                            <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Instant Privé Checkout
+                        </button>
+                    </div>
+
+                    <!-- 6. Short Description (Concise luxury narrative) -->
+                    <div class="pdp-short-desc-block mb-3 mb-md-4">
+                        <div class="p-3 bg-white border rounded-1 shadow-xs pdp-short-desc-box" style="border-color: var(--color-border); border-left: 3px solid var(--color-gold) !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.15em; color: var(--color-gold-dark);">Atelier Highlights</span>
+                                <a href="#descTab" onclick="document.querySelector('#descTab-tab').click();" class="small text-decoration-none" style="color: var(--color-cognac); font-size: 0.72rem;">Full Architecture &darr;</a>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 0.84rem; line-height: 1.6;">
+                                <?= e(!empty($product['short_description']) ? $product['short_description'] : substr(strip_tags($product['detailed_description']), 0, 160) . '...') ?>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 7. Bespoke Hot Foil Monogramming Option -->
+                    <div class="pdp-monogram-block mb-3 mb-md-4">
+                        <div class="p-2 p-md-3 bg-white border rounded-1 shadow-sm" style="border-color: var(--color-border);">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="monogramToggle" onchange="document.getElementById('monogramBox').classList.toggle('d-none');">
-                                <label class="form-check-label small fw-bold text-dark cursor-pointer" for="monogramToggle">
+                                <label class="form-check-label small fw-bold text-dark cursor-pointer" for="monogramToggle" style="font-size: 0.82rem;">
                                     <i class="bi bi-pen-fill text-warning me-1"></i> Add Complimentary Bespoke Monogramming
                                 </label>
                             </div>
-                            <div id="monogramBox" class="mt-3 pt-3 border-top d-none">
+                            <div id="monogramBox" class="mt-2 pt-2 border-top d-none">
                                 <div class="row g-2 align-items-center">
                                     <div class="col-6">
-                                        <label class="form-label small text-muted mb-1">Initials (Max 3):</label>
+                                        <label class="form-label small text-muted mb-1" style="font-size: 0.72rem;">Initials (Max 3):</label>
                                         <input type="text" id="monogramInitials" maxlength="3" class="form-control form-control-sm text-uppercase fw-bold font-monospace" placeholder="e.g. ABL">
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label small text-muted mb-1">Foil Stamping:</label>
-                                        <select id="monogramStyle" class="form-select form-select-sm">
+                                        <label class="form-label small text-muted mb-1" style="font-size: 0.72rem;">Foil Stamping:</label>
+                                        <select id="monogramStyle" class="form-select form-select-sm" style="font-size: 0.75rem;">
                                             <option value="gold">24k Gold Hot Foil</option>
                                             <option value="blind">Blind Debossed Heat Stamp</option>
                                         </select>
@@ -296,35 +321,37 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
                     </div>
 
-                    <!-- Purchase & Bag Action Buttons -->
-                    <div class="pdp-actions-container d-flex flex-column gap-2 mb-3 mb-md-4">
-                        <div class="d-flex align-items-stretch gap-2 gap-sm-3 pdp-action-group">
-                            <!-- Quantity Counter -->
-                            <div class="pdp-qty-box d-flex align-items-center border bg-white rounded-1" style="border-color: var(--color-border); height: 48px;">
-                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;">&minus;</button>
-                                <input type="number" id="productQty" class="form-control text-center border-0 p-0 fw-bold" value="1" min="1" max="<?= max(1, (int)$product['stock_quantity']) ?>" style="width: 38px; font-size: 0.95rem;">
-                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) < <?= max(1, (int)$product['stock_quantity']) ?>) input.value = parseInt(input.value) + 1;">&#43;</button>
+                    <!-- 8. Regional Stock & Availability Status (Desktop full box) -->
+                    <div class="pdp-stock-block mb-3 mb-md-4 p-2 p-md-3 bg-white border rounded-1 d-none d-lg-block" style="border-color: var(--color-border);">
+                        <?php if ((int)$product['stock_quantity'] > 5): ?>
+                            <div class="d-flex align-items-center gap-2 text-success small fw-semibold">
+                                <i class="bi bi-check-circle-fill fs-5"></i>
+                                <div>
+                                    <strong class="d-block text-dark">In Stock & Prepared for Dispatch</strong>
+                                    <span><?= (int)$product['stock_quantity'] ?> units available in <?= e($activeCountry['name']) ?> regional fulfillment center.</span>
+                                </div>
                             </div>
-
-                            <!-- Add to Bag Button -->
-                            <button type="button" class="btn btn-buller-gold flex-grow-1 py-2 py-md-3 btn-add-to-cart fw-bold d-flex align-items-center justify-content-center" data-product-id="<?= $product['id'] ?>" onclick="this.dataset.quantity = document.getElementById('productQty').value;" style="min-height: 48px; font-size: 0.92rem; letter-spacing: 0.05em;">
-                                <i class="bi bi-bag-plus me-2 fs-5"></i> <span>Add To Bag</span>
-                            </button>
-
-                            <!-- Wishlist Toggle Button -->
-                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations" style="width: 48px !important; height: 48px !important; min-width: 48px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
-                                <i class="bi <?= $isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart' ?> fs-5"></i>
-                            </button>
-                        </div>
-
-                        <!-- Instant Buy Now Button -->
-                        <button type="button" class="btn btn-dark w-100 py-3 text-uppercase fw-bold shadow-sm d-flex align-items-center justify-content-center" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.1em; min-height: 48px; font-size: 0.88rem;" onclick="instantBuyNow(<?= $product['id'] ?>)">
-                            <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Instant Privé Checkout
-                        </button>
+                        <?php elseif ((int)$product['stock_quantity'] > 0): ?>
+                            <div class="d-flex align-items-center gap-2 text-warning-emphasis small fw-semibold">
+                                <i class="bi bi-fire text-danger fs-5"></i>
+                                <div>
+                                    <strong class="d-block text-danger">Limited Atelier Vault Inventory</strong>
+                                    <span>Only <?= (int)$product['stock_quantity'] ?> pieces remaining for <?= e($activeCountry['name']) ?> patrons.</span>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="d-flex align-items-center gap-2 text-danger small fw-semibold">
+                                <i class="bi bi-x-circle-fill fs-5"></i>
+                                <div>
+                                    <strong class="d-block text-danger">Currently Reserved / Out of Stock</strong>
+                                    <span>This piece is awaiting next tanning release for <?= e($activeCountry['name']) ?>.</span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
-                    <!-- Atelier Guarantees & Pillars -->
-                    <div class="p-3 bg-white border text-muted small shadow-soft" style="border-color: var(--color-border); border-radius: 2px;">
+                    <!-- 9. Atelier Guarantees & Pillars -->
+                    <div class="pdp-guarantees-block p-3 bg-white border text-muted small shadow-soft mb-3 mb-md-4" style="border-color: var(--color-border); border-radius: 2px;">
                         <div class="d-flex align-items-center gap-2 gap-md-3 mb-2">
                             <i class="bi bi-shield-check text-warning fs-5"></i>
                             <div>
@@ -348,8 +375,8 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
                     </div>
 
-                    <!-- Craftsmanship Certification Banner (Mobile placement below actions & guarantees) -->
-                    <div class="p-3 bg-white border shadow-soft d-flex d-lg-none align-items-center justify-content-between rounded-1 small text-muted mt-3" style="border-color: var(--color-border);">
+                    <!-- 10. Craftsmanship Certification Banner (Mobile placement below actions & guarantees) -->
+                    <div class="pdp-cert-mobile-block p-3 bg-white border shadow-soft d-flex d-lg-none align-items-center justify-content-between rounded-1 small text-muted mb-3" style="border-color: var(--color-border);">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-patch-check-fill text-warning fs-5"></i>
                             <div>
@@ -1029,6 +1056,180 @@ require __DIR__ . '/../layouts/header.php';
 .pdp-wishlist-btn:hover {
     border-color: var(--color-gold) !important;
     background: var(--color-ivory) !important;
+}
+
+/* PDP Details Flex Column Layout */
+.pdp-details-col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Desktop layout order */
+@media (min-width: 992px) {
+    .pdp-header-block { order: 1; }
+    .pdp-pricing-block { order: 2; }
+    .pdp-stock-block { order: 3; }
+    .pdp-size-block { order: 4; }
+    .pdp-color-block { order: 5; }
+    .pdp-monogram-block { order: 6; }
+    .pdp-actions-container { order: 7; }
+    .pdp-short-desc-block { order: 8; }
+    .pdp-guarantees-block { order: 9; }
+}
+
+/* Mobile Product Detail Layout (< 992px) */
+@media (max-width: 991.98px) {
+    /* 1. Header (Brand, Title, Rating, Stock badge) */
+    .pdp-header-block {
+        order: 1;
+        margin-bottom: 0.75rem !important;
+    }
+    .pdp-header-block .pdp-title {
+        font-size: 1.45rem !important;
+        margin-top: 0.25rem !important;
+        margin-bottom: 0.35rem !important;
+        line-height: 1.25;
+    }
+
+    /* 2. Sizes */
+    .pdp-size-block {
+        order: 2;
+        margin-bottom: 0.85rem !important;
+    }
+    .pdp-size-block .form-label {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+    .size-pill-btn {
+        padding: 5px 12px !important;
+        font-size: 0.78rem !important;
+        min-height: 34px !important;
+    }
+
+    /* 3. Colors */
+    .pdp-color-block {
+        order: 3;
+        margin-bottom: 0.85rem !important;
+    }
+    .pdp-color-block .form-label {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+    .color-swatch-btn .swatch-circle {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    /* 4. Compact Price (Chota sa dikha) */
+    .pdp-pricing-block {
+        order: 4;
+        padding: 0.65rem 0.85rem !important;
+        margin-bottom: 0.85rem !important;
+        background: #fdfbf7 !important;
+        border: 1px solid var(--color-border) !important;
+        border-left: 3px solid var(--color-gold) !important;
+        border-radius: 4px !important;
+        box-shadow: none !important;
+    }
+    .pdp-pricing-block .pdp-price-value {
+        font-size: 1.25rem !important;
+        font-weight: 700;
+        color: var(--color-espresso-deep);
+    }
+    .pdp-pricing-block .pdp-price-orig {
+        font-size: 0.82rem !important;
+    }
+    .pdp-pricing-block .pdp-price-badge {
+        font-size: 0.68rem !important;
+        padding: 2px 6px !important;
+    }
+    .pdp-pricing-block .pdp-price-subtext {
+        font-size: 0.72rem !important;
+        color: #706a64 !important;
+        line-height: 1.35;
+    }
+
+    /* 5. Aligned Add to Cart & Buy Buttons */
+    .pdp-actions-container {
+        order: 5;
+        margin-bottom: 0.85rem !important;
+        gap: 0.45rem !important;
+    }
+    .pdp-action-group {
+        display: flex;
+        gap: 0.45rem !important;
+    }
+    .pdp-qty-box {
+        height: 44px !important;
+        border-radius: 3px !important;
+    }
+    .pdp-qty-box button {
+        padding: 0 10px !important;
+        font-size: 1rem !important;
+    }
+    .pdp-qty-box input {
+        width: 32px !important;
+        font-size: 0.88rem !important;
+    }
+    .btn-add-to-cart {
+        min-height: 44px !important;
+        height: 44px !important;
+        font-size: 0.88rem !important;
+        padding: 0 0.9rem !important;
+        border-radius: 3px !important;
+    }
+    .pdp-wishlist-btn {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        max-width: 44px !important;
+        border-radius: 3px !important;
+    }
+    .btn-instant-buy {
+        min-height: 44px !important;
+        height: 44px !important;
+        font-size: 0.84rem !important;
+        letter-spacing: 0.06em !important;
+        padding: 0 1rem !important;
+        border-radius: 3px !important;
+    }
+
+    /* 6. Short Description (Thoda description bhot zyada nai) */
+    .pdp-short-desc-block {
+        order: 6;
+        margin-bottom: 0.95rem !important;
+    }
+    .pdp-short-desc-box {
+        background: #ffffff;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        padding: 0.75rem 0.9rem !important;
+    }
+    .pdp-short-desc-box p {
+        font-size: 0.82rem !important;
+        line-height: 1.55;
+        color: #554f49;
+    }
+
+    /* 7. Monogram */
+    .pdp-monogram-block {
+        order: 7;
+        margin-bottom: 0.85rem !important;
+    }
+
+    /* 8. Guarantees */
+    .pdp-guarantees-block {
+        order: 8;
+        margin-bottom: 0.95rem !important;
+        padding: 0.85rem !important;
+    }
+
+    /* 9. Lot Cert */
+    .pdp-cert-mobile-block {
+        order: 9;
+        margin-bottom: 0.95rem !important;
+        padding: 0.85rem !important;
+    }
 }
 
 /* Mobile Tabs Horizontal Swipeable Pill Bar */
