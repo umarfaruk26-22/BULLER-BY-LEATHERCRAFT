@@ -367,6 +367,72 @@ a:hover {
 }
 
 
+
+/* Luxury Market & Regional Selector Pill (Desktop Navbar & Mobile Drawer) */
+.buller-market-pill-btn {
+    background-color: var(--color-espresso-deep);
+    border: 1px solid rgba(197, 168, 128, 0.4);
+    color: #e8e1d7;
+    font-size: 0.8rem;
+    line-height: 1.25;
+    padding: 0.38rem 0.85rem;
+    border-radius: 8px;
+    transition: all 0.22s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    user-select: none;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.buller-market-pill-btn:hover,
+.buller-market-pill-btn:focus-visible {
+    background-color: #241a13;
+    border-color: var(--color-gold);
+    color: #ffffff;
+    box-shadow: 0 3px 12px rgba(197, 168, 128, 0.25);
+    transform: translateY(-1px);
+}
+
+.buller-market-pill-btn:active {
+    transform: translateY(0);
+}
+
+.buller-market-pill-name {
+    color: #ded6cb;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.buller-market-pill-dot {
+    color: rgba(197, 168, 128, 0.65);
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+.buller-market-pill-currency {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+/* Mobile Drawer Variant */
+.buller-market-pill-drawer {
+    background: linear-gradient(135deg, var(--color-espresso-deep) 0%, #201712 100%);
+    border: 1px solid rgba(197, 168, 128, 0.45);
+    border-radius: 10px;
+    padding: 0.65rem 0.95rem;
+}
+
+.buller-market-pill-drawer:hover {
+    background: linear-gradient(135deg, #251b15 0%, #17100b 100%);
+    border-color: var(--color-gold);
+}
+
+#marketSelectorModal {
+    z-index: 1065 !important;
+}
+
 /* Luxury Dropdown Menu */
 .nav-action-account-dropdown {
     position: relative;

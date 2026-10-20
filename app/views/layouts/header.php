@@ -66,6 +66,15 @@ $currentUser = Auth::user();
 
             <!-- Action Icons (Right side of navbar on both mobile and desktop) -->
             <div class="d-flex align-items-center gap-1 gap-xl-2 nav-actions-wrapper ms-auto ms-lg-0 order-2 order-lg-3">
+                <!-- Market & Regional Selector Pill (Desktop View >= 992px) -->
+                <button type="button" class="btn buller-market-pill-btn d-none d-lg-inline-flex align-items-center gap-2 me-1 me-xl-2" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" title="Select Shopping Region & Currency" aria-label="Selected Region">
+                    <?= country_flag($activeCountry['code'], $activeCountry['name'], 18) ?>
+                    <span class="buller-market-pill-name"><?= e($activeCountry['name']) ?></span>
+                    <span class="buller-market-pill-dot">&bull;</span>
+                    <strong class="buller-market-pill-currency"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>
+                    <i class="bi bi-chevron-down ms-1 text-muted" style="font-size: 0.65rem;"></i>
+                </button>
+
                 <!-- 1. Search Trigger -->
                 <button type="button" id="bullerSearchBtn" class="btn nav-actions-icon nav-action-search" data-bs-toggle="modal" data-bs-target="#searchModal" title="Search Curations" aria-label="Search">
                     <i class="bi bi-search"></i>
@@ -191,6 +200,24 @@ $currentUser = Auth::user();
         
         <div class="offcanvas-body p-0 d-flex flex-column justify-content-between" style="background-color: var(--color-ivory);">
             <div class="p-3">
+                <!-- Active Regional Market Pill (Mobile View in Drawer where all pages are) -->
+                <div class="mb-3">
+                    <button type="button" class="btn buller-market-pill-btn buller-market-pill-drawer w-100 d-flex align-items-center justify-content-between py-2 px-3" data-bs-toggle="modal" data-bs-target="#marketSelectorModal" title="Select Shopping Region & Currency" aria-label="Selected Region">
+                        <div class="d-flex align-items-center gap-2">
+                            <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
+                            <div class="text-start" style="line-height: 1.25;">
+                                <div class="buller-market-pill-name" style="font-size: 0.84rem;"><?= e($activeCountry['name']) ?></div>
+                                <div class="buller-market-pill-currency" style="font-size: 0.74rem;"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge border small" style="background: rgba(255, 255, 255, 0.08); border-color: rgba(197, 168, 128, 0.3) !important; font-size: 0.68rem; color: var(--color-gold);">
+                                Change <i class="bi bi-chevron-right ms-1"></i>
+                            </span>
+                        </div>
+                    </button>
+                </div>
+
                 <!-- Navigation Items -->
                 <ul class="nav flex-column mb-3 mobile-nav-items">
                     <li class="nav-item">
@@ -271,21 +298,7 @@ $currentUser = Auth::user();
                 </div>
             </div>
 
-            <!-- Bottom Market & Regional Indicator -->
-            <div class="p-3 border-top" style="background-color: #f7f3ec; border-color: var(--color-border) !important;">
-                <div class="small p-2 bg-white border rounded text-muted d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center gap-2">
-                        <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
-                        <div style="line-height: 1.2;">
-                            <span class="d-block text-dark fw-bold" style="font-size: 0.78rem;"><?= e($activeCountry['name']) ?></span>
-                            <span class="d-block text-muted" style="font-size: 0.7rem;"><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</span>
-                        </div>
-                    </div>
-                    <?php if (Auth::isLoggedIn()): ?>
-                        <span class="badge bg-light text-dark border" style="font-size: 0.65rem;"><i class="bi bi-shield-lock-fill text-gold me-1"></i> Fixed</span>
-                    <?php endif; ?>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -327,3 +340,6 @@ $currentUser = Auth::user();
 
     <!-- Include Cart Drawer -->
     <?php require __DIR__ . '/cart_drawer.php'; ?>
+
+    <!-- Include Market Selector Modal -->
+    <?php require __DIR__ . '/market_modal.php'; ?>

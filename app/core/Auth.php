@@ -88,7 +88,7 @@ class Auth {
      * Check if user is locked to their registered country
      */
     public static function isCountryLocked(): bool {
-        return self::isLoggedIn() && !self::isSuperAdmin();
+        return false;
     }
 
     /**

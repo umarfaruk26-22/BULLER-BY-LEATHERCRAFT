@@ -12,15 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(['success' => false, 'message' => 'Method not allowed.'], 405);
 }
 
-// Market switching is strictly prohibited after registration
-if (!Auth::isSuperAdmin()) {
-    json_response([
-        'success' => false,
-        'locked' => true,
-        'message' => 'Regional market switching is disabled. Country is permanently bound upon VIP registration.'
-    ], 403);
-}
-
 $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
 $countryCode = $input['country_code'] ?? null;
 
@@ -32,6 +23,19 @@ $switched = MarketContext::switchCountry($countryCode);
 
 if ($switched) {
     $active = MarketContext::getCountry();
+
+    // If customer is logged in, sync to their database record as well
+    if (Auth::isLoggedIn() && Auth::id()) {
+        try {
+            $db = \App\Core\Database::getConnection();
+            $stmt = $db->prepare("UPDATE users SET default_country_id = ? WHERE id = ?");
+            $stmt->execute([(int)$active['id'], Auth::id()]);
+            $_SESSION['user_default_country_id'] = (int)$active['id'];
+        } catch (\Throwable $e) {
+            // Non-fatal
+        }
+    }
+
     json_response([
         'success' => true,
         'country_code' => $active['code'],
