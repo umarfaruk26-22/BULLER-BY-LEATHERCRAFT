@@ -13,7 +13,10 @@ define('APP_TAGLINE', 'Generational Leather Craftsmanship & Heritage Luxury');
 define('APP_VERSION', '1.0.0');
 
 // Database Credentials (XAMPP / MySQL & Live Hostinger)
-$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'nexalogictechno.com') !== false);
+$isLive = (isset($_SERVER['HTTP_HOST']) && (
+    strpos($_SERVER['HTTP_HOST'], 'nexalogictechno.com') !== false ||
+    strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false
+));
 
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
