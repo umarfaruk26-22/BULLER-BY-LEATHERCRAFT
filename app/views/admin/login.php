@@ -84,30 +84,82 @@ $activeCountry = MarketContext::getCountry();
             margin-bottom: 1.75rem;
         }
 
-        .brand-logo-icon {
-            height: 52px;
-            width: auto;
-            margin-bottom: 0.5rem;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+        .brand-logo-wrap .navbar-brand-logo {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 12px;
+            text-decoration: none !important;
+            transition: transform 0.25s ease;
         }
 
-        .brand-title {
+        .brand-logo-wrap .navbar-brand-logo:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-logo-wrap .brand-logo-icon {
+            height: 48px;
+            width: auto;
+            margin-bottom: 0;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .brand-logo-wrap .navbar-brand-logo:hover .brand-logo-icon {
+            transform: scale(1.05);
+        }
+
+        .brand-logo-wrap .brand-text-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            line-height: 1.1;
+            text-align: left;
+        }
+
+        .brand-logo-wrap .brand-main {
+            display: block;
             font-family: var(--font-brand);
-            font-size: 1.45rem;
-            letter-spacing: 0.22em;
+            font-size: 1.75rem;
+            letter-spacing: 0.26em;
+            margin-right: -0.26em;
             color: var(--color-gold-bright);
             font-weight: 700;
             margin: 0;
-            line-height: 1.1;
+            line-height: 1;
+            transition: color 0.25s ease;
         }
 
-        .brand-sub {
-            font-size: 0.64rem;
-            letter-spacing: 0.28em;
+        .brand-logo-wrap .navbar-brand-logo:hover .brand-main {
+            color: #ffffff;
+        }
+
+        .brand-logo-wrap .brand-sub {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.58rem;
+            letter-spacing: 0.22em;
+            margin-right: -0.22em;
             text-transform: uppercase;
             color: var(--color-gold);
-            opacity: 0.85;
-            margin-top: 2px;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-top: 3px;
+        }
+
+        .brand-logo-wrap .brand-sub::before,
+        .brand-logo-wrap .brand-sub::after {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.5;
+            vertical-align: middle;
         }
 
         .portal-badge {
@@ -227,10 +279,12 @@ $activeCountry = MarketContext::getCountry();
 
     <div class="admin-login-card">
         <div class="brand-logo-wrap">
-            <a href="<?= url('') ?>" title="Buller Leather Storefront" class="text-decoration-none">
-                <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Leather" class="brand-logo-icon">
-                <h1 class="brand-title">BULLER</h1>
-                <div class="brand-sub">By leathercraft</div>
+            <a href="<?= url('') ?>" title="Buller Leather Storefront" class="navbar-brand-logo text-decoration-none">
+                <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather" class="brand-logo-icon">
+                <div class="brand-text-group">
+                    <span class="brand-main">BULLER</span>
+                    <span class="brand-sub">By leathercraft</span>
+                </div>
             </a>
             <div>
                 <span class="portal-badge">

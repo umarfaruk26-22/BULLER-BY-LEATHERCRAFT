@@ -44,7 +44,7 @@ body.admin-body {
 }
 
 .admin-sidebar-brand {
-    padding: 1.6rem 1rem 1.4rem;
+    padding: 1.35rem 0.85rem 1.15rem;
     border-bottom: 1px solid rgba(197, 168, 128, 0.18);
     background: #0d0804;
     text-align: center;
@@ -52,36 +52,50 @@ body.admin-body {
 
 .admin-sidebar-brand .navbar-brand-logo {
     display: inline-flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-    text-align: center !important;
-    line-height: 1.1;
+    gap: 10px;
     text-decoration: none !important;
     padding: 2px 0;
     margin: 0 auto;
     vertical-align: middle;
+    transition: transform 0.25s ease;
 }
 
-.admin-sidebar-brand .brand-logo-icon-admin {
-    height: 48px;
+.admin-sidebar-brand .navbar-brand-logo:hover {
+    transform: translateY(-1px);
+}
+
+.admin-sidebar-brand .brand-logo-icon {
+    height: 38px;
     width: auto;
     object-fit: contain;
-    margin-bottom: 8px;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
 }
 
-.admin-sidebar-brand .navbar-brand-logo:hover .brand-logo-icon-admin {
+.admin-sidebar-brand .navbar-brand-logo:hover .brand-logo-icon {
     transform: scale(1.06);
+}
+
+.admin-sidebar-brand .brand-text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    line-height: 1.1;
+    text-align: left;
 }
 
 .admin-sidebar-brand .navbar-brand-logo .brand-main {
     display: block !important;
     font-family: 'Cinzel', serif;
-    font-size: 1.65rem;
+    font-size: 1.45rem;
     font-weight: 700;
-    letter-spacing: 0.28em;
-    margin-right: -0.28em; /* Perfectly cancels trailing letter-spacing for dead-center balance */
+    letter-spacing: 0.26em;
+    margin-right: -0.26em; /* Perfectly cancels trailing letter-spacing for dead-center balance */
     color: var(--admin-gold-light, #dfc298) !important;
     white-space: nowrap;
     transition: all 0.25s ease;
@@ -94,16 +108,16 @@ body.admin-body {
 .admin-sidebar-brand .navbar-brand-logo .brand-sub {
     display: inline-flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    gap: 7px;
+    justify-content: flex-start !important;
+    gap: 6px;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-size: 0.58rem;
-    letter-spacing: 0.24em;
-    margin-right: -0.24em; /* Perfectly cancels trailing letter-spacing */
+    font-size: 0.54rem;
+    letter-spacing: 0.22em;
+    margin-right: -0.22em; /* Perfectly cancels trailing letter-spacing */
     font-weight: 600;
     text-transform: uppercase;
     color: var(--admin-gold, #c5a880) !important;
-    margin-top: 4px;
+    margin-top: 3px;
     white-space: nowrap;
     opacity: 0.95;
     text-decoration: none !important;
@@ -113,7 +127,7 @@ body.admin-body {
 .admin-sidebar-brand .navbar-brand-logo .brand-sub::after {
     content: '';
     display: inline-block;
-    width: 14px;
+    width: 10px;
     height: 1px;
     background: currentColor;
     opacity: 0.5;

@@ -10,9 +10,11 @@ $currentRoute = $_GET['route'] ?? '';
             <i class="bi bi-x-lg fs-5"></i>
         </button>
         <a href="<?= url('') ?>" class="navbar-brand-logo text-decoration-none" title="Buller Leather - Return to Storefront">
-            <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon-admin">
-            <span class="brand-main">BULLER</span>
-            <span class="brand-sub">By leathercraft</span>
+            <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon">
+            <div class="brand-text-group">
+                <span class="brand-main">BULLER</span>
+                <span class="brand-sub">By leathercraft</span>
+            </div>
         </a>
         <div class="mt-2 pt-1">
             <span class="admin-role-badge">
