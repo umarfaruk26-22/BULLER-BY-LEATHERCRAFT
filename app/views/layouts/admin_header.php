@@ -57,7 +57,7 @@ $currentRoute = $_GET['route'] ?? '';
                     <i class="bi bi-list fs-5"></i>
                 </button>
                 <h4 class="mb-0 font-serif fw-bold text-truncate admin-topbar-title" style="color: var(--color-espresso-deep); font-size: 1.05rem; max-width: 140px;">
-                    <?= isset($pageTitle) ? e($pageTitle) : 'Atelier Administration' ?>
+                    <?= isset($pageTitle) ? e($pageTitle) : 'Buller Administration' ?>
                 </h4>
             </div>
 

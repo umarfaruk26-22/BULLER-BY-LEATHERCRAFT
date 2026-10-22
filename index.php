@@ -430,8 +430,12 @@ switch ($route) {
             $password = $_POST['password'] ?? '';
 
             if (Auth::attempt($email, $password)) {
-                if (Auth::isSuperAdmin()) redirect('superadmin/dashboard');
-                if (Auth::isCountryAdmin()) redirect('admin/dashboard');
+                // Remove admin login from user side: admins must authenticate via /admin
+                if (Auth::isSuperAdmin() || Auth::isCountryAdmin()) {
+                    Auth::logout();
+                    flash('login_error', 'Administrative accounts cannot sign in through the customer portal. Please navigate to /admin to access the Admin Portal.');
+                    redirect('login');
+                }
                 redirect('customer/dashboard');
             } else {
                 flash('login_error', 'Invalid email credentials or unauthorized account status.');
@@ -490,7 +494,12 @@ switch ($route) {
         break;
 
     case 'logout':
+        $wasAdmin = Auth::isSuperAdmin() || Auth::isCountryAdmin();
         Auth::logout();
+        if ($wasAdmin) {
+            flash('admin_login_success', 'You have been securely signed out of the administrative session.');
+            redirect('admin');
+        }
         redirect('');
         break;
 
@@ -517,11 +526,51 @@ switch ($route) {
         break;
 
     // ---------------------------------------------------------------------
+    // SECURE DEDICATED ADMIN PORTAL ROUTE (/admin, /admin/login, /superadmin)
+    // ---------------------------------------------------------------------
+    case 'admin':
+    case 'admin/login':
+    case 'superadmin':
+        if (Auth::isSuperAdmin()) {
+            redirect('superadmin/dashboard');
+        }
+        if (Auth::isCountryAdmin()) {
+            redirect('admin/dashboard');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+                die("Invalid security token.");
+            }
+            $email = trim($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? '';
+
+            if (Auth::attempt($email, $password)) {
+                if (Auth::isSuperAdmin()) {
+                    redirect('superadmin/dashboard');
+                }
+                if (Auth::isCountryAdmin()) {
+                    redirect('admin/dashboard');
+                }
+                // If a customer attempts to sign in via /admin:
+                Auth::logout();
+                flash('admin_login_error', 'Access Restricted: This portal is exclusively for authorized administrators. Customers please sign in via customer portal.');
+                redirect('admin');
+            } else {
+                flash('admin_login_error', 'Invalid administrator credentials or unauthorized account status.');
+                redirect('admin');
+            }
+        }
+
+        require __DIR__ . '/app/views/admin/login.php';
+        break;
+
+    // ---------------------------------------------------------------------
     // 6. SUPER ADMIN MANAGEMENT
     // ---------------------------------------------------------------------
     case 'superadmin/dashboard':
         if (!Auth::isSuperAdmin()) {
-            redirect('login');
+            redirect('admin');
         }
 
         // Global KPIs
@@ -563,14 +612,14 @@ switch ($route) {
         break;
 
     case 'superadmin/countries':
-        if (!Auth::isSuperAdmin()) redirect('login');
+        if (!Auth::isSuperAdmin()) redirect('admin');
         $cStmt = $db->query("SELECT * FROM countries ORDER BY id ASC");
         $countries = $cStmt->fetchAll();
         require __DIR__ . '/app/views/superadmin/countries.php';
         break;
 
     case 'superadmin/countries/create':
-        if (!Auth::isSuperAdmin()) redirect('login');
+        if (!Auth::isSuperAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
 
@@ -606,7 +655,7 @@ switch ($route) {
         break;
 
     case 'superadmin/countries/toggle':
-        if (!Auth::isSuperAdmin()) redirect('login');
+        if (!Auth::isSuperAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
             $countryId = (int)($_POST['country_id'] ?? 0);
@@ -618,7 +667,7 @@ switch ($route) {
         break;
 
     case 'superadmin/admins':
-        if (!Auth::isSuperAdmin()) redirect('login');
+        if (!Auth::isSuperAdmin()) redirect('admin');
         
         $admStmt = $db->query("SELECT u.* FROM users u WHERE u.role IN ('super_admin', 'country_admin') ORDER BY u.id ASC");
         $admins = $admStmt->fetchAll();
@@ -636,7 +685,7 @@ switch ($route) {
         break;
 
     case 'superadmin/admins/create':
-        if (!Auth::isSuperAdmin()) redirect('login');
+        if (!Auth::isSuperAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
 
@@ -664,7 +713,7 @@ switch ($route) {
         break;
 
     case 'superadmin/admins/toggle':
-        if (!Auth::isSuperAdmin()) redirect('login');
+        if (!Auth::isSuperAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
             $adminId = (int)($_POST['admin_id'] ?? 0);
@@ -768,7 +817,7 @@ switch ($route) {
     case 'admin/products':
     case 'admin/orders':
         if (!Auth::isCountryAdmin()) {
-            redirect('login');
+            redirect('admin');
         }
 
         $permittedIds = Auth::getPermittedCountryIds();
@@ -837,7 +886,7 @@ switch ($route) {
         break;
 
     case 'admin/products/update-pricing':
-        if (!Auth::isCountryAdmin()) redirect('login');
+        if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
             $countryId = (int)($_POST['country_id'] ?? 0);
@@ -866,7 +915,7 @@ switch ($route) {
         break;
 
     case 'admin/orders/update-status':
-        if (!Auth::isCountryAdmin()) redirect('login');
+        if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
             $orderId = (int)($_POST['order_id'] ?? 0);

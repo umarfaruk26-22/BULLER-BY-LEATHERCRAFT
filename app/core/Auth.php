@@ -196,7 +196,7 @@ class Auth {
                 ['message' => 'Unauthorized attempt to access Super Admin portal.']
             );
             if (!self::isLoggedIn()) {
-                redirect('login');
+                redirect('admin');
             }
             http_response_code(403);
             require __DIR__ . '/../../app/views/errors/403.php';
@@ -216,7 +216,7 @@ class Auth {
                 null,
                 ['message' => 'Unauthorized attempt to access Admin portal.']
             );
-            redirect('login');
+            redirect('admin');
         }
     }
 }
