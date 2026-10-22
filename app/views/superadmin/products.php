@@ -13,9 +13,6 @@ require __DIR__ . '/../layouts/admin_header.php';
             <p class="text-muted small mb-0">Centralized governance of handcrafted leather goods, master SKUs, and cross-border currency price tiers.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <a href="<?= url('admin/products') ?>" class="btn btn-outline-dark btn-sm">
-                <i class="bi bi-geo-alt me-1"></i> View Scoped Regional View
-            </a>
             <button type="button" class="btn btn-buller-gold btn-sm d-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#addSuperProductModal">
                 <i class="bi bi-plus-circle-fill"></i> Add New Product
             </button>

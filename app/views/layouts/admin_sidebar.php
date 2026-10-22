@@ -24,10 +24,25 @@ $currentRoute = $_GET['route'] ?? '';
 
     <div class="flex-grow-1 overflow-auto py-2">
         <?php if ($isSuper): ?>
-            <!-- SUPER ADMIN SECTION -->
+            <!-- SUPER ADMIN SECTION (100% EXCLUSIVE TO GLOBAL EXECUTIVE) -->
             <div class="admin-nav-heading">Global Executive</div>
             <a href="<?= url('superadmin/dashboard') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/dashboard') ? 'active' : '' ?>">
                 <i class="bi bi-speedometer2"></i> Global Dashboard
+            </a>
+            <a href="<?= url('superadmin/products') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/products') ? 'active' : '' ?>">
+                <i class="bi bi-box-seam-fill"></i> Master Product Catalog
+            </a>
+            <a href="<?= url('superadmin/categories') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/categories')) ? 'active' : '' ?>">
+                <i class="bi bi-tags-fill"></i> Product Categories
+            </a>
+            <a href="<?= url('superadmin/orders') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/orders') ? 'active' : '' ?>">
+                <i class="bi bi-receipt"></i> Global Orders & Fulfillment
+            </a>
+            <a href="<?= url('superadmin/coupons') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/coupons')) ? 'active' : '' ?>">
+                <i class="bi bi-ticket-perforated-fill"></i> Promotional Coupons
+            </a>
+            <a href="<?= url('superadmin/reviews') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/reviews')) ? 'active' : '' ?>">
+                <i class="bi bi-star-fill text-warning"></i> Review Moderation
             </a>
             <a href="<?= url('superadmin/countries') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/countries')) ? 'active' : '' ?>">
                 <i class="bi bi-globe-americas"></i> Country Markets (<?= $totalCountriesCount ?? 4 ?>)
@@ -35,37 +50,11 @@ $currentRoute = $_GET['route'] ?? '';
             <a href="<?= url('superadmin/admins') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/admins')) ? 'active' : '' ?>">
                 <i class="bi bi-person-badge-fill"></i> Admin Management (RBAC)
             </a>
-            <a href="<?= url('superadmin/products') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/products') ? 'active' : '' ?>">
-                <i class="bi bi-box-seam-fill"></i> Master Catalog & Matrix
-            </a>
-            <a href="<?= url('admin/categories') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/categories')) ? 'active' : '' ?>">
-                <i class="bi bi-tags-fill"></i> Product Categories
-            </a>
-            <a href="<?= url('superadmin/orders') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/orders') ? 'active' : '' ?>">
-                <i class="bi bi-receipt"></i> Global Orders & Fulfillment
-            </a>
             <a href="<?= url('superadmin/settings') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/settings')) ? 'active' : '' ?>">
                 <i class="bi bi-sliders"></i> Global System Settings
             </a>
             <a href="<?= url('superadmin/audit-logs') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/audit-logs') ? 'active' : '' ?>">
                 <i class="bi bi-shield-shaded"></i> Security Audit Logs
-            </a>
-
-            <div class="admin-nav-heading">Regional Market Scopes</div>
-            <a href="<?= url('admin/products') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/products')) ? 'active' : '' ?>">
-                <i class="bi bi-box-seam"></i> Regional Product Pricing
-            </a>
-            <a href="<?= url('admin/orders') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/orders')) ? 'active' : '' ?>">
-                <i class="bi bi-truck"></i> Regional Orders Dispatch
-            </a>
-            <a href="<?= url('admin/coupons') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/coupons')) ? 'active' : '' ?>">
-                <i class="bi bi-ticket-perforated"></i> Promotional Coupons
-            </a>
-            <a href="<?= url('admin/reviews') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/reviews')) ? 'active' : '' ?>">
-                <i class="bi bi-star"></i> Review Moderation
-            </a>
-            <a href="<?= url('admin/dashboard') ?>" class="admin-nav-link <?= ($currentRoute === 'admin/dashboard') ? 'active' : '' ?>">
-                <i class="bi bi-layout-text-window-reverse"></i> Scoped Regional Dashboard
             </a>
 
         <?php else: ?>

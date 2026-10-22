@@ -62,8 +62,8 @@ $currentRoute = $_GET['route'] ?? '';
             </div>
 
             <div class="d-flex align-items-center gap-2 gap-sm-3">
-                <?php if (isset($permittedCountries) && count($permittedCountries) > 1): ?>
-                    <!-- Scoped Country Selector -->
+                <?php if (isset($permittedCountries) && count($permittedCountries) > 1 && !$isSuper): ?>
+                    <!-- Scoped Country Selector (Country Admins with multiple markets) -->
                     <div class="d-flex align-items-center gap-1">
                         <span class="small text-muted text-nowrap d-none d-md-inline">Market:</span>
                         <select class="form-select form-select-sm" style="max-width: 120px;" onchange="switchAdminMarket(this.value)">
@@ -99,22 +99,6 @@ $currentRoute = $_GET['route'] ?? '';
                 </div>
             </div>
         </header>
-
-        <!-- Super Admin Context Alert if visiting regional route -->
-        <?php if ($isSuper && str_starts_with($currentRoute, 'admin/')): ?>
-            <div class="px-4 pt-3 pb-0">
-                <div class="d-flex align-items-center justify-content-between p-2 px-3 rounded shadow-sm" style="background: #1a120b; border: 1px solid #c5a059;">
-                    <div class="d-flex align-items-center gap-2 text-white small">
-                        <span class="badge bg-warning text-dark text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.05em;">SUPER ADMIN ACTIVE</span>
-                        <span class="text-white-50 d-none d-md-inline">&bull; Scoped Regional View:</span>
-                        <strong class="text-warning"><?= isset($currentCountry) ? e($currentCountry['name']) : 'Boutique' ?></strong>
-                    </div>
-                    <a href="<?= url('superadmin/dashboard') ?>" class="btn btn-outline-warning btn-sm py-1 px-2" style="font-size: 0.75rem;">
-                        <i class="bi bi-arrow-left me-1"></i> Return to Global Super Admin
-                    </a>
-                </div>
-            </div>
-        <?php endif; ?>
 
         <!-- Flash messages for Admin -->
         <div class="px-4 pt-3">

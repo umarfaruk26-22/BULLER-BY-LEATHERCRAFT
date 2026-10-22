@@ -134,7 +134,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                             <h5 class="modal-title font-serif fs-5">Fulfill Order #<?= e($ord['order_number']) ?></h5>
                                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                         </div>
-                                        <form action="<?= url('admin/orders/update-status') ?>" method="POST">
+                                        <form action="<?= url('superadmin/orders/update-status') ?>" method="POST">
                                             <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                             <input type="hidden" name="order_id" value="<?= $ord['id'] ?>">
                                             <input type="hidden" name="country_id" value="<?= $ord['country_id'] ?>">

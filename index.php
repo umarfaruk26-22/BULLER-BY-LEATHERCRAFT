@@ -821,6 +821,13 @@ switch ($route) {
     case 'admin/dashboard':
     case 'admin/products':
     case 'admin/orders':
+        // Strict Role Isolation: Super Admin must NEVER be trapped in scoped Country Admin pages
+        if (Auth::isSuperAdmin()) {
+            if ($route === 'admin/dashboard') redirect('superadmin/dashboard');
+            if ($route === 'admin/products') redirect('superadmin/products');
+            if ($route === 'admin/orders') redirect('superadmin/orders');
+        }
+
         if (!Auth::isCountryAdmin()) {
             redirect('admin');
         }
@@ -1002,7 +1009,8 @@ switch ($route) {
             AuditLogger::log(Auth::id(), 'create_product', 'products', $productId, ['title' => $title, 'sku' => $sku]);
             flash('admin_success', "Product '{$title}' successfully published to the catalog!");
             
-            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
             redirect($redirectTarget);
         }
         break;
@@ -1019,7 +1027,8 @@ switch ($route) {
             $product = $stmt->fetch();
             if (!$product) {
                 flash('admin_error', 'Product not found.');
-                redirect('admin/products?country_id=' . $currentCountryId);
+                $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
+                redirect(!empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect);
             }
 
             $title = trim($_POST['title'] ?? $product['title']);
@@ -1094,7 +1103,8 @@ switch ($route) {
             AuditLogger::log(Auth::id(), 'update_product', 'products', $productId, ['title' => $title]);
             flash('admin_success', "Product '{$title}' updated successfully!");
 
-            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
             redirect($redirectTarget);
         }
         break;
@@ -1119,7 +1129,8 @@ switch ($route) {
             AuditLogger::log(Auth::id(), 'delete_product', 'products', $productId, ['title' => $title]);
             flash('admin_success', "Product '{$title}' permanently removed from catalog.");
 
-            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
             redirect($redirectTarget);
         }
         break;
@@ -1136,7 +1147,8 @@ switch ($route) {
             AuditLogger::log(Auth::id(), 'delete_product_image', 'product_images', $imageId, ['product_id' => $productId]);
             flash('admin_success', 'Gallery photo removed.');
 
-            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
             redirect($redirectTarget);
         }
         break;
@@ -1172,7 +1184,11 @@ switch ($route) {
     // ---------------------------------------------------------------------
     // CATEGORY CRUD ACTIONS (COUNTRY ADMIN & SUPER ADMIN)
     // ---------------------------------------------------------------------
+    case 'superadmin/categories':
     case 'admin/categories':
+        if (Auth::isSuperAdmin() && $route === 'admin/categories') {
+            redirect('superadmin/categories');
+        }
         if (!Auth::isCountryAdmin()) redirect('admin');
         $catSql = "SELECT c.*, COUNT(p.id) as product_count 
                    FROM categories c 
@@ -1183,6 +1199,7 @@ switch ($route) {
         require __DIR__ . '/app/views/admin/categories.php';
         break;
 
+    case 'superadmin/categories/create':
     case 'admin/categories/create':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1190,7 +1207,7 @@ switch ($route) {
             $name = trim($_POST['name'] ?? '');
             if (empty($name)) {
                 flash('admin_error', 'Category Name is required.');
-                redirect('admin/categories');
+                redirect(Auth::isSuperAdmin() ? 'superadmin/categories' : 'admin/categories');
             }
             $slug = slugify(trim($_POST['slug'] ?? '') ?: $name);
             $description = trim($_POST['description'] ?? '');
@@ -1214,10 +1231,11 @@ switch ($route) {
 
             AuditLogger::log(Auth::id(), 'create_category', 'categories', $newCatId, ['name' => $name, 'slug' => $slug]);
             flash('admin_success', "Category '{$name}' successfully created.");
-            redirect('admin/categories');
+            redirect(Auth::isSuperAdmin() ? 'superadmin/categories' : 'admin/categories');
         }
         break;
 
+    case 'superadmin/categories/edit':
     case 'admin/categories/edit':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1234,7 +1252,7 @@ switch ($route) {
             $existing = $exStmt->fetch();
             if (!$existing) {
                 flash('admin_error', 'Category not found.');
-                redirect('admin/categories');
+                redirect(Auth::isSuperAdmin() ? 'superadmin/categories' : 'admin/categories');
             }
 
             $check = $db->prepare("SELECT id FROM categories WHERE slug = ? AND id != ? LIMIT 1");
@@ -1256,10 +1274,11 @@ switch ($route) {
 
             AuditLogger::log(Auth::id(), 'update_category', 'categories', $catId, ['name' => $name, 'slug' => $slug]);
             flash('admin_success', "Category '{$name}' successfully updated.");
-            redirect('admin/categories');
+            redirect(Auth::isSuperAdmin() ? 'superadmin/categories' : 'admin/categories');
         }
         break;
 
+    case 'superadmin/categories/delete':
     case 'admin/categories/delete':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1272,16 +1291,17 @@ switch ($route) {
 
             if ($pCount > 0) {
                 flash('admin_error', "Cannot delete category: {$pCount} products are currently assigned to this category. Please reassign those products first.");
-                redirect('admin/categories');
+                redirect(Auth::isSuperAdmin() ? 'superadmin/categories' : 'admin/categories');
             }
 
             $db->prepare("DELETE FROM categories WHERE id = ?")->execute([$catId]);
             AuditLogger::log(Auth::id(), 'delete_category', 'categories', $catId);
             flash('admin_success', "Category permanently deleted.");
-            redirect('admin/categories');
+            redirect(Auth::isSuperAdmin() ? 'superadmin/categories' : 'admin/categories');
         }
         break;
 
+    case 'superadmin/orders/update-status':
     case 'admin/orders/update-status':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1289,8 +1309,10 @@ switch ($route) {
             $orderId = (int)($_POST['order_id'] ?? 0);
             $countryId = (int)($_POST['country_id'] ?? 0);
 
-            // Strict country scoping check
-            Auth::enforceCountryAccess($countryId);
+            // Strict country scoping check (only for regional admins)
+            if (!Auth::isSuperAdmin()) {
+                Auth::enforceCountryAccess($countryId);
+            }
 
             $orderStatus = $_POST['order_status'] ?? 'placed';
             $paymentStatus = $_POST['payment_status'] ?? 'pending';
@@ -1303,11 +1325,19 @@ switch ($route) {
 
             AuditLogger::log(Auth::id(), 'update_order_status', 'orders', $orderId, ['status' => $orderStatus, 'tracking' => $trackingNum]);
             flash('admin_success', "Order #$orderId fulfillment status successfully updated.");
-            redirect('admin/orders?country_id=' . $countryId);
+            redirect(Auth::isSuperAdmin() ? 'superadmin/orders' : ('admin/orders?country_id=' . $countryId));
         }
         break;
 
+    case 'superadmin/coupons':
     case 'admin/coupons':
+        if (Auth::isSuperAdmin() && $route === 'admin/coupons') {
+            redirect('superadmin/coupons');
+        }
+        if (!Auth::isSuperAdmin() && $route === 'superadmin/coupons') {
+            redirect('admin/coupons');
+        }
+
         Auth::requireCountryAdmin();
         $permittedIds = Auth::getPermittedCountryIds();
         $allCountries = $db->query("SELECT * FROM countries ORDER BY name ASC")->fetchAll();
@@ -1365,6 +1395,7 @@ switch ($route) {
         require __DIR__ . '/app/views/admin/coupons.php';
         break;
 
+    case 'superadmin/coupons/create':
     case 'admin/coupons/create':
         Auth::requireCountryAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1389,16 +1420,18 @@ switch ($route) {
                 die("Only Super Admin can create Global coupons.");
             }
 
+            $targetRoute = Auth::isSuperAdmin() ? 'superadmin/coupons' : 'admin/coupons';
+
             if (empty($code) || $discVal <= 0) {
                 flash('admin_error', 'Invalid coupon code or discount value.');
-                redirect('admin/coupons');
+                redirect($targetRoute);
             }
 
             $chkStmt = $db->prepare("SELECT id FROM coupons WHERE code = ? AND (country_id = ? OR (country_id IS NULL AND ? IS NULL)) LIMIT 1");
             $chkStmt->execute([$code, $countryId, $countryId]);
             if ($chkStmt->fetch()) {
                 flash('admin_error', "Coupon voucher code '$code' already exists for this market.");
-                redirect('admin/coupons');
+                redirect($targetRoute);
             }
 
             $insStmt = $db->prepare("INSERT INTO coupons (code, country_id, discount_type, discount_value, min_spend, valid_from, valid_until, usage_limit, times_used, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 'active')");
@@ -1407,10 +1440,13 @@ switch ($route) {
 
             AuditLogger::log(Auth::id(), 'create_coupon', 'coupons', $newCouponId, ['code' => $code, 'country_id' => $countryId, 'value' => $discVal]);
             flash('admin_success', "Coupon voucher '$code' created successfully.");
-            redirect('admin/coupons' . ($countryId ? '?country_id=' . $countryId : ''));
+            
+            $redirectUrl = Auth::isSuperAdmin() ? 'superadmin/coupons' : ('admin/coupons' . ($countryId ? '?country_id=' . $countryId : ''));
+            redirect($redirectUrl);
         }
         break;
 
+    case 'superadmin/coupons/toggle':
     case 'admin/coupons/toggle':
         Auth::requireCountryAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1433,10 +1469,12 @@ switch ($route) {
                 AuditLogger::log(Auth::id(), 'toggle_coupon_status', 'coupons', $cpnId, ['status' => $newStatus]);
                 flash('admin_success', "Coupon voucher status updated to '$newStatus'.");
             }
-            redirect('admin/coupons' . (!empty($coupon['country_id']) ? '?country_id=' . $coupon['country_id'] : ''));
+            $redirectUrl = Auth::isSuperAdmin() ? 'superadmin/coupons' : ('admin/coupons' . (!empty($coupon['country_id']) ? '?country_id=' . $coupon['country_id'] : ''));
+            redirect($redirectUrl);
         }
         break;
 
+    case 'superadmin/coupons/delete':
     case 'admin/coupons/delete':
         Auth::requireCountryAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1458,11 +1496,20 @@ switch ($route) {
                 AuditLogger::log(Auth::id(), 'delete_coupon', 'coupons', $cpnId, ['code' => $coupon['code']]);
                 flash('admin_success', "Coupon voucher '{$coupon['code']}' permanently deleted.");
             }
-            redirect('admin/coupons' . (!empty($coupon['country_id']) ? '?country_id=' . $coupon['country_id'] : ''));
+            $redirectUrl = Auth::isSuperAdmin() ? 'superadmin/coupons' : ('admin/coupons' . (!empty($coupon['country_id']) ? '?country_id=' . $coupon['country_id'] : ''));
+            redirect($redirectUrl);
         }
         break;
 
+    case 'superadmin/reviews':
     case 'admin/reviews':
+        if (Auth::isSuperAdmin() && $route === 'admin/reviews') {
+            redirect('superadmin/reviews');
+        }
+        if (!Auth::isSuperAdmin() && $route === 'superadmin/reviews') {
+            redirect('admin/reviews');
+        }
+
         Auth::requireCountryAdmin();
         $permittedIds = Auth::getPermittedCountryIds();
         $allCountries = $db->query("SELECT * FROM countries ORDER BY name ASC")->fetchAll();
@@ -1543,6 +1590,7 @@ switch ($route) {
         require __DIR__ . '/app/views/admin/reviews.php';
         break;
 
+    case 'superadmin/reviews/update-status':
     case 'admin/reviews/update-status':
         Auth::requireCountryAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1559,15 +1607,18 @@ switch ($route) {
             $review = $chkStmt->fetch();
 
             if ($review) {
-                Auth::enforceCountryAccess((int)$review['country_id']);
+                if (!Auth::isSuperAdmin()) {
+                    Auth::enforceCountryAccess((int)$review['country_id']);
+                }
                 $db->prepare("UPDATE product_reviews SET status = ? WHERE id = ?")->execute([$newStatus, $revId]);
                 AuditLogger::log(Auth::id(), 'moderate_review', 'product_reviews', $revId, ['status' => $newStatus]);
                 flash('admin_success', "Testimonial review status updated to '$newStatus'.");
             }
-            redirect('admin/reviews');
+            redirect(Auth::isSuperAdmin() ? 'superadmin/reviews' : 'admin/reviews');
         }
         break;
 
+    case 'superadmin/reviews/delete':
     case 'admin/reviews/delete':
         Auth::requireCountryAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1579,12 +1630,14 @@ switch ($route) {
             $review = $chkStmt->fetch();
 
             if ($review) {
-                Auth::enforceCountryAccess((int)$review['country_id']);
+                if (!Auth::isSuperAdmin()) {
+                    Auth::enforceCountryAccess((int)$review['country_id']);
+                }
                 $db->prepare("DELETE FROM product_reviews WHERE id = ?")->execute([$revId]);
                 AuditLogger::log(Auth::id(), 'delete_review', 'product_reviews', $revId);
                 flash('admin_success', "Customer testimonial permanently removed.");
             }
-            redirect('admin/reviews');
+            redirect(Auth::isSuperAdmin() ? 'superadmin/reviews' : 'admin/reviews');
         }
         break;
 
