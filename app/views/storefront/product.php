@@ -106,9 +106,9 @@ require __DIR__ . '/../layouts/header.php';
             <!-- Right: Commercial Specifications & Interactive Purchase Engine -->
             <div class="col-lg-5">
                 <div class="ps-lg-3 pdp-details-col">
-                    <!-- 1. Header Block: Brand Origin Tag, Title, SKU & Ratings & Mobile Stock Badge -->
-                    <div class="pdp-header-block mb-3">
-                        <div class="d-flex align-items-center justify-content-between mb-1 mb-md-2">
+                    <!-- 1. Header Block: Brand Origin Tag, Title, SKU & Ratings (No Stock Details) -->
+                    <div class="pdp-header-block mb-2 mb-md-3">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
                             <span class="text-uppercase small fw-bold" style="letter-spacing: 0.2em; color: var(--color-gold-dark); font-size: 0.72rem;">
                                 Buller Atelier &bull; <?= e($product['leather_type'] ?? 'Prime European Hide') ?>
                             </span>
@@ -119,7 +119,7 @@ require __DIR__ . '/../layouts/header.php';
                             <?= e($product['title']) ?>
                         </h1>
 
-                        <div class="d-flex flex-wrap align-items-center gap-2 text-muted small mb-2 mb-md-3 pb-2 border-bottom">
+                        <div class="d-flex flex-wrap align-items-center gap-2 text-muted small mb-2 pb-2 border-bottom">
                             <div>SKU: <strong class="text-dark"><?= e($product['sku']) ?></strong></div>
                             <span>&bull;</span>
                             <div class="d-flex align-items-center gap-1">
@@ -132,79 +132,43 @@ require __DIR__ . '/../layouts/header.php';
                                     <?= $avgRating ?> (<?= count($reviews) ?> Reviews)
                                 </a>
                             </div>
-                            <div class="ms-auto d-inline-block d-lg-none">
-                                <?php if ((int)$product['stock_quantity'] > 0): ?>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.68rem; padding: 2px 7px;">
-                                        <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                            <?php if ((int)$product['stock_quantity'] <= 0): ?>
+                                <div class="ms-auto d-inline-block">
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle" style="font-size: 0.68rem; padding: 2px 7px;">
+                                        Privé Reserved
                                     </span>
-                                <?php else: ?>
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle" style="font-size: 0.68rem; padding: 2px 7px;">
-                                        Sold Out
-                                    </span>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Dynamic Size & Specification Selector -->
-                    <?php 
-                        $catSlug = $product['category_slug'] ?? '';
-                    ?>
-                    <div class="pdp-size-block mb-3 mb-md-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label class="form-label small fw-bold text-muted mb-0">Select Atelier Fit / Size:</label>
-                            <button type="button" class="btn btn-link p-0 small text-decoration-underline" style="color: var(--color-cognac); font-size: 0.78rem;" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
-                                <i class="bi bi-rulers me-1"></i> Size Guide
-                            </button>
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-2" id="productSizeOptions">
-                            <?php if ($catSlug === 'leather-jackets'): ?>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '38 / S')">38 (S)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 / M')">40 (M)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '42 / L')">42 (L)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '44 / XL')">44 (XL)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '46 / XXL')">46 (XXL)</button>
-                            <?php elseif ($catSlug === 'shoes-boots'): ?>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 7 / US 8')">UK 7 / US 8</button>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'UK 8 / US 9')">UK 8 / US 9</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 9 / US 10')">UK 9 / US 10</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 10 / US 11')">UK 10 / US 11</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 11 / US 12')">UK 11 / US 12</button>
-                            <?php elseif ($catSlug === 'belts'): ?>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '32 in')">32" (80cm)</button>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '34 in')">34" (85cm)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '36 in')">36" (90cm)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '38 in')">38" (95cm)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 in')">40" (100cm)</button>
-                            <?php elseif (str_contains($catSlug, 'briefcase') || str_contains($catSlug, 'bag') || $product['id'] == 2): ?>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'Executive 16in Laptop Fit')">Executive 16" Laptop Fit</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Classic 14in Edition')">Classic 14" Edition</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Slimline 13in Profile')">Slimline 13" Profile</button>
-                            <?php elseif (str_contains($catSlug, 'duffel') || str_contains($catSlug, 'travel') || $product['id'] == 3): ?>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '48-Hour Weekender (45L)')">48-Hour Weekender (45L)</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Grand Voyage (60L)')">Grand Voyage (60L)</button>
-                            <?php elseif (str_contains($catSlug, 'wallet') || $product['id'] == 4): ?>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'Classic Bifold Profile (8 Cards)')">Classic Bifold Profile</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Ultra-Slim Minimalist (6 Cards)')">Ultra-Slim Minimalist</button>
-                            <?php elseif (str_contains($catSlug, 'watch') || $product['id'] == 7): ?>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '3-Timepiece Vault Edition')">3-Timepiece Vault Edition</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Dual-Timepiece Travel Case')">Dual-Timepiece Travel Case</button>
-                            <?php else: ?>
-                                <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'Standard Heirloom Fit')">Standard Heirloom Edition</button>
-                                <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'Custom Atelier Fit')">Bespoke Atelier Fit</button>
+                                </div>
                             <?php endif; ?>
                         </div>
-                        <input type="hidden" id="selectedProductSize" value="Standard Heirloom Edition">
                     </div>
 
-                    <!-- 3. Interactive Curated Colorway Selector -->
-                    <div class="pdp-color-block mb-3 mb-md-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label class="form-label small fw-bold text-muted mb-0">Select Curated Leather Colorway:</label>
-                            <span id="selectedColorName" class="badge bg-white text-dark border shadow-sm small fw-bold" style="border-color: var(--color-gold) !important; color: var(--color-espresso-deep) !important; font-size: 0.72rem;">
-                                <?= e($product['color'] ?? 'Heritage Deep Espresso') ?>
+                    <!-- 2. Localized Pricing Block (Immediate Visibility) -->
+                    <div class="pdp-pricing-block p-2.5 p-md-3 bg-white border shadow-xs mb-3 position-relative" style="border-radius: 4px; border-left: 3px solid var(--color-gold) !important;">
+                        <div class="d-flex flex-wrap align-items-baseline gap-2 gap-md-3">
+                            <span class="pdp-price-value fw-bold" style="font-size: 1.45rem; color: var(--color-espresso-deep); font-family: var(--font-serif);">
+                                <?= $pricing['formatted_final'] ?>
                             </span>
+                            <?php if ($pricing['is_discounted']): ?>
+                                <span class="pdp-price-orig fs-6 text-muted text-decoration-line-through">
+                                    <?= $pricing['formatted_original'] ?>
+                                </span>
+                                <span class="badge bg-danger pdp-price-badge px-2 py-1 small">
+                                    <?= $pricing['discount_percent'] ?>% OFF
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="text-muted small mt-1" style="font-size: 0.74rem;">
+                            <i class="bi bi-shield-check text-success me-1"></i><?= e($activeCountry['tax_name']) ?> Included &bull; <i class="bi bi-airplane text-success me-1"></i>Complimentary Express Air Delivery
+                        </div>
+                    </div>
+
+                    <!-- 3. Curated Leather Shade Selector -->
+                    <div class="pdp-color-block mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-1.5">
+                            <div class="small">
+                                <span class="text-muted">Curated Leather:</span>
+                                <strong id="selectedColorName" class="text-dark ms-1" style="font-size: 0.82rem;"><?= e($product['color'] ?? 'Heritage Deep Espresso') ?></strong>
+                            </div>
                         </div>
                         
                         <div class="d-flex align-items-center gap-2" id="productColorOptions">
@@ -224,81 +188,101 @@ require __DIR__ . '/../layouts/header.php';
                         <input type="hidden" id="selectedProductColor" value="<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>">
                     </div>
 
-                    <!-- 4. Localized Pricing (Compact on mobile, full on desktop) -->
-                    <div class="pdp-pricing-block p-3 p-md-4 bg-white border shadow-soft mb-3 mb-md-4 position-relative">
-                        <div class="d-flex flex-wrap align-items-baseline gap-2 gap-md-3">
-                            <span class="pdp-price-value fw-bold">
-                                <?= $pricing['formatted_final'] ?>
-                            </span>
-                            <?php if ($pricing['is_discounted']): ?>
-                                <span class="pdp-price-orig fs-6 fs-md-5 text-muted text-decoration-line-through">
-                                    <?= $pricing['formatted_original'] ?>
-                                </span>
-                                <span class="badge bg-danger pdp-price-badge px-2 py-1 small">
-                                    Save <?= MarketContext::formatPrice($pricing['original_price'] - $pricing['final_price']) ?> (<?= $pricing['discount_percent'] ?>% OFF)
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="text-muted small mt-2 d-none d-lg-flex flex-column gap-1" style="font-size: 0.8rem;">
-                            <div>
-                                <i class="bi bi-shield-check text-success me-1"></i>
-                                Includes localized <strong><?= e($activeCountry['tax_name']) ?> (<?= $activeCountry['tax_rate_percent'] ?>%)</strong>. Formatted in <strong><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong>.
+                    <!-- 4. Dynamic Size Selector (Only for categories with real sizes: Jackets, Shoes, Belts) -->
+                    <?php 
+                        $catSlug = $product['category_slug'] ?? '';
+                        $isJacket = ($catSlug === 'leather-jackets');
+                        $isShoes  = ($catSlug === 'shoes-boots' || $catSlug === 'footwear-boots');
+                        $isBelts  = ($catSlug === 'belts' || $catSlug === 'handcrafted-belts');
+                        $hasSizes = ($isJacket || $isShoes || $isBelts);
+                    ?>
+                    <?php if ($hasSizes): ?>
+                        <div class="pdp-size-block mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                <label class="form-label small fw-bold text-dark mb-0" style="font-size: 0.8rem;">Select Size:</label>
+                                <button type="button" class="btn btn-link p-0 small text-decoration-underline" style="color: var(--color-cognac); font-size: 0.76rem;" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+                                    <i class="bi bi-rulers me-1"></i> Size Guide
+                                </button>
                             </div>
-                            <div class="text-success fw-semibold">
-                                <i class="bi bi-truck me-1"></i> Complimentary International Air Delivery to <?= e($activeCountry['name']) ?> included.
-                            </div>
-                        </div>
-                        <div class="pdp-price-subtext d-lg-none mt-1 text-muted small">
-                            <i class="bi bi-shield-check text-success me-1"></i><?= e($activeCountry['tax_name']) ?> Included &bull; <i class="bi bi-truck text-success me-1"></i>Free Express Air Delivery
-                        </div>
-                    </div>
 
-                    <!-- 5. Purchase & Bag Action Buttons (Aligned) -->
-                    <div class="pdp-actions-container d-flex flex-column gap-2 mb-3 mb-md-4">
-                        <div class="d-flex align-items-stretch gap-2 gap-sm-3 pdp-action-group">
+                            <div class="d-flex flex-wrap gap-1.5" id="productSizeOptions">
+                                <?php if ($isJacket): ?>
+                                    <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '38 (S)')">38 (S)</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 (M)')">40 (M)</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '42 (L)')">42 (L)</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '44 (XL)')">44 (XL)</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '46 (XXL)')">46 (XXL)</button>
+                                <?php elseif ($isShoes): ?>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 7 / US 8')">UK 7</button>
+                                    <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, 'UK 8 / US 9')">UK 8</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 9 / US 10')">UK 9</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 10 / US 11')">UK 10</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, 'UK 11 / US 12')">UK 11</button>
+                                <?php elseif ($isBelts): ?>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '32 in')">32"</button>
+                                    <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '34 in')">34"</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '36 in')">36"</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '38 in')">38"</button>
+                                    <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 in')">40"</button>
+                                <?php endif; ?>
+                            </div>
+                            <input type="hidden" id="selectedProductSize" value="<?= $isJacket ? '38 (S)' : ($isShoes ? 'UK 8 / US 9' : '34 in') ?>">
+                        </div>
+                    <?php else: ?>
+                        <input type="hidden" id="selectedProductSize" value="Standard Atelier Fit">
+                    <?php endif; ?>
+
+                    <!-- 5. Purchase & Bag Action Buttons (Ergonomic & Aligned) -->
+                    <div class="pdp-actions-container d-flex flex-column gap-2 mb-3">
+                        <div class="d-flex align-items-stretch gap-2 pdp-action-group">
                             <!-- Quantity Counter -->
                             <div class="pdp-qty-box d-flex align-items-center border bg-white rounded-1" style="border-color: var(--color-border); height: 46px;">
                                 <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;">&minus;</button>
-                                <input type="number" id="productQty" class="form-control text-center border-0 p-0 fw-bold" value="1" min="1" max="<?= max(1, (int)$product['stock_quantity']) ?>" style="width: 36px; font-size: 0.95rem;">
-                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) < <?= max(1, (int)$product['stock_quantity']) ?>) input.value = parseInt(input.value) + 1;">&#43;</button>
+                                <input type="number" id="productQty" class="form-control text-center border-0 p-0 fw-bold" value="1" min="1" max="10" style="width: 32px; font-size: 0.95rem;">
+                                <button type="button" class="btn btn-link text-dark px-2 px-md-3 py-2 text-decoration-none fw-bold" onclick="let input = document.getElementById('productQty'); if(parseInt(input.value) < 10) input.value = parseInt(input.value) + 1;">&#43;</button>
                             </div>
 
                             <!-- Add to Bag Button -->
-                            <button type="button" class="btn btn-buller-gold flex-grow-1 py-2 py-md-3 btn-add-to-cart fw-bold d-flex align-items-center justify-content-center" data-product-id="<?= $product['id'] ?>" onclick="this.dataset.quantity = document.getElementById('productQty').value;" style="min-height: 46px; font-size: 0.92rem; letter-spacing: 0.05em;">
-                                <i class="bi bi-bag-plus me-2 fs-5"></i> <span>Add To Bag</span>
+                            <button type="button" class="btn btn-buller-gold flex-grow-1 py-2 btn-add-to-cart fw-bold d-flex align-items-center justify-content-center" data-product-id="<?= $product['id'] ?>" onclick="this.dataset.quantity = document.getElementById('productQty').value;" style="height: 46px; font-size: 0.9rem; letter-spacing: 0.05em; border-radius: 3px;">
+                                <i class="bi bi-bag-plus me-1.5 fs-5"></i> <span>Add To Bag</span>
                             </button>
 
                             <!-- Wishlist Toggle Button -->
-                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations" style="width: 46px !important; height: 46px !important; min-width: 46px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
+                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations" style="width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 3px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
                                 <i class="bi <?= $isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart' ?> fs-5"></i>
                             </button>
                         </div>
 
                         <!-- Instant Buy Now Button -->
-                        <button type="button" class="btn btn-dark w-100 py-3 btn-instant-buy text-uppercase fw-bold shadow-sm d-flex align-items-center justify-content-center" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.1em; min-height: 46px; font-size: 0.88rem;" onclick="instantBuyNow(<?= $product['id'] ?>)">
-                            <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Instant Privé Checkout
+                        <button type="button" class="btn btn-dark w-100 btn-instant-buy text-uppercase fw-bold shadow-sm d-flex align-items-center justify-content-center" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.08em; height: 46px; font-size: 0.85rem; border-radius: 3px;" onclick="instantBuyNow(<?= $product['id'] ?>)">
+                            <i class="bi bi-lightning-charge-fill text-warning me-1.5"></i> Instant Privé Checkout
                         </button>
                     </div>
 
-                    <!-- 6. Short Description (Concise luxury narrative) -->
-                    <div class="pdp-short-desc-block mb-3 mb-md-4">
-                        <div class="p-3 bg-white border rounded-1 shadow-xs pdp-short-desc-box" style="border-color: var(--color-border); border-left: 3px solid var(--color-gold) !important;">
+                    <!-- 6. Short Narrative & Specifications -->
+                    <div class="pdp-short-desc-block mb-3">
+                        <div class="p-2.5 p-md-3 bg-white border rounded-1 shadow-xs pdp-short-desc-box" style="border-color: var(--color-border); border-left: 3px solid var(--color-gold) !important;">
                             <div class="d-flex align-items-center justify-content-between mb-1">
                                 <span class="text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.15em; color: var(--color-gold-dark);">Atelier Highlights</span>
                                 <a href="#descTab" onclick="document.querySelector('#descTab-tab').click();" class="small text-decoration-none" style="color: var(--color-cognac); font-size: 0.72rem;">Full Architecture &darr;</a>
                             </div>
-                            <p class="text-muted mb-0" style="font-size: 0.84rem; line-height: 1.6;">
-                                <?= e(!empty($product['short_description']) ? $product['short_description'] : substr(strip_tags($product['detailed_description']), 0, 160) . '...') ?>
+                            <p class="text-muted mb-0" style="font-size: 0.82rem; line-height: 1.55;">
+                                <?= e(!empty($product['short_description']) ? $product['short_description'] : substr(strip_tags($product['detailed_description']), 0, 150) . '...') ?>
                             </p>
+                            <?php if (!empty($product['dimensions']) && !$hasSizes): ?>
+                                <div class="mt-2 pt-2 border-top small text-muted" style="font-size: 0.76rem;">
+                                    <i class="bi bi-aspect-ratio text-dark me-1"></i> Artisanal Spec: <span class="text-dark fw-semibold"><?= e($product['dimensions']) ?></span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
-                    <!-- 7. Bespoke Hot Foil Monogramming Option -->
-                    <div class="pdp-monogram-block mb-3 mb-md-4">
-                        <div class="p-2 p-md-3 bg-white border rounded-1 shadow-sm" style="border-color: var(--color-border);">
-                            <div class="form-check">
+                    <!-- 7. Bespoke Monogramming Option -->
+                    <div class="pdp-monogram-block mb-3">
+                        <div class="p-2.5 p-md-3 bg-white border rounded-1 shadow-xs" style="border-color: var(--color-border);">
+                            <div class="form-check m-0">
                                 <input class="form-check-input" type="checkbox" id="monogramToggle" onchange="document.getElementById('monogramBox').classList.toggle('d-none');">
-                                <label class="form-check-label small fw-bold text-dark cursor-pointer" for="monogramToggle" style="font-size: 0.82rem;">
+                                <label class="form-check-label small fw-bold text-dark cursor-pointer" for="monogramToggle" style="font-size: 0.8rem;">
                                     <i class="bi bi-pen-fill text-warning me-1"></i> Add Complimentary Bespoke Monogramming
                                 </label>
                             </div>
@@ -316,72 +300,39 @@ require __DIR__ . '/../layouts/header.php';
                                         </select>
                                     </div>
                                 </div>
-                                <small class="text-muted d-block mt-2" style="font-size: 0.72rem;">* Hand-stamped by our master embossers prior to sealing and dispatch.</small>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 8. Regional Stock & Availability Status (Desktop full box) -->
-                    <div class="pdp-stock-block mb-3 mb-md-4 p-2 p-md-3 bg-white border rounded-1 d-none d-lg-block" style="border-color: var(--color-border);">
-                        <?php if ((int)$product['stock_quantity'] > 5): ?>
-                            <div class="d-flex align-items-center gap-2 text-success small fw-semibold">
-                                <i class="bi bi-check-circle-fill fs-5"></i>
-                                <div>
-                                    <strong class="d-block text-dark">In Stock & Prepared for Dispatch</strong>
-                                    <span><?= (int)$product['stock_quantity'] ?> units available in <?= e($activeCountry['name']) ?> regional fulfillment center.</span>
-                                </div>
-                            </div>
-                        <?php elseif ((int)$product['stock_quantity'] > 0): ?>
-                            <div class="d-flex align-items-center gap-2 text-warning-emphasis small fw-semibold">
-                                <i class="bi bi-fire text-danger fs-5"></i>
-                                <div>
-                                    <strong class="d-block text-danger">Limited Atelier Vault Inventory</strong>
-                                    <span>Only <?= (int)$product['stock_quantity'] ?> pieces remaining for <?= e($activeCountry['name']) ?> patrons.</span>
-                                </div>
-                            </div>
-                        <?php else: ?>
-                            <div class="d-flex align-items-center gap-2 text-danger small fw-semibold">
-                                <i class="bi bi-x-circle-fill fs-5"></i>
-                                <div>
-                                    <strong class="d-block text-danger">Currently Reserved / Out of Stock</strong>
-                                    <span>This piece is awaiting next tanning release for <?= e($activeCountry['name']) ?>.</span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- 9. Atelier Guarantees & Pillars -->
-                    <div class="pdp-guarantees-block p-3 bg-white border text-muted small shadow-soft mb-3 mb-md-4" style="border-color: var(--color-border); border-radius: 2px;">
-                        <div class="d-flex align-items-center gap-2 gap-md-3 mb-2">
-                            <i class="bi bi-shield-check text-warning fs-5"></i>
-                            <div>
-                                <strong class="text-dark d-block">Buller Generational Guarantee</strong>
-                                <span style="font-size: 0.8rem;">Unconditional lifetime structural warranty on leather hide, stitching, and hardware.</span>
+                    <!-- 8. Atelier Guarantees & Trust -->
+                    <div class="pdp-guarantees-block p-2.5 p-md-3 bg-white border text-muted small shadow-xs mb-3" style="border-color: var(--color-border); border-radius: 4px;">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-shield-check text-warning fs-6"></i>
+                            <div style="font-size: 0.78rem;">
+                                <strong class="text-dark">Lifetime Structural Guarantee</strong> &bull; Full-grain hide & hardware
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2 gap-md-3 mb-2">
-                            <i class="bi bi-airplane text-dark fs-5"></i>
-                            <div>
-                                <strong class="text-dark d-block">Priority Express Air Cargo</strong>
-                                <span style="font-size: 0.8rem;">Dispatched via DHL / Blue Dart with full customs clearance and real-time live AWB tracking.</span>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-airplane text-dark fs-6"></i>
+                            <div style="font-size: 0.78rem;">
+                                <strong class="text-dark">Express Priority Air Cargo</strong> &bull; Customs clearance included
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2 gap-md-3">
-                            <i class="bi bi-arrow-repeat text-dark fs-5"></i>
-                            <div>
-                                <strong class="text-dark d-block"><?= (int)$activeCountry['return_window_days'] ?>-Day Complimentary Exchanges</strong>
-                                <span style="font-size: 0.8rem;">Complimentary sizing exchanges and returns within <?= (int)$activeCountry['return_window_days'] ?> days of receipt in <?= e($activeCountry['name']) ?>.</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-arrow-repeat text-dark fs-6"></i>
+                            <div style="font-size: 0.78rem;">
+                                <strong class="text-dark"><?= (int)$activeCountry['return_window_days'] ?>-Day Global Exchanges</strong> &bull; Complimentary concierge service
                             </div>
                         </div>
                     </div>
 
-                    <!-- 10. Craftsmanship Certification Banner (Mobile placement below actions & guarantees) -->
-                    <div class="pdp-cert-mobile-block p-3 bg-white border shadow-soft d-flex d-lg-none align-items-center justify-content-between rounded-1 small text-muted mb-3" style="border-color: var(--color-border);">
+                    <!-- 9. Craftsmanship Certification Banner (Mobile placement below guarantees) -->
+                    <div class="pdp-cert-mobile-block p-2.5 bg-white border shadow-xs d-flex d-lg-none align-items-center justify-content-between rounded-1 small text-muted mb-3" style="border-color: var(--color-border);">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-patch-check-fill text-warning fs-5"></i>
                             <div>
-                                <strong class="text-dark d-block">Hand-Inspected Masterpiece</strong>
-                                <span style="font-size: 0.8rem;">Certified authentic vegetable pit-tanned hide</span>
+                                <strong class="text-dark d-block" style="font-size: 0.8rem;">Hand-Inspected Masterpiece</strong>
+                                <span style="font-size: 0.74rem;">Certified authentic vegetable pit-tanned hide</span>
                             </div>
                         </div>
                         <span class="badge bg-light text-dark border">Lot: <?= e($product['sku']) ?></span>
@@ -1068,63 +1019,33 @@ require __DIR__ . '/../layouts/header.php';
 @media (min-width: 992px) {
     .pdp-header-block { order: 1; }
     .pdp-pricing-block { order: 2; }
-    .pdp-stock-block { order: 3; }
+    .pdp-color-block { order: 3; }
     .pdp-size-block { order: 4; }
-    .pdp-color-block { order: 5; }
-    .pdp-monogram-block { order: 6; }
-    .pdp-actions-container { order: 7; }
-    .pdp-short-desc-block { order: 8; }
-    .pdp-guarantees-block { order: 9; }
+    .pdp-actions-container { order: 5; }
+    .pdp-short-desc-block { order: 6; }
+    .pdp-monogram-block { order: 7; }
+    .pdp-guarantees-block { order: 8; }
 }
 
 /* Mobile Product Detail Layout (< 992px) */
 @media (max-width: 991.98px) {
-    /* 1. Header (Brand, Title, Rating, Stock badge) */
+    /* 1. Header (Brand, Title, Rating - No stock badge) */
     .pdp-header-block {
         order: 1;
-        margin-bottom: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
     }
     .pdp-header-block .pdp-title {
-        font-size: 1.45rem !important;
-        margin-top: 0.25rem !important;
-        margin-bottom: 0.35rem !important;
+        font-size: 1.35rem !important;
+        margin-top: 0.2rem !important;
+        margin-bottom: 0.3rem !important;
         line-height: 1.25;
     }
 
-    /* 2. Sizes */
-    .pdp-size-block {
-        order: 2;
-        margin-bottom: 0.85rem !important;
-    }
-    .pdp-size-block .form-label {
-        font-size: 0.75rem !important;
-        margin-bottom: 0.3rem !important;
-    }
-    .size-pill-btn {
-        padding: 5px 12px !important;
-        font-size: 0.78rem !important;
-        min-height: 34px !important;
-    }
-
-    /* 3. Colors */
-    .pdp-color-block {
-        order: 3;
-        margin-bottom: 0.85rem !important;
-    }
-    .pdp-color-block .form-label {
-        font-size: 0.75rem !important;
-        margin-bottom: 0.3rem !important;
-    }
-    .color-swatch-btn .swatch-circle {
-        width: 24px !important;
-        height: 24px !important;
-    }
-
-    /* 4. Compact Price (Chota sa dikha) */
+    /* 2. Price right below title */
     .pdp-pricing-block {
-        order: 4;
+        order: 2;
         padding: 0.65rem 0.85rem !important;
-        margin-bottom: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
         background: #fdfbf7 !important;
         border: 1px solid var(--color-border) !important;
         border-left: 3px solid var(--color-gold) !important;
@@ -1132,7 +1053,7 @@ require __DIR__ . '/../layouts/header.php';
         box-shadow: none !important;
     }
     .pdp-pricing-block .pdp-price-value {
-        font-size: 1.25rem !important;
+        font-size: 1.35rem !important;
         font-weight: 700;
         color: var(--color-espresso-deep);
     }
@@ -1149,10 +1070,31 @@ require __DIR__ . '/../layouts/header.php';
         line-height: 1.35;
     }
 
+    /* 3. Colors */
+    .pdp-color-block {
+        order: 3;
+        margin-bottom: 0.75rem !important;
+    }
+    .color-swatch-btn .swatch-circle {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    /* 4. Sizes */
+    .pdp-size-block {
+        order: 4;
+        margin-bottom: 0.75rem !important;
+    }
+    .size-pill-btn {
+        padding: 4px 10px !important;
+        font-size: 0.76rem !important;
+        min-height: 32px !important;
+    }
+
     /* 5. Aligned Add to Cart & Buy Buttons */
     .pdp-actions-container {
         order: 5;
-        margin-bottom: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
         gap: 0.45rem !important;
     }
     .pdp-action-group {
@@ -1194,41 +1136,41 @@ require __DIR__ . '/../layouts/header.php';
         border-radius: 3px !important;
     }
 
-    /* 6. Short Description (Thoda description bhot zyada nai) */
+    /* 6. Short Narrative */
     .pdp-short-desc-block {
         order: 6;
-        margin-bottom: 0.95rem !important;
+        margin-bottom: 0.75rem !important;
     }
     .pdp-short-desc-box {
         background: #ffffff;
         border: 1px solid var(--color-border);
         border-radius: 4px;
-        padding: 0.75rem 0.9rem !important;
+        padding: 0.65rem 0.8rem !important;
     }
     .pdp-short-desc-box p {
-        font-size: 0.82rem !important;
-        line-height: 1.55;
+        font-size: 0.8rem !important;
+        line-height: 1.5;
         color: #554f49;
     }
 
     /* 7. Monogram */
     .pdp-monogram-block {
         order: 7;
-        margin-bottom: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
     }
 
     /* 8. Guarantees */
     .pdp-guarantees-block {
         order: 8;
-        margin-bottom: 0.95rem !important;
-        padding: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
+        padding: 0.75rem !important;
     }
 
     /* 9. Lot Cert */
     .pdp-cert-mobile-block {
         order: 9;
-        margin-bottom: 0.95rem !important;
-        padding: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
+        padding: 0.75rem !important;
     }
 }
 
