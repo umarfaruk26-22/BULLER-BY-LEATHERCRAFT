@@ -1,7 +1,7 @@
 <?php
 use App\Core\Auth;
 $isSuper = Auth::isSuperAdmin();
-$pageTitle = 'Promotional Coupons & Privé Codes';
+$pageTitle = 'Promotional Coupons & Discount Codes';
 require __DIR__ . '/../layouts/admin_header.php';
 ?>
 
@@ -11,7 +11,7 @@ require __DIR__ . '/../layouts/admin_header.php';
         <div class="alert alert-dark border border-warning d-flex justify-content-between align-items-center py-2 px-3 mb-4 shadow-sm" style="background: #1a120b;">
             <div class="text-white small">
                 <i class="bi bi-shield-check text-warning me-2 fs-5 align-middle"></i>
-                <strong class="text-warning">Global Super Admin Mode:</strong> Managing Promotional Privé Codes & Discounts
+                <strong class="text-warning">Global Super Admin Mode:</strong> Managing Promotional Coupons & Discounts
             </div>
             <a href="<?= url('superadmin/dashboard') ?>" class="btn btn-outline-warning btn-sm py-1">
                 <i class="bi bi-arrow-left me-1"></i> Back to Global Dashboard
@@ -22,9 +22,9 @@ require __DIR__ . '/../layouts/admin_header.php';
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h1 class="h3 font-serif mb-1 d-flex align-items-center gap-2" style="color: var(--color-espresso-deep);">
-                <i class="bi bi-ticket-perforated text-warning"></i> Promotional Coupons & Privé Codes
+                <i class="bi bi-ticket-perforated text-warning"></i> Promotional Coupons & Discount Codes
             </h1>
-            <p class="text-muted small mb-0">Create, monitor, and regulate country-specific or global discount vouchers for distinguished patrons.</p>
+            <p class="text-muted small mb-0">Create, monitor, and regulate country-specific or global discount vouchers for customers.</p>
         </div>
         <div class="d-flex gap-2 align-items-center">
             <?php if ($isSuper && !empty($allCountries)): ?>
@@ -79,7 +79,7 @@ require __DIR__ . '/../layouts/admin_header.php';
             <div class="kpi-card p-3 bg-white border">
                 <div class="kpi-label">Total Registered Codes</div>
                 <div class="kpi-value" style="color: var(--color-espresso-deep);"><?= count($coupons) ?></div>
-                <small class="text-muted">In Atelier Database</small>
+                <small class="text-muted">In System Database</small>
             </div>
         </div>
     </div>
@@ -206,7 +206,7 @@ require __DIR__ . '/../layouts/admin_header.php';
         <div class="modal-content border-0 shadow">
             <div class="modal-header text-white" style="background-color: var(--color-espresso-deep); border-bottom: 2px solid var(--color-gold);">
                 <h5 class="modal-title font-serif fs-5">
-                    <i class="bi bi-ticket-perforated text-warning me-2"></i> Create Privé Coupon Voucher
+                    <i class="bi bi-ticket-perforated text-warning me-2"></i> Create Coupon Voucher
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -216,7 +216,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Coupon Code (Uppercase)</label>
                         <input type="text" name="code" class="form-control text-uppercase font-monospace fw-bold" placeholder="e.g. LUXURY20" required style="letter-spacing: 0.1em;">
-                        <small class="text-muted">Distinguished identifier entered by patrons during checkout.</small>
+                        <small class="text-muted">Coupon code entered by customers during checkout.</small>
                     </div>
 
                     <div class="mb-3">

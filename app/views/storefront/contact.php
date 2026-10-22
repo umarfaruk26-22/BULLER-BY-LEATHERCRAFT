@@ -2,27 +2,27 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'Atelier Concierge & Regional Appointments | Buller Leather';
-$pageDescription = 'Connect directly with Buller Leather regional ateliers across London, New York, Mumbai, and Dubai for bespoke fitting, corporate commissions, and client support.';
+$pageTitle = 'Customer Support & Regional Offices | Buller Leather';
+$pageDescription = 'Connect directly with Buller Leather regional offices across London, New York, Mumbai, and Dubai for bespoke fitting, corporate commissions, and customer support.';
 
 // Get active shopping market
 $currentMarket = MarketContext::getCountry();
 $selectedCountryCode = strtoupper(trim($_GET['country'] ?? $currentMarket['code'] ?? 'IN'));
 
-// Regional Atelier Directory Configuration
+// Regional Directory Configuration
 $regionalAteliers = [
     'IN' => [
         'name' => 'India',
         'code' => 'IN',
         'flag' => 'in',
         'city' => 'Mumbai',
-        'atelier_title' => 'The Colaba Heritage Atelier & Guild',
+        'atelier_title' => 'The Colaba Heritage Showroom & Workshop',
         'address' => 'Heritage Wing, 14 B.K. Boman Behram Marg, Colaba, Mumbai, Maharashtra 400001',
         'landmark' => 'Adjacent to Gateway of India Promenade',
         'phone' => '+91 (22) 6842 9100',
         'phone_raw' => '+912268429100',
         'phone_code' => '+91',
-        'email' => 'concierge.in@bullerleather.com',
+        'email' => 'support.in@bullerleather.com',
         'whatsapp' => '+91 98200 48210',
         'whatsapp_raw' => '919820048210',
         'hours' => 'Monday – Saturday: 10:00 AM – 8:00 PM IST',
@@ -31,30 +31,30 @@ $regionalAteliers = [
         'turnaround' => '24 – 48 Hours Across Major Metros',
         'services' => [
             'Bespoke Jacket Tailoring & Hide Grading',
-            'Corporate Guild Commissions & Gifting',
+            'Corporate Commissions & Gifting',
             'Official GST Tax Invoice Processing',
             'Complimentary Conditioning & Polishing Service'
         ],
         'specialist' => 'Arjun Singhania',
-        'specialist_title' => 'Head of Guild Client Services',
-        'badge' => 'South Asia Flagship Guild'
+        'specialist_title' => 'Head of Client Services',
+        'badge' => 'South Asia Flagship Showroom'
     ],
     'US' => [
         'name' => 'United States',
         'code' => 'US',
         'flag' => 'us',
         'city' => 'New York',
-        'atelier_title' => 'SoHo Private Salon & Client Suites',
+        'atelier_title' => 'SoHo Private Showroom & Client Suites',
         'address' => '482 Broome Street, 3rd Floor Penthouse, SoHo, New York, NY 10013',
         'landmark' => 'Between Wooster & West Broadway',
         'phone' => '+1 (800) 285-5371',
         'phone_raw' => '+18002855371',
         'phone_code' => '+1',
-        'email' => 'concierge.us@bullerleather.com',
+        'email' => 'support.us@bullerleather.com',
         'whatsapp' => '+1 (212) 555-0194',
         'whatsapp_raw' => '12125550194',
         'hours' => 'Monday – Friday: 9:00 AM – 6:00 PM EST',
-        'sunday' => 'Saturday & Sunday: Private VIP Showings',
+        'sunday' => 'Saturday & Sunday: Private Showings',
         'shipping_partner' => 'FedEx Air Priority & DHL Express',
         'turnaround' => 'Next-Day Delivery Across Continental US',
         'services' => [
@@ -65,20 +65,20 @@ $regionalAteliers = [
         ],
         'specialist' => 'Eleanor Vance',
         'specialist_title' => 'Senior Client Director (Americas)',
-        'badge' => 'North America Private Salon'
+        'badge' => 'North America Private Showroom'
     ],
     'GB' => [
         'name' => 'United Kingdom',
         'code' => 'GB',
         'flag' => 'gb',
         'city' => 'London',
-        'atelier_title' => 'Mayfair Historic Atelier & Workshop',
+        'atelier_title' => 'Mayfair Historic Showroom & Workshop',
         'address' => '48 Conduit Street, Mayfair, London W1S 2YG, United Kingdom',
         'landmark' => 'Steps from Savile Row & Bond Street',
         'phone' => '+44 (20) 7946 0920',
         'phone_raw' => '+442079460920',
         'phone_code' => '+44',
-        'email' => 'concierge.uk@bullerleather.com',
+        'email' => 'support.uk@bullerleather.com',
         'whatsapp' => '+44 7700 900142',
         'whatsapp_raw' => '447700900142',
         'hours' => 'Monday – Friday: 9:30 AM – 6:30 PM GMT',
@@ -92,7 +92,7 @@ $regionalAteliers = [
             'Lifetime Leather Re-waxing & Restoration'
         ],
         'specialist' => 'Charles Sterling',
-        'specialist_title' => 'Master Craftsman & Atelier Curator',
+        'specialist_title' => 'Master Craftsman & Workshop Curator',
         'badge' => 'European Headquarters & Workshop'
     ],
     'AE' => [
@@ -100,13 +100,13 @@ $regionalAteliers = [
         'code' => 'AE',
         'flag' => 'ae',
         'city' => 'Dubai',
-        'atelier_title' => 'DIFC Private Client Suite & Salon',
+        'atelier_title' => 'DIFC Private Showroom & Client Suites',
         'address' => 'Gate Village 04, Level 5, Dubai International Financial Centre (DIFC), Dubai, UAE',
         'landmark' => 'Adjacent to The Gate Building',
         'phone' => '+971 (4) 362 7800',
         'phone_raw' => '+97143627800',
         'phone_code' => '+971',
-        'email' => 'concierge.uae@bullerleather.com',
+        'email' => 'support.uae@bullerleather.com',
         'whatsapp' => '+971 50 123 4567',
         'whatsapp_raw' => '971501234567',
         'hours' => 'Sunday – Thursday: 10:00 AM – 7:00 PM GST',
@@ -142,7 +142,7 @@ require __DIR__ . '/../layouts/header.php';
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="<?= url('') ?>" class="text-decoration-none text-gold-bright small"><i class="bi bi-house-door me-1"></i> Home</a></li>
-                <li class="breadcrumb-item active text-white-50 small" aria-current="page">Atelier Concierge & Contact</li>
+                <li class="breadcrumb-item active text-white-50 small" aria-current="page">Customer Support & Contact</li>
             </ol>
         </nav>
 
@@ -150,13 +150,13 @@ require __DIR__ . '/../layouts/header.php';
             <div class="col-lg-8">
                 <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-2 mb-md-3 rounded-pill" style="background: rgba(197, 168, 128, 0.15); border: 1px solid rgba(197, 168, 128, 0.35);">
                     <i class="bi bi-compass text-warning" style="font-size: 0.85rem;"></i>
-                    <span class="text-uppercase fw-semibold" style="letter-spacing: 0.22em; font-size: 0.68rem; color: var(--color-gold-bright);">GLOBAL CONCIERGE NETWORK</span>
+                    <span class="text-uppercase fw-semibold" style="letter-spacing: 0.22em; font-size: 0.68rem; color: var(--color-gold-bright);">GLOBAL SUPPORT NETWORK</span>
                 </div>
                 <h1 class="font-serif fw-bold mb-2 mb-md-3" style="letter-spacing: 0.02em; line-height: 1.2; color: #ffffff; font-size: clamp(1.75rem, 5vw, 2.8rem);">
-                    Connect With Our <br><span style="color: var(--color-gold-bright); font-style: italic;">Regional Ateliers</span>
+                    Connect With Our <br><span style="color: var(--color-gold-bright); font-style: italic;">Regional Showrooms & Offices</span>
                 </h1>
                 <p class="lead text-light mb-0" style="line-height: 1.7; opacity: 0.9; max-width: 650px; font-size: clamp(0.9rem, 2vw, 1.05rem);">
-                    Whether commissioning a bespoke leather garment, arranging an executive gifting order, or requesting private salon access, our regional client directors stand at your service.
+                    Whether ordering custom leather goods, arranging a corporate order, or requesting showroom visits, our regional client directors stand at your service.
                 </p>
             </div>
             <div class="col-lg-4 text-start text-lg-end mt-3 mt-lg-0">
@@ -165,7 +165,7 @@ require __DIR__ . '/../layouts/header.php';
                         <i class="bi bi-clock-history me-1"></i> Global Response Promise
                     </div>
                     <div class="fw-bold text-white fs-6">Under 4 Business Hours</div>
-                    <div class="small text-light-50 mt-1" style="font-size: 0.74rem;">Dedicated senior concierge attention with zero automated bot queues.</div>
+                    <div class="small text-light-50 mt-1" style="font-size: 0.74rem;">Dedicated customer support with zero automated bot queues.</div>
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@ require __DIR__ . '/../layouts/header.php';
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 gap-md-3">
             <div class="d-flex align-items-center gap-2">
                 <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 0.12em; font-size: 0.72rem;">
-                    Select Regional Atelier:
+                    Select Regional Showroom:
                 </span>
             </div>
 
@@ -199,7 +199,7 @@ require __DIR__ . '/../layouts/header.php';
     </div>
 </section>
 
-<!-- Main Contact Area: Atelier Details & Localized Form -->
+<!-- Main Contact Area: Showroom Details & Localized Form -->
 <section class="py-4 py-md-5" style="background-color: var(--color-ivory);">
     <div class="container py-2 py-md-3">
 
@@ -208,7 +208,7 @@ require __DIR__ . '/../layouts/header.php';
             <div class="alert alert-success border-0 shadow-soft p-3 p-md-4 mb-4 mb-md-5 rounded-2 d-flex align-items-start gap-3" id="inquiryConfirmed" style="background-color: #f0fdf4; border-left: 4px solid #16a34a !important;">
                 <i class="bi bi-check-circle-fill text-success fs-4 mt-1"></i>
                 <div>
-                    <h5 class="fw-bold text-success mb-1 font-serif" style="font-size: 1.1rem;">Inquiry Registered With Regional Atelier</h5>
+                    <h5 class="fw-bold text-success mb-1 font-serif" style="font-size: 1.1rem;">Inquiry Registered With Regional Support</h5>
                     <p class="text-dark mb-0 small" style="line-height: 1.6;"><?= flash('contact_success') ?></p>
                 </div>
             </div>
@@ -264,11 +264,11 @@ require __DIR__ . '/../layouts/header.php';
                                 <i class="bi bi-telephone-fill text-gold fs-5"></i>
                             </div>
                             <div>
-                                <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Direct Atelier Line</span>
+                                <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Direct Support Line</span>
                                 <a href="tel:<?= e($currentAtelier['phone_raw']) ?>" id="atelierPhoneLink" class="text-decoration-none fw-bold" style="color: var(--color-espresso-deep); font-size: 1rem;">
                                     <?= e($currentAtelier['phone']) ?>
                                 </a>
-                                <span class="d-block small text-muted mt-0" style="font-size: 0.74rem;">Direct concierge line &bull; Zero toll fees</span>
+                                <span class="d-block small text-muted mt-0" style="font-size: 0.74rem;">Direct customer care line &bull; Zero toll fees</span>
                             </div>
                         </div>
 
@@ -278,21 +278,21 @@ require __DIR__ . '/../layouts/header.php';
                                 <i class="bi bi-envelope-fill text-gold fs-5"></i>
                             </div>
                             <div>
-                                <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Private Client Desk</span>
+                                <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Customer Support Email</span>
                                 <a href="mailto:<?= e($currentAtelier['email']) ?>" id="atelierEmailLink" class="text-decoration-none fw-semibold text-primary" style="font-size: 0.92rem;">
                                     <?= e($currentAtelier['email']) ?>
                                 </a>
                             </div>
                         </div>
 
-                        <!-- WhatsApp Direct Concierge -->
+                        <!-- WhatsApp Direct Support -->
                         <div class="d-flex align-items-start gap-3">
                             <div class="contact-icon-circle" style="background: rgba(37, 211, 102, 0.1); color: #16a34a;">
                                 <i class="bi bi-whatsapp fs-5 text-success"></i>
                             </div>
                             <div>
-                                <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Instant VIP WhatsApp Desk</span>
-                                <a href="https://wa.me/<?= e($currentAtelier['whatsapp_raw']) ?>?text=<?= urlencode('Hello Buller Atelier, I would like to inquire about bespoke services.') ?>" target="_blank" id="atelierWhatsappLink" class="text-decoration-none fw-bold text-success" style="font-size: 0.92rem;">
+                                <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Instant WhatsApp Support</span>
+                                <a href="https://wa.me/<?= e($currentAtelier['whatsapp_raw']) ?>?text=<?= urlencode('Hello Buller Leather, I would like to inquire about your products and services.') ?>" target="_blank" id="atelierWhatsappLink" class="text-decoration-none fw-bold text-success" style="font-size: 0.92rem;">
                                     <?= e($currentAtelier['whatsapp']) ?> <i class="bi bi-box-arrow-up-right ms-1 small" style="font-size: 0.72rem;"></i>
                                 </a>
                             </div>
@@ -321,9 +321,9 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
                     </div>
 
-                    <!-- Services Available at this Atelier -->
+                    <!-- Services Available at this Showroom -->
                     <div class="mt-4 pt-3 border-top" style="border-color: var(--color-border) !important;">
-                        <span class="d-block small text-muted text-uppercase fw-bold mb-2" style="letter-spacing: 0.1em; font-size: 0.68rem;">Atelier Capabilities</span>
+                        <span class="d-block small text-muted text-uppercase fw-bold mb-2" style="letter-spacing: 0.1em; font-size: 0.68rem;">Showroom & Workshop Services</span>
                         <ul class="list-unstyled mb-0" id="atelierServicesList">
                             <?php foreach ($currentAtelier['services'] as $srv): ?>
                                 <li class="small text-muted py-1 d-flex align-items-center gap-2">
@@ -340,27 +340,27 @@ require __DIR__ . '/../layouts/header.php';
             <div class="col-lg-7">
                 <div class="bg-white p-3 p-sm-4 p-md-5 border shadow-soft rounded-2" style="border-color: var(--color-border);">
                     
-                    <!-- Destination Atelier Indicator -->
+                    <!-- Destination Showroom Indicator -->
                     <div class="p-3 mb-4 rounded-1 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2" style="background-color: var(--color-cream); border-left: 3px solid var(--color-cognac);">
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-envelope-paper-heart text-gold fs-4"></i>
                             <div>
                                 <span class="d-block small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.68rem;">Direct Dispatch Destination</span>
                                 <strong class="text-dark font-serif" id="formDestinationNotice" style="font-size: clamp(0.88rem, 2vw, 1rem);">
-                                    <?= e($currentAtelier['name']) ?> Atelier (<?= e($currentAtelier['city']) ?>) Desk
+                                    <?= e($currentAtelier['name']) ?> Showroom (<?= e($currentAtelier['city']) ?>) Desk
                                 </strong>
                             </div>
                         </div>
                         <span class="badge text-uppercase bg-dark align-self-start align-self-sm-center" id="formCountryBadge" style="letter-spacing: 0.1em; font-size: 0.68rem;">
-                            <?= e($currentAtelier['code']) ?> ATELIER
+                            <?= e($currentAtelier['code']) ?> SHOWROOM
                         </span>
                     </div>
 
                     <h2 class="font-serif fw-bold mb-2" style="color: var(--color-espresso-deep); font-size: clamp(1.4rem, 3.5vw, 1.85rem);">
-                        Direct Atelier Dispatch
+                        Send Us A Message
                     </h2>
                     <p class="text-muted small mb-4" style="font-size: 0.82rem; line-height: 1.6;">
-                        Please provide your contact particulars below. Your inquiry is routed directly to the regional mastercraft desk and assigned to a dedicated client specialist.
+                        Please provide your details below. Your message will be routed directly to the regional support team and assigned to a dedicated specialist.
                     </p>
 
                     <!-- Contact Form -->
@@ -372,7 +372,7 @@ require __DIR__ . '/../layouts/header.php';
                             <!-- Full Name -->
                             <div class="col-md-6">
                                 <label for="fullName" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Full Name *</label>
-                                <input type="text" class="form-control luxury-input" id="fullName" name="full_name" placeholder="e.g. Lord Alexander Wright" required value="<?= e($_POST['full_name'] ?? (Auth::user()['full_name'] ?? '')) ?>">
+                                <input type="text" class="form-control luxury-input" id="fullName" name="full_name" placeholder="e.g. Alexander Wright" required value="<?= e($_POST['full_name'] ?? (Auth::user()['full_name'] ?? '')) ?>">
                             </div>
 
                             <!-- Email Address -->
@@ -394,13 +394,13 @@ require __DIR__ . '/../layouts/header.php';
                                 </div>
                             </div>
 
-                            <!-- Target Country Atelier Selection -->
+                            <!-- Target Country Showroom Selection -->
                             <div class="col-md-6">
-                                <label for="selectTargetCountry" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Routing Atelier *</label>
+                                <label for="selectTargetCountry" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Routing Showroom *</label>
                                 <select class="form-select luxury-input" id="selectTargetCountry" onchange="switchContactCountry(this.value)">
                                     <?php foreach ($regionalAteliers as $c => $data): ?>
                                         <option value="<?= $c ?>" <?= ($c === $selectedCountryCode) ? 'selected' : '' ?>>
-                                            <?= $data['name'] ?> (<?= $data['city'] ?> Atelier)
+                                            <?= $data['name'] ?> (<?= $data['city'] ?> Showroom)
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -410,14 +410,14 @@ require __DIR__ . '/../layouts/header.php';
                         <div class="row g-3 mb-3">
                             <!-- Inquiry Classification -->
                             <div class="col-md-6">
-                                <label for="inquiryType" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Inquiry Classification *</label>
+                                <label for="inquiryType" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Inquiry Topic *</label>
                                 <select class="form-select luxury-input" id="inquiryType" name="inquiry_type" required>
-                                    <option value="Bespoke Sizing & Custom Fitting" <?= (($_POST['inquiry_type'] ?? '') === 'Bespoke Sizing & Custom Fitting') ? 'selected' : '' ?>>Bespoke Sizing & Custom Fitting</option>
-                                    <option value="Order Tracking & International Customs" <?= (($_POST['inquiry_type'] ?? '') === 'Order Tracking & International Customs') ? 'selected' : '' ?>>Order Tracking & International Customs</option>
-                                    <option value="Private Salon VIP Appointment" <?= (($_POST['inquiry_type'] ?? '') === 'Private Salon VIP Appointment') ? 'selected' : '' ?>>Private Salon VIP Appointment</option>
-                                    <option value="Corporate Commissions & Monogramming" <?= (($_POST['inquiry_type'] ?? '') === 'Corporate Commissions & Monogramming') ? 'selected' : '' ?>>Corporate Commissions & Monogramming</option>
-                                    <option value="Leather Care, Waxing & Warranty" <?= (($_POST['inquiry_type'] ?? '') === 'Leather Care, Waxing & Warranty') ? 'selected' : '' ?>>Leather Care, Waxing & Warranty</option>
-                                    <option value="General Atelier Inquiries" <?= (($_POST['inquiry_type'] ?? '') === 'General Atelier Inquiries') ? 'selected' : '' ?>>General Atelier Inquiries</option>
+                                    <option value="Bespoke Sizing & Custom Fitting" <?= (($_POST['inquiry_type'] ?? '') === 'Bespoke Sizing & Custom Fitting') ? 'selected' : '' ?>>Custom Sizing & Fitting</option>
+                                    <option value="Order Tracking & International Customs" <?= (($_POST['inquiry_type'] ?? '') === 'Order Tracking & International Customs') ? 'selected' : '' ?>>Order Tracking & Delivery</option>
+                                    <option value="Private Salon VIP Appointment" <?= (($_POST['inquiry_type'] ?? '') === 'Private Salon VIP Appointment') ? 'selected' : '' ?>>Showroom Appointment</option>
+                                    <option value="Corporate Commissions & Monogramming" <?= (($_POST['inquiry_type'] ?? '') === 'Corporate Commissions & Monogramming') ? 'selected' : '' ?>>Corporate Orders & Monogramming</option>
+                                    <option value="Leather Care, Waxing & Warranty" <?= (($_POST['inquiry_type'] ?? '') === 'Leather Care, Waxing & Warranty') ? 'selected' : '' ?>>Leather Care & Warranty</option>
+                                    <option value="General Atelier Inquiries" <?= (($_POST['inquiry_type'] ?? '') === 'General Atelier Inquiries') ? 'selected' : '' ?>>General Inquiries</option>
                                 </select>
                             </div>
 
@@ -425,9 +425,9 @@ require __DIR__ . '/../layouts/header.php';
                             <div class="col-md-6">
                                 <label for="preferredChannel" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Preferred Channel</label>
                                 <select class="form-select luxury-input" id="preferredChannel" name="preferred_channel">
-                                    <option value="Email">Official Concierge Email</option>
+                                    <option value="Email">Official Support Email</option>
                                     <option value="Phone">Direct Phone Call</option>
-                                    <option value="WhatsApp">VIP WhatsApp Desk</option>
+                                    <option value="WhatsApp">WhatsApp Message</option>
                                 </select>
                             </div>
                         </div>
@@ -435,22 +435,22 @@ require __DIR__ . '/../layouts/header.php';
                         <!-- Subject Line -->
                         <div class="mb-3">
                             <label for="subjectLine" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Subject *</label>
-                            <input type="text" class="form-control luxury-input" id="subjectLine" name="subject" placeholder="e.g. Inquiring regarding Tuscan Aviator sizing & Mayfair fitting" required value="<?= e($_POST['subject'] ?? '') ?>">
+                            <input type="text" class="form-control luxury-input" id="subjectLine" name="subject" placeholder="e.g. Inquiring regarding Tuscan Aviator sizing & fit" required value="<?= e($_POST['subject'] ?? '') ?>">
                         </div>
 
                         <!-- Message -->
                         <div class="mb-4">
-                            <label for="messageBody" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Message / Request Particulars *</label>
-                            <textarea class="form-control luxury-input" id="messageBody" name="message" rows="5" placeholder="Please detail your dimensions, preferred hide grade, delivery requirements, or bespoke inquiries..." required><?= e($_POST['message'] ?? '') ?></textarea>
+                            <label for="messageBody" class="form-label small fw-bold text-uppercase" style="letter-spacing: 0.08em; font-size: 0.72rem;">Message Details *</label>
+                            <textarea class="form-control luxury-input" id="messageBody" name="message" rows="5" placeholder="Please detail your measurements, preferred leather color, delivery requirements, or questions..." required><?= e($_POST['message'] ?? '') ?></textarea>
                             <div class="form-text small text-muted" style="font-size: 0.75rem;">
-                                <i class="bi bi-shield-check text-success"></i> Your message is handled strictly under European General Data Protection and confidential atelier protocols.
+                                <i class="bi bi-shield-check text-success"></i> Your message is handled strictly under European General Data Protection and confidential customer privacy standards.
                             </div>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
                             <button type="submit" class="btn btn-buller-primary py-3 px-4 fw-semibold d-inline-flex align-items-center justify-content-center gap-2" style="font-size: 0.88rem; letter-spacing: 0.08em;">
-                                <span>Dispatch Inquiry to Atelier</span>
+                                <span>Send Message to Support</span>
                                 <i class="bi bi-send-fill text-warning"></i>
                             </button>
                             <span class="small text-muted" style="font-size: 0.75rem;">
@@ -466,12 +466,12 @@ require __DIR__ . '/../layouts/header.php';
     </div>
 </section>
 
-<!-- Regional Ateliers Quick Grid -->
+<!-- Regional Showrooms Quick Grid -->
 <section class="py-5" style="background-color: var(--color-cream); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container py-4">
         <div class="text-center max-w-700 mx-auto mb-5">
             <span class="text-uppercase small fw-bold" style="color: var(--color-cognac); letter-spacing: 0.22em;">Global Network</span>
-            <h2 class="font-serif display-6 fw-bold mt-2 mb-3" style="color: var(--color-espresso-deep);">Four International Flagship Salons</h2>
+            <h2 class="font-serif display-6 fw-bold mt-2 mb-3" style="color: var(--color-espresso-deep);">Four International Flagship Showrooms</h2>
             <p class="text-muted">Direct appointment booking and international logistics support across every primary time zone.</p>
         </div>
 
@@ -481,10 +481,10 @@ require __DIR__ . '/../layouts/header.php';
                     <div class="card h-100 border-0 shadow-soft p-4 text-center <?= ($code === $selectedCountryCode) ? 'border-gold-active' : '' ?>" style="background: #ffffff; border-radius: 8px;">
                         <img src="<?= asset('assets/images/flags/' . $at['flag'] . '.png') ?>" alt="<?= $at['name'] ?>" width="34" height="24" class="rounded shadow-xs mx-auto mb-3">
                         <h5 class="font-serif fw-bold mb-1" style="color: var(--color-espresso-deep);"><?= $at['name'] ?></h5>
-                        <p class="small text-muted mb-2"><?= $at['city'] ?> Atelier</p>
+                        <p class="small text-muted mb-2"><?= $at['city'] ?> Showroom</p>
                         <div class="small fw-semibold text-dark mb-3" style="font-size: 0.82rem;"><?= $at['phone'] ?></div>
                         <button type="button" class="btn btn-outline-dark btn-sm mt-auto" onclick="switchContactCountry('<?= $code ?>'); window.scrollTo({top: 400, behavior: 'smooth'});">
-                            Select Atelier <i class="bi bi-arrow-right ms-1"></i>
+                            Select Showroom <i class="bi bi-arrow-right ms-1"></i>
                         </button>
                     </div>
                 </div>
@@ -493,7 +493,7 @@ require __DIR__ . '/../layouts/header.php';
     </div>
 </section>
 
-<!-- Client Concierge FAQ Section -->
+<!-- Customer Support FAQ Section -->
 <section class="py-5" style="background-color: var(--color-ivory);">
     <div class="container py-4">
         <div class="max-w-800 mx-auto">
@@ -511,7 +511,7 @@ require __DIR__ . '/../layouts/header.php';
                     </h2>
                     <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
                         <div class="accordion-body text-muted small" style="line-height: 1.8;">
-                            Select your regional atelier above, choose <em>"Private Salon VIP Appointment"</em> as your inquiry type, and suggest two preferred dates. Your regional client director will confirm your private salon booking with tailored hide samples prepared in advance.
+                            Select your regional showroom above, choose <em>"Showroom Appointment"</em> as your inquiry type, and suggest two preferred dates. Your regional client director will confirm your private showroom booking with tailored leather samples prepared in advance.
                         </div>
                     </div>
                 </div>
@@ -524,7 +524,7 @@ require __DIR__ . '/../layouts/header.php';
                     </h2>
                     <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
                         <div class="accordion-body text-muted small" style="line-height: 1.8;">
-                            100% yes. Every Buller Leather parcel travels under full declaration and comprehensive marine & air cargo insurance via DHL Express, Blue Dart Apex, or FedEx Priority. In the rare event of transit damage, an immediate replacement or full restoration is guaranteed.
+                            100% yes. Every Buller Leather parcel travels under full declaration and comprehensive cargo insurance via DHL Express, Blue Dart Apex, or FedEx Priority. In the rare event of transit damage, an immediate replacement or full resolution is guaranteed.
                         </div>
                     </div>
                 </div>
@@ -532,12 +532,12 @@ require __DIR__ . '/../layouts/header.php';
                 <div class="accordion-item border mb-3 rounded shadow-xs" style="border-color: var(--color-border) !important;">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed fw-bold font-serif" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                            Can I request custom hot-foil monogramming or corporate guild embossing?
+                            Can I request custom hot-foil monogramming or corporate logo embossing?
                         </button>
                     </h2>
                     <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
                         <div class="accordion-body text-muted small" style="line-height: 1.8;">
-                            Yes. We offer blind debossing and 24K gold foil monogramming on all briefcases, wallets, belts, and desk accoutrements. For corporate commissions exceeding 10 units, our design team produces custom brass die stamps featuring your crest or corporate mark.
+                            Yes. We offer blind debossing and 24K gold foil monogramming on all briefcases, wallets, belts, and accessories. For corporate commissions exceeding 10 units, our team produces custom brass die stamps featuring your crest or corporate mark.
                         </div>
                     </div>
                 </div>
@@ -559,7 +559,7 @@ function switchContactCountry(code) {
         btn.classList.toggle('active', btn.getAttribute('data-country') === code);
     });
 
-    // Update Atelier Card Details
+    // Update Showroom Card Details
     document.getElementById('atelierBadge').textContent = at.badge;
     document.getElementById('atelierFlagImg').src = '<?= asset('assets/images/flags/') ?>' + at.flag + '.png';
     document.getElementById('atelierTitle').textContent = at.atelier_title;
@@ -579,7 +579,7 @@ function switchContactCountry(code) {
     // WhatsApp
     const waLink = document.getElementById('atelierWhatsappLink');
     waLink.innerHTML = at.whatsapp + ' <i class="bi bi-box-arrow-up-right ms-1 small"></i>';
-    waLink.href = 'https://wa.me/' + at.whatsapp_raw + '?text=' + encodeURIComponent('Hello ' + at.city + ' Atelier, I would like to inquire about bespoke services.');
+    waLink.href = 'https://wa.me/' + at.whatsapp_raw + '?text=' + encodeURIComponent('Hello ' + at.city + ' Showroom, I would like to inquire about your leather products and services.');
 
     // Hours & Logistics
     document.getElementById('atelierHours').innerHTML = '<i class="bi bi-clock me-1 text-gold"></i> ' + at.hours;
@@ -605,8 +605,8 @@ function switchContactCountry(code) {
     document.getElementById('inputCountryCode').value = code;
     document.getElementById('selectTargetCountry').value = code;
     document.getElementById('phonePrefixLabel').textContent = at.phone_code;
-    document.getElementById('formDestinationNotice').textContent = at.name + ' Atelier (' + at.city + ') Desk';
-    document.getElementById('formCountryBadge').textContent = at.code + ' ATELIER';
+    document.getElementById('formDestinationNotice').textContent = at.name + ' Showroom (' + at.city + ') Desk';
+    document.getElementById('formCountryBadge').textContent = at.code + ' SHOWROOM';
 
     // Update URL query string without page reload
     const url = new URL(window.location);
@@ -668,7 +668,7 @@ function switchContactCountry(code) {
     position: relative;
 }
 .border-gold-active::after {
-    content: 'ACTIVE ATELIER';
+    content: 'ACTIVE SHOWROOM';
     position: absolute;
     top: -10px;
     right: 12px;

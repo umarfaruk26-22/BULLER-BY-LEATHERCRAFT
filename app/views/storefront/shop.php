@@ -2,7 +2,7 @@
 use App\Core\MarketContext;
 use App\Core\Wishlist;
 
-$pageTitle = 'Collections & Curations';
+$pageTitle = 'All Collections & Products';
 require __DIR__ . '/../layouts/header.php';
 
 $activeCountry = MarketContext::getCountry();
@@ -12,7 +12,7 @@ $activeCountry = MarketContext::getCountry();
 <section class="py-5 bg-dark text-white position-relative" style="background-image: url('<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>'); background-size: cover; background-position: center;">
     <div class="hero-overlay" style="background: rgba(18, 11, 6, 0.85);"></div>
     <div class="container position-relative py-4 text-center">
-        <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">Buller Atelier Curations</span>
+        <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">Buller Leather Collections</span>
         <h1 class="font-serif mt-2 mb-2" style="font-size: 2.8rem; color: #fff;">
             <?= isset($activeCategory) ? e($activeCategory['name']) : 'The Master Collection' ?>
         </h1>
@@ -124,7 +124,7 @@ $activeCountry = MarketContext::getCountry();
                 <!-- Mobile Filter Toggle Button -->
                 <div class="d-lg-none mb-3">
                     <button class="btn btn-outline-dark w-100 d-flex justify-content-between align-items-center py-2 px-3 bg-white shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#shopFilterSidebar" aria-expanded="false" aria-controls="shopFilterSidebar" style="border-color: var(--color-border); min-height: 44px;">
-                        <span><i class="bi bi-funnel me-2 text-warning"></i> Filter Curations & Categories</span>
+                        <span><i class="bi bi-funnel me-2 text-warning"></i> Filter Products & Categories</span>
                         <i class="bi bi-chevron-down"></i>
                     </button>
                 </div>
@@ -132,7 +132,7 @@ $activeCountry = MarketContext::getCountry();
                 <div class="collapse d-lg-block" id="shopFilterSidebar">
                     <div class="p-3 p-md-4 bg-white border shadow-soft rounded-2 shop-sidebar-sticky mb-4 mb-lg-0" style="border-color: var(--color-border);">
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                            <h5 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: 1.15rem;">Filter Ateliers</h5>
+                            <h5 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: 1.15rem;">Filter Products</h5>
                             <a href="<?= url('shop') ?>" class="text-muted small text-decoration-none">Reset</a>
                         </div>
 
@@ -142,7 +142,7 @@ $activeCountry = MarketContext::getCountry();
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-2">
                                     <a href="<?= url('shop') ?>" class="d-flex justify-content-between align-items-center <?= (!isset($_GET['category'])) ? 'fw-bold text-dark' : 'text-muted' ?>" style="font-size: 0.9rem;">
-                                        <span>All Curations</span>
+                                        <span>All Products</span>
                                     </a>
                                 </li>
                                 <?php foreach ($categories as $cat): ?>
@@ -155,23 +155,23 @@ $activeCountry = MarketContext::getCountry();
                             </ul>
                         </div>
 
-                        <!-- Curations Special Filter -->
+                        <!-- Special Filter -->
                         <div class="mb-4 pt-3 border-top">
-                            <h6 class="text-uppercase small fw-bold mb-3" style="letter-spacing: 0.1em; color: var(--color-gold-dark);">Special Editions</h6>
+                            <h6 class="text-uppercase small fw-bold mb-3" style="letter-spacing: 0.1em; color: var(--color-gold-dark);">Special Offers</h6>
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-2">
                                     <a href="<?= url('shop?filter=sale') ?>" class="d-flex align-items-center gap-2 <?= (($_GET['filter'] ?? '') === 'sale') ? 'fw-bold text-danger' : 'text-muted' ?>" style="font-size: 0.9rem;">
-                                        <i class="bi bi-tag-fill text-danger"></i> Privé Sale Curations
+                                        <i class="bi bi-tag-fill text-danger"></i> Sale & Discounts
                                     </a>
                                 </li>
                                 <li class="mb-2">
                                     <a href="<?= url('shop?filter=bestseller') ?>" class="d-flex align-items-center gap-2 <?= (($_GET['filter'] ?? '') === 'bestseller') ? 'fw-bold text-dark' : 'text-muted' ?>" style="font-size: 0.9rem;">
-                                        <i class="bi bi-star-fill text-warning"></i> Bestseller Classics
+                                        <i class="bi bi-star-fill text-warning"></i> Best Sellers
                                     </a>
                                 </li>
                                 <li class="mb-2">
                                     <a href="<?= url('shop?filter=new') ?>" class="d-flex align-items-center gap-2 <?= (($_GET['filter'] ?? '') === 'new') ? 'fw-bold text-dark' : 'text-muted' ?>" style="font-size: 0.9rem;">
-                                        <i class="bi bi-sparkles text-primary"></i> New Atelier Releases
+                                        <i class="bi bi-sparkles text-primary"></i> New Arrivals
                                     </a>
                                 </li>
                             </ul>

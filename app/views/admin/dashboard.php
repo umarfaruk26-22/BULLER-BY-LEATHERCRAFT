@@ -11,7 +11,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                 <?= country_flag($currentCountry['code'], $currentCountry['name'], 36) ?>
                 <div>
                     <h2 class="h4 font-serif mb-1" style="color: var(--color-espresso-deep);">
-                        <?= e($currentCountry['name']) ?> Atelier Operations
+                        <?= e($currentCountry['name']) ?> Store Operations
                     </h2>
                     <span class="text-muted small">
                         Operating Currency: <strong><?= e($currentCountry['currency_code']) ?> (<?= e($currentCountry['currency_symbol']) ?>)</strong> &bull; <?= e($currentCountry['tax_name']) ?> (<?= $currentCountry['tax_rate_percent'] ?>%)

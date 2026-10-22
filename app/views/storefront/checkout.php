@@ -24,7 +24,7 @@ require __DIR__ . '/../layouts/header.php';
 <section class="py-5" style="background-color: var(--color-ivory);">
     <div class="container">
         <div class="text-center max-w-700 mx-auto mb-5">
-            <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">Buller Leather Concierge</span>
+            <span class="text-uppercase small text-gold" style="letter-spacing: 0.25em;">Buller Leather Official</span>
             <h1 class="font-serif mt-1" style="font-size: 2.4rem; color: var(--color-espresso-deep);">Secure International Checkout</h1>
             <p class="text-muted small">Shipping directly to <strong class="d-inline-flex align-items-center gap-1"><?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?> <?= e($activeCountry['name']) ?></strong> &bull; Currency: <strong><?= e($activeCountry['currency_code']) ?> (<?= e($activeCountry['currency_symbol']) ?>)</strong></p>
         </div>
@@ -47,13 +47,13 @@ require __DIR__ . '/../layouts/header.php';
                         <!-- 1. Customer Contact Details -->
                         <div class="bg-white border shadow-soft p-4 mb-4" style="border-color: var(--color-border);">
                             <h5 class="font-serif mb-4 pb-2 border-bottom" style="color: var(--color-espresso-deep);">
-                                1. Patron & Contact Information
+                                1. Customer & Contact Information
                             </h5>
 
                             <div class="row g-3">
                                 <div class="col-md-12">
                                     <label class="form-label small fw-bold">Full Name *</label>
-                                    <input type="text" name="customer_name" class="form-control" value="<?= e($currentUser['name'] ?? '') ?>" required placeholder="e.g. Lord Julian Sterling">
+                                    <input type="text" name="customer_name" class="form-control" value="<?= e($currentUser['name'] ?? '') ?>" required placeholder="e.g. Julian Sterling">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">Email Address *</label>
@@ -101,8 +101,8 @@ require __DIR__ . '/../layouts/header.php';
                                     <input type="text" name="postal_code" class="form-control" required placeholder="Postal Code">
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label small fw-bold">Special Atelier Delivery Instructions (Optional)</label>
-                                    <textarea name="customer_notes" class="form-control" rows="2" placeholder="Gate codes, delivery time preferences, concierge notes..."></textarea>
+                                    <label class="form-label small fw-bold">Special Delivery Instructions (Optional)</label>
+                                    <textarea name="customer_notes" class="form-control" rows="2" placeholder="Gate codes, delivery time preferences, delivery notes..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -139,8 +139,8 @@ require __DIR__ . '/../layouts/header.php';
                                 <label class="border p-3 d-flex align-items-center gap-3 cursor-pointer rounded-1">
                                     <input type="radio" name="payment_method" value="cod" class="form-check-input">
                                     <div class="flex-grow-1">
-                                        <div class="fw-bold" style="color: var(--color-espresso-deep);">Atelier Concierge Settlement / Cash on Delivery</div>
-                                        <div class="text-muted small">Pay upon receipt after white-glove inspection at delivery</div>
+                                        <div class="fw-bold" style="color: var(--color-espresso-deep);">Cash on Delivery (COD)</div>
+                                        <div class="text-muted small">Pay upon receipt after product inspection at delivery</div>
                                     </div>
                                     <i class="bi bi-cash-coin fs-4 text-muted"></i>
                                 </label>
@@ -158,7 +158,7 @@ require __DIR__ . '/../layouts/header.php';
                 <div class="col-lg-5">
                     <div class="bg-white border shadow-soft p-4 sticky-top" style="top: 100px; border-color: var(--color-border);">
                         <h5 class="font-serif mb-4 pb-2 border-bottom" style="color: var(--color-espresso-deep);">
-                            Curations Summary (<?= $summary['items_count'] ?> items)
+                            Order Summary (<?= $summary['items_count'] ?> items)
                         </h5>
 
                         <div class="mb-4" style="max-height: 280px; overflow-y: auto;">
@@ -179,7 +179,7 @@ require __DIR__ . '/../layouts/header.php';
                         <!-- Coupon Code Box -->
                         <form action="<?= url('coupon/apply') ?>" method="POST" class="mb-4">
                             <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
-                            <label class="form-label small fw-bold">Privé Promotion / Invitation Code</label>
+                            <label class="form-label small fw-bold">Discount Code / Promo Code</label>
                             <div class="input-group">
                                 <input type="text" name="coupon_code" class="form-control text-uppercase" placeholder="e.g. WELCOME10" required>
                                 <button class="btn btn-buller-primary px-3" type="submit" style="font-size: 0.75rem;">Apply</button>
@@ -199,7 +199,7 @@ require __DIR__ . '/../layouts/header.php';
 
                         <?php if ($summary['discount_amount'] > 0): ?>
                             <div class="d-flex justify-content-between mb-2 small text-success">
-                                <span>Privé Coupon Discount (<?= e($summary['coupon']['code'] ?? '') ?>)</span>
+                                <span>Coupon Discount (<?= e($summary['coupon']['code'] ?? '') ?>)</span>
                                 <span>-<?= $summary['formatted_discount'] ?></span>
                             </div>
                         <?php endif; ?>

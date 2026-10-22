@@ -13,10 +13,10 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
             <!-- Success Banner -->
             <div class="p-4 p-md-5 bg-white border shadow-soft text-center mb-4" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
                 <div class="mb-3">
-                    <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Atelier Crest" style="height: 62px; width: auto;">
+                    <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather" style="height: 62px; width: auto;">
                 </div>
-                <h1 class="font-serif mb-2" style="font-size: 2.3rem; color: var(--color-espresso-deep);">Thank You For Your Patronage</h1>
-                <p class="text-muted mb-3">Your order has been officially registered with the Buller Leather Atelier.</p>
+                <h1 class="font-serif mb-2" style="font-size: 2.3rem; color: var(--color-espresso-deep);">Thank You For Your Order</h1>
+                <p class="text-muted mb-3">Your order has been placed successfully with Buller Leather.</p>
                 <div class="badge p-2 px-3 fs-6" style="background-color: var(--color-espresso-deep); color: var(--color-gold);">
                     Order Reference: #<?= e($order['order_number']) ?>
                 </div>
@@ -60,7 +60,7 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
                 </div>
 
                 <!-- Items Table -->
-                <h6 class="text-uppercase small fw-bold mb-3" style="color: var(--color-gold-dark);">Curations Breakdown</h6>
+                <h6 class="text-uppercase small fw-bold mb-3" style="color: var(--color-gold-dark);">Order Items</h6>
                 <div class="table-responsive mb-4">
                     <table class="table table-bordered align-middle">
                         <thead class="table-light small text-uppercase">
@@ -96,7 +96,7 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
                             </tr>
                             <?php if ($order['discount_amount'] > 0): ?>
                                 <tr>
-                                    <th colspan="3" class="text-end text-success">Privé Discount:</th>
+                                    <th colspan="3" class="text-end text-success">Discount Applied:</th>
                                     <td class="text-end text-success">-<?= e($order['currency_symbol']) . number_format($order['discount_amount'], 2) ?></td>
                                 </tr>
                             <?php endif; ?>

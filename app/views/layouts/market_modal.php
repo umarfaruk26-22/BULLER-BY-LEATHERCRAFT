@@ -69,7 +69,7 @@ $isLocked = Auth::isCountryLocked();
             </div>
             <div class="modal-footer border-top text-center justify-content-center" style="border-color: var(--color-border) !important;">
                 <span class="text-muted small">
-                    <?= $isLocked ? 'Contact client concierge if you are relocating or require corporate re-assignment.' : 'All international duties & localized taxes calculated at checkout.' ?>
+                    <?= $isLocked ? 'Contact customer support if you are relocating or require address changes.' : 'All international duties & localized taxes calculated at checkout.' ?>
                 </span>
             </div>
         </div>

@@ -2,7 +2,7 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'Sign In | Client & Atelier Portal';
+$pageTitle = 'Sign In | Customer Account';
 $activeCountry = MarketContext::getCountry();
 
 require __DIR__ . '/../layouts/header.php';
@@ -51,7 +51,7 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
 
                         <button type="submit" class="btn btn-buller-primary w-100 py-3 mb-3">
-                            Sign In To Atelier Account
+                            Sign In to Your Account
                         </button>
 
                         <div class="text-center small text-muted">

@@ -2,7 +2,7 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'Patron Portfolio | My Account';
+$pageTitle = 'My Account | Customer Dashboard';
 require __DIR__ . '/../layouts/header.php';
 ?>
 
@@ -10,7 +10,7 @@ require __DIR__ . '/../layouts/header.php';
     <div class="container small text-muted">
         <a href="<?= url('') ?>" class="text-muted text-decoration-none">Home</a>
         <span class="mx-2">&bull;</span>
-        <span class="text-dark fw-semibold">Patron Account</span>
+        <span class="text-dark fw-semibold">Customer Account</span>
     </div>
 </div>
 
@@ -51,7 +51,7 @@ require __DIR__ . '/../layouts/header.php';
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-muted px-3 py-2" href="<?= url('wishlist') ?>">
-                                <i class="bi bi-heart me-2"></i> Wishlist Portfolio
+                                <i class="bi bi-heart me-2"></i> Saved Wishlist
                             </a>
                         </li>
                         <li class="nav-item border-top pt-2">
@@ -68,13 +68,13 @@ require __DIR__ . '/../layouts/header.php';
                 <!-- Welcome Banner -->
                 <div class="p-4 bg-white border shadow-soft mb-4" style="border-color: var(--color-border); border-left: 4px solid var(--color-gold) !important;">
                     <h3 class="font-serif mb-1" style="color: var(--color-espresso-deep);">Welcome, <?= e($user['full_name']) ?></h3>
-                    <p class="text-muted small mb-0">From your private patron portfolio, you can inspect previous orders, download tax invoices, track dispatches, and manage your delivery addresses.</p>
+                    <p class="text-muted small mb-0">From your account dashboard, you can view your previous orders, download invoices, track shipments, and manage your delivery addresses.</p>
                 </div>
 
                 <!-- Recent Orders -->
                 <div class="p-4 bg-white border shadow-soft" style="border-color: var(--color-border);">
                     <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
-                        <h5 class="font-serif mb-0" style="color: var(--color-espresso-deep);">Recent Atelier Orders</h5>
+                        <h5 class="font-serif mb-0" style="color: var(--color-espresso-deep);">Recent Orders</h5>
                         <a href="<?= url('customer/orders') ?>" class="small text-muted">View All</a>
                     </div>
 
@@ -83,7 +83,7 @@ require __DIR__ . '/../layouts/header.php';
                             <i class="bi bi-bag-dash fs-2 mb-2 d-block"></i>
                             <span>You haven't placed an order yet.</span>
                             <div class="mt-3">
-                                <a href="<?= url('shop') ?>" class="btn btn-buller-primary btn-sm">Explore Master Curations</a>
+                                <a href="<?= url('shop') ?>" class="btn btn-buller-primary btn-sm">Explore All Products</a>
                             </div>
                         </div>
                     <?php else: ?>

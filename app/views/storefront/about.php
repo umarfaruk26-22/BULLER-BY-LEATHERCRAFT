@@ -26,20 +26,20 @@ require __DIR__ . '/../layouts/header.php';
                     Generational Mastery. <br><span style="color: var(--color-gold-bright); font-style: italic;">By Leathercraft.</span>
                 </h1>
                 <p class="lead text-light mb-4" style="line-height: 1.75; opacity: 0.9; max-width: 620px; font-size: clamp(0.92rem, 2vw, 1.15rem);">
-                    Buller is not merely an atelier of fine leathergoods; it is a living commitment to ancestral craftsmanship. Every hide we shape carries the lineage of European tanneries, slow bark steeping, and obsessive hand-finishing.
+                    Buller is not merely a brand of fine leather goods; it is a living commitment to ancestral craftsmanship. Every hide we shape carries the lineage of European tanneries, slow bark steeping, and obsessive hand-finishing.
                 </p>
                 <div class="d-flex flex-wrap gap-2 gap-sm-3">
                     <a href="<?= url('shop') ?>" class="btn btn-buller-gold px-3 px-sm-4 py-2 fw-semibold" style="font-size: 0.88rem;">
                         Explore Master Catalog <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                     <a href="<?= url('shop?filter=sale') ?>" class="btn btn-outline-light px-3 px-sm-4 py-2" style="border-color: rgba(255,255,255,0.3); font-size: 0.88rem;">
-                        Privé Archive Sale
+                        Special Archive Sale
                     </a>
                 </div>
             </div>
             <div class="col-lg-5 text-center mt-4 mt-lg-0">
                 <div class="position-relative d-inline-block w-100 px-2 px-sm-0" style="max-width: 440px;">
-                    <img src="<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>" alt="Buller Leather Atelier Workbench" class="img-fluid rounded-1 shadow-deep w-100" style="max-height: 400px; object-fit: cover; border: 2px solid var(--color-gold);">
+                    <img src="<?= asset('assets/images/banners/hero_leather_craft.jpg') ?>" alt="Buller Leather Workshop" class="img-fluid rounded-1 shadow-deep w-100" style="max-height: 400px; object-fit: cover; border: 2px solid var(--color-gold);">
                 </div>
             </div>
         </div>
@@ -165,13 +165,13 @@ require __DIR__ . '/../layouts/header.php';
     </div>
 </section>
 
-<!-- Global Atelier Hubs -->
+<!-- Global Showroom Hubs -->
 <section class="py-4 py-md-5" style="background-color: var(--color-ivory);">
     <div class="container py-2 py-md-4">
         <div class="text-center max-w-700 mx-auto mb-4 mb-md-5">
             <span class="text-uppercase small fw-bold" style="color: var(--color-cognac); letter-spacing: 0.22em; font-size: 0.72rem;">International Presence</span>
-            <h2 class="font-serif fw-bold mt-2 mb-2" style="color: var(--color-espresso-deep); font-size: clamp(1.6rem, 4vw, 2.2rem);">Our Global Atelier Hubs</h2>
-            <p class="text-muted small mb-0">Serving discerning clients across London, New York, Mumbai, and Dubai with tailored delivery and concierge support.</p>
+            <h2 class="font-serif fw-bold mt-2 mb-2" style="color: var(--color-espresso-deep); font-size: clamp(1.6rem, 4vw, 2.2rem);">Our Global Showroom Hubs</h2>
+            <p class="text-muted small mb-0">Serving customers across London, New York, Mumbai, and Dubai with express delivery and dedicated customer support.</p>
         </div>
 
         <div class="row g-2 g-sm-3 text-center">
@@ -186,21 +186,21 @@ require __DIR__ . '/../layouts/header.php';
                 <div class="p-3 p-sm-4 bg-white border rounded-1 shadow-soft h-100">
                     <img src="<?= asset('assets/images/flags/us.png') ?>" alt="USA" width="32" class="mb-2 rounded shadow-sm">
                     <h6 class="font-serif fw-bold mb-1" style="font-size: clamp(0.85rem, 2vw, 1rem);">New York SoHo</h6>
-                    <p class="small text-muted mb-0" style="font-size: 0.72rem;">Private Salon & Client Fittings</p>
+                    <p class="small text-muted mb-0" style="font-size: 0.72rem;">Private Showroom & Client Fittings</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="p-3 p-sm-4 bg-white border rounded-1 shadow-soft h-100">
                     <img src="<?= asset('assets/images/flags/in.png') ?>" alt="India" width="32" class="mb-2 rounded shadow-sm">
                     <h6 class="font-serif fw-bold mb-1" style="font-size: clamp(0.85rem, 2vw, 1rem);">Mumbai Colaba</h6>
-                    <p class="small text-muted mb-0" style="font-size: 0.72rem;">Flagship Atelier & Master Guild</p>
+                    <p class="small text-muted mb-0" style="font-size: 0.72rem;">Flagship Showroom & Workshop</p>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="p-3 p-sm-4 bg-white border rounded-1 shadow-soft h-100">
                     <img src="<?= asset('assets/images/flags/ae.png') ?>" alt="UAE" width="32" class="mb-2 rounded shadow-sm">
                     <h6 class="font-serif fw-bold mb-1" style="font-size: clamp(0.85rem, 2vw, 1rem);">Dubai DIFC</h6>
-                    <p class="small text-muted mb-0" style="font-size: 0.72rem;">VIP Concierge & Gulf Logistics</p>
+                    <p class="small text-muted mb-0" style="font-size: 0.72rem;">Customer Support & Gulf Logistics</p>
                 </div>
             </div>
         </div>
@@ -210,16 +210,16 @@ require __DIR__ . '/../layouts/header.php';
 <!-- Call to Action Banner -->
 <section class="py-4 py-md-5 text-center text-white" style="background: linear-gradient(135deg, var(--color-espresso) 0%, var(--color-espresso-deep) 100%);">
     <div class="container py-3 py-md-4">
-        <h2 class="font-serif fw-bold mb-3" style="color: var(--color-gold-bright); font-size: clamp(1.6rem, 4vw, 2.2rem);">Experience Heirloom Leathercraft</h2>
+        <h2 class="font-serif fw-bold mb-3" style="color: var(--color-gold-bright); font-size: clamp(1.6rem, 4vw, 2.2rem);">Experience Handcrafted Leathercraft</h2>
         <p class="text-light-50 max-w-600 mx-auto mb-4" style="line-height: 1.7; font-size: clamp(0.88rem, 2vw, 0.98rem); opacity: 0.85;">
-            Step into our master collections or consult with our client concierge for bespoke commissions and sizing guidance.
+            Explore our collections or reach out to our customer support team for custom orders and sizing guidance.
         </p>
         <div class="d-flex justify-content-center gap-2 gap-sm-3 flex-wrap">
             <a href="<?= url('shop') ?>" class="btn btn-buller-gold px-3 px-sm-4 py-2 fw-semibold" style="font-size: 0.88rem;">
                 Shop Collections <i class="bi bi-arrow-right ms-1"></i>
             </a>
             <a href="<?= url('contact') ?>" class="btn btn-outline-light px-3 px-sm-4 py-2" style="font-size: 0.88rem;">
-                Contact Concierge
+                Contact Support
             </a>
         </div>
     </div>

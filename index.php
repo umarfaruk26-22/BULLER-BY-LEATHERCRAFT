@@ -223,7 +223,7 @@ switch ($route) {
                     $userId = (int)$existingUser['id'];
                 } else {
                     $insU = $db->prepare("INSERT INTO users (full_name, email, password_hash, role, default_country_id, status) VALUES (?, ?, ?, 'customer', ?, 'active')");
-                    $insU->execute([$authorName ?: 'Distinguished Patron', $email, password_hash(bin2hex(random_bytes(8)), PASSWORD_BCRYPT), $countryId]);
+                    $insU->execute([$authorName ?: 'Verified Buyer', $email, password_hash(bin2hex(random_bytes(8)), PASSWORD_BCRYPT), $countryId]);
                     $userId = (int)$db->lastInsertId();
                 }
             }
@@ -233,7 +233,7 @@ switch ($route) {
             $newRevId = (int)$db->lastInsertId();
 
             AuditLogger::log($userId, 'submit_review', 'product_reviews', $newRevId, ['product_id' => $productId, 'rating' => $rating]);
-            flash('review_success', 'Your distinguished endorsement has been recorded and published to the atelier ledger.');
+            flash('review_success', 'Thank you! Your product review has been submitted successfully.');
             redirect('product?slug=' . urlencode($slug) . '#reviewsTab');
         }
         break;
@@ -260,7 +260,7 @@ switch ($route) {
 
             if ($coupon) {
                 $_SESSION['applied_coupon'] = $coupon;
-                flash('coupon_success', "Privé coupon '$code' applied successfully!");
+                flash('coupon_success', "Coupon code '$code' applied successfully!");
             } else {
                 unset($_SESSION['applied_coupon']);
                 flash('coupon_error', "The coupon code '$code' is invalid or not eligible for your selected country.");
@@ -1224,7 +1224,7 @@ switch ($route) {
             $countryNames = ['IN' => 'Mumbai (India)', 'US' => 'New York (United States)', 'GB' => 'London (United Kingdom)', 'AE' => 'Dubai (United Arab Emirates)'];
             $destName = $countryNames[$countryCode] ?? $countryCode;
 
-            flash('contact_success', "Thank you, " . e($fullName) . ". Your inquiry (#AT-" . str_pad($inquiryId, 4, '0', STR_PAD_LEFT) . ") has been dispatched directly to our " . $destName . " Atelier Concierge. A dedicated client specialist will respond within 4 business hours.");
+            flash('contact_success', "Thank you, " . e($fullName) . ". Your message (#REF-" . str_pad($inquiryId, 4, '0', STR_PAD_LEFT) . ") has been received by our " . $destName . " Support Team. A customer care specialist will respond within 4 business hours.");
             redirect('contact?country=' . urlencode($countryCode) . '#inquiryConfirmed');
         }
 

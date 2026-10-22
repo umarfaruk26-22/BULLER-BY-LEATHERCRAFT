@@ -66,7 +66,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                         <tr>
                             <th>Order Number</th>
                             <th>Market</th>
-                            <th>Distinguished Patron</th>
+                            <th>Customer</th>
                             <th>Date</th>
                             <th>Grand Total</th>
                             <th>Payment</th>
@@ -143,7 +143,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                                     <label class="form-label small fw-bold text-muted">Fulfillment Status</label>
                                                     <select name="order_status" class="form-select">
                                                         <option value="placed" <?= ($ord['order_status'] === 'placed') ? 'selected' : '' ?>>Placed</option>
-                                                        <option value="processing" <?= ($ord['order_status'] === 'processing') ? 'selected' : '' ?>>Processing / Atelier Workshop</option>
+                                                        <option value="processing" <?= ($ord['order_status'] === 'processing') ? 'selected' : '' ?>>Processing / Workshop</option>
                                                         <option value="dispatched" <?= ($ord['order_status'] === 'dispatched') ? 'selected' : '' ?>>Dispatched / In Transit</option>
                                                         <option value="delivered" <?= ($ord['order_status'] === 'delivered') ? 'selected' : '' ?>>Delivered</option>
                                                         <option value="cancelled" <?= ($ord['order_status'] === 'cancelled') ? 'selected' : '' ?>>Cancelled</option>

@@ -59,7 +59,7 @@ require __DIR__ . '/../layouts/header.php';
                         <!-- Luxury Product Badges -->
                         <div class="product-badges pdp-badges">
                             <?php if ($pricing['is_discounted']): ?>
-                                <span class="badge-luxury badge-sale mb-1 shadow-sm">-<?= $pricing['discount_percent'] ?>% Privé Privilege</span>
+                                <span class="badge-luxury badge-sale mb-1 shadow-sm">-<?= $pricing['discount_percent'] ?>% Special Discount</span>
                             <?php endif; ?>
                             <?php if ($product['is_bestseller']): ?>
                                 <span class="badge-luxury badge-bestseller mb-1 shadow-sm"><i class="bi bi-award-fill me-1"></i> Signature Masterpiece</span>
@@ -72,7 +72,7 @@ require __DIR__ . '/../layouts/header.php';
                         <!-- Zoom hint icon -->
                         <div class="position-absolute bottom-0 end-0 p-3 text-muted small d-none d-md-flex align-items-center gap-1 opacity-75">
                             <i class="bi bi-arrows-fullscreen"></i>
-                            <span>Atelier High-Resolution View</span>
+                            <span>High-Resolution View</span>
                         </div>
                     </div>
 
@@ -110,7 +110,7 @@ require __DIR__ . '/../layouts/header.php';
                     <div class="pdp-header-block mb-2 mb-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-1">
                             <span class="text-uppercase small fw-bold" style="letter-spacing: 0.2em; color: var(--color-gold-dark); font-size: 0.72rem;">
-                                Buller Atelier &bull; <?= e($product['leather_type'] ?? 'Prime European Hide') ?>
+                                Buller Leather &bull; <?= e($product['leather_type'] ?? 'Prime European Hide') ?>
                             </span>
                             <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?>
                         </div>
@@ -135,7 +135,7 @@ require __DIR__ . '/../layouts/header.php';
                             <?php if ((int)$product['stock_quantity'] <= 0): ?>
                                 <div class="ms-auto d-inline-block">
                                     <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle" style="font-size: 0.68rem; padding: 2px 7px;">
-                                        Privé Reserved
+                                        Reserved
                                     </span>
                                 </div>
                             <?php endif; ?>
@@ -229,7 +229,7 @@ require __DIR__ . '/../layouts/header.php';
                             <input type="hidden" id="selectedProductSize" value="<?= $isJacket ? '38 (S)' : ($isShoes ? 'UK 8 / US 9' : '34 in') ?>">
                         </div>
                     <?php else: ?>
-                        <input type="hidden" id="selectedProductSize" value="Standard Atelier Fit">
+                        <input type="hidden" id="selectedProductSize" value="Standard Fit">
                     <?php endif; ?>
 
                     <!-- 5. Purchase & Bag Action Buttons (Ergonomic & Aligned) -->
@@ -248,14 +248,14 @@ require __DIR__ . '/../layouts/header.php';
                             </button>
 
                             <!-- Wishlist Toggle Button -->
-                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Curations" style="width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 3px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
+                            <button type="button" class="btn btn-outline-secondary wishlist-toggle-btn pdp-wishlist-btn position-static <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $product['id'] ?>" title="Save to Wishlist" style="width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 3px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;">
                                 <i class="bi <?= $isWishlisted ? 'bi-heart-fill text-danger' : 'bi-heart' ?> fs-5"></i>
                             </button>
                         </div>
 
                         <!-- Instant Buy Now Button -->
                         <button type="button" class="btn btn-dark w-100 btn-instant-buy text-uppercase fw-bold shadow-sm d-flex align-items-center justify-content-center" style="background-color: var(--color-espresso-deep); border-color: var(--color-gold); letter-spacing: 0.08em; height: 46px; font-size: 0.85rem; border-radius: 3px;" onclick="instantBuyNow(<?= $product['id'] ?>)">
-                            <i class="bi bi-lightning-charge-fill text-warning me-1.5"></i> Instant Privé Checkout
+                            <i class="bi bi-lightning-charge-fill text-warning me-1.5"></i> Instant Buy Now
                         </button>
                     </div>
 
@@ -263,7 +263,7 @@ require __DIR__ . '/../layouts/header.php';
                     <div class="pdp-short-desc-block mb-3">
                         <div class="p-2.5 p-md-3 bg-white border rounded-1 shadow-xs pdp-short-desc-box" style="border-color: var(--color-border); border-left: 3px solid var(--color-gold) !important;">
                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.15em; color: var(--color-gold-dark);">Atelier Highlights</span>
+                                <span class="text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.15em; color: var(--color-gold-dark);">Product Highlights</span>
                                 <a href="#descTab" onclick="document.querySelector('#descTab-tab').click();" class="small text-decoration-none" style="color: var(--color-cognac); font-size: 0.72rem;">Full Architecture &darr;</a>
                             </div>
                             <p class="text-muted mb-0" style="font-size: 0.82rem; line-height: 1.55;">
@@ -321,7 +321,7 @@ require __DIR__ . '/../layouts/header.php';
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-arrow-repeat text-dark fs-6"></i>
                             <div style="font-size: 0.78rem;">
-                                <strong class="text-dark"><?= (int)$activeCountry['return_window_days'] ?>-Day Global Exchanges</strong> &bull; Complimentary concierge service
+                                <strong class="text-dark"><?= (int)$activeCountry['return_window_days'] ?>-Day Global Exchanges</strong> &bull; Complimentary customer support
                             </div>
                         </div>
                     </div>
@@ -346,7 +346,7 @@ require __DIR__ . '/../layouts/header.php';
             <ul class="nav nav-tabs justify-content-start justify-content-md-center border-bottom mobile-pdp-tabs" style="border-color: var(--color-border) !important;" id="productDetailTabs" role="tablist">
                 <li class="nav-item">
                     <button class="nav-link active font-serif text-uppercase fw-semibold" id="descTab-tab" data-bs-toggle="tab" data-bs-target="#descTab">
-                        Atelier Architecture
+                        Product Specifications
                     </button>
                 </li>
                 <li class="nav-item">
@@ -356,7 +356,7 @@ require __DIR__ . '/../layouts/header.php';
                 </li>
                 <li class="nav-item">
                     <button class="nav-link font-serif text-uppercase fw-semibold" id="careTab-tab" data-bs-toggle="tab" data-bs-target="#careTab">
-                        Heritage Preservation
+                        Preservation & Care
                     </button>
                 </li>
                 <li class="nav-item">
@@ -366,7 +366,7 @@ require __DIR__ . '/../layouts/header.php';
                 </li>
                 <li class="nav-item">
                     <button class="nav-link font-serif text-uppercase fw-semibold" id="reviewsTab-tab" data-bs-toggle="tab" data-bs-target="#reviewsTab">
-                        Patron Reviews (<?= count($reviews) ?>)
+                        Customer Reviews (<?= count($reviews) ?>)
                     </button>
                 </li>
             </ul>
@@ -480,7 +480,7 @@ require __DIR__ . '/../layouts/header.php';
                             </h4>
                         </div>
                         <p class="text-muted" style="line-height: 1.8;">
-                            All orders bound for <strong><?= e($activeCountry['name']) ?></strong> are dispatched via priority air cargo directly from our European atelier hub to your doorstep with full tracking.
+                            All orders bound for <strong><?= e($activeCountry['name']) ?></strong> are dispatched via priority air cargo directly from our European workshop hub to your doorstep with full tracking.
                         </p>
 
                         <div class="table-responsive">
@@ -514,7 +514,7 @@ require __DIR__ . '/../layouts/header.php';
                         <!-- Score Header & Write Review Button -->
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-3 border-bottom">
                             <div>
-                                <h4 class="font-serif mb-1" style="color: var(--color-espresso-deep);">Patron Endorsements & Impressions</h4>
+                                <h4 class="font-serif mb-1" style="color: var(--color-espresso-deep);">Customer Reviews & Ratings</h4>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="fs-4 fw-bold text-dark"><?= $avgRating ?></span>
                                     <div class="text-warning small">
@@ -522,17 +522,17 @@ require __DIR__ . '/../layouts/header.php';
                                             <i class="bi bi-star<?= ($i <= round($avgRating)) ? '-fill' : '' ?>"></i>
                                         <?php endfor; ?>
                                     </div>
-                                    <span class="text-muted small">&bull; <?= count($reviews) ?> Verified Endorsements</span>
+                                    <span class="text-muted small">&bull; <?= count($reviews) ?> Verified Reviews</span>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-outline-dark btn-sm" onclick="document.getElementById('writeReviewCard').classList.toggle('d-none');">
-                                <i class="bi bi-pencil-square me-1"></i> Write Patron Testimonial
+                                <i class="bi bi-pencil-square me-1"></i> Write a Review
                             </button>
                         </div>
 
                         <!-- Write Review Card Form (Hidden by default, toggleable) -->
                         <div id="writeReviewCard" class="card border p-4 mb-4 shadow-sm d-none" style="border-color: var(--color-border); background-color: var(--color-ivory);">
-                            <h5 class="font-serif mb-3" style="color: var(--color-espresso-deep);">Share Your Atelier Experience</h5>
+                            <h5 class="font-serif mb-3" style="color: var(--color-espresso-deep);">Share Your Experience</h5>
                             <form action="<?= url('product/review/submit') ?>" method="POST">
                                 <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                 <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
@@ -541,7 +541,7 @@ require __DIR__ . '/../layouts/header.php';
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label small fw-bold text-muted">Your Full Name</label>
-                                        <input type="text" name="patron_name" class="form-control" value="<?= Auth::isLoggedIn() ? e(Auth::user()['name']) : '' ?>" placeholder="e.g. Lord Julian Sterling" required>
+                                        <input type="text" name="patron_name" class="form-control" value="<?= Auth::isLoggedIn() ? e(Auth::user()['name']) : '' ?>" placeholder="e.g. Julian Sterling" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label small fw-bold text-muted">Email Address (Kept Private)</label>
@@ -572,7 +572,7 @@ require __DIR__ . '/../layouts/header.php';
                                 </div>
 
                                 <button type="submit" class="btn btn-buller-primary py-2 px-4">
-                                    <i class="bi bi-send-check me-1"></i> Submit Patron Review
+                                    <i class="bi bi-send-check me-1"></i> Submit Review
                                 </button>
                             </form>
                         </div>
@@ -581,8 +581,8 @@ require __DIR__ . '/../layouts/header.php';
                         <?php if (empty($reviews)): ?>
                             <div class="text-center py-5 text-muted">
                                 <i class="bi bi-chat-square-quote fs-1 mb-2 d-block text-warning"></i>
-                                <h5>Be The First To Endorse This Piece</h5>
-                                <p class="small">No customer impressions recorded yet. Click <strong>"Write Patron Testimonial"</strong> above to share your thoughts.</p>
+                                <h5>Be The First To Review This Piece</h5>
+                                <p class="small">No customer reviews recorded yet. Click <strong>"Write a Review"</strong> above to share your thoughts.</p>
                             </div>
                         <?php else: ?>
                             <div class="d-flex flex-column gap-4">
@@ -604,7 +604,7 @@ require __DIR__ . '/../layouts/header.php';
                                             <?= country_flag($rev['country_code'] ?? 'US', $rev['country_name'] ?? 'United States', 18) ?>
                                             <strong class="text-dark"><?= e($rev['user_name']) ?></strong>
                                             <span class="badge bg-success-subtle text-success border border-success" style="font-size: 0.65rem;">
-                                                <i class="bi bi-patch-check-fill me-1"></i> Verified Patron
+                                                <i class="bi bi-patch-check-fill me-1"></i> Verified Buyer
                                             </span>
                                         </div>
                                     </div>
@@ -659,7 +659,7 @@ require __DIR__ . '/../layouts/header.php';
                         </h2>
                         <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#productFaqAccordion">
                             <div class="accordion-body text-muted small" style="line-height: 1.8;">
-                                Absolutely. We provide a <?= (int)$activeCountry['return_window_days'] ?>-day complimentary size exchange guarantee for patrons in <?= e($activeCountry['name']) ?>. Our concierge desk will arrange courier collection from your address at no added charge.
+                                Absolutely. We provide a <?= (int)$activeCountry['return_window_days'] ?>-day complimentary size exchange guarantee for customers in <?= e($activeCountry['name']) ?>. Our support team will arrange courier collection from your address at no added charge.
                             </div>
                         </div>
                     </div>
@@ -672,7 +672,7 @@ require __DIR__ . '/../layouts/header.php';
                         </h2>
                         <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#productFaqAccordion">
                             <div class="accordion-body text-muted small" style="line-height: 1.8;">
-                                Every piece is stamped with its unique Atelier ID and registered in our worldwide ledger. If any brass rivet, zipper, or saddle stitch ever requires restoration, contact our client concierge at <code>concierge@bullerleather.com</code> for lifetime atelier service.
+                                Every piece is stamped with its unique Product ID and registered in our worldwide ledger. If any brass rivet, zipper, or saddle stitch ever requires restoration, contact our support team at <code>support@bullerleather.com</code> for lifetime repair service.
                             </div>
                         </div>
                     </div>
@@ -749,13 +749,13 @@ require __DIR__ . '/../layouts/header.php';
         <div class="modal-content border-0 shadow">
             <div class="modal-header text-white" style="background-color: var(--color-espresso-deep); border-bottom: 2px solid var(--color-gold);">
                 <h5 class="modal-title font-serif fs-5">
-                    <i class="bi bi-rulers text-warning me-2"></i> Atelier Size & Fit Guide — <?= e($product['category_name']) ?>
+                    <i class="bi bi-rulers text-warning me-2"></i> Size & Fit Guide — <?= e($product['category_name']) ?>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
                 <p class="text-muted small mb-4">
-                    Buller Leather garments and accessories are crafted to traditional tailored proportions. Refer to the matrix below or contact our private client concierge for bespoke sizing appointments.
+                    Buller Leather garments and accessories are crafted to traditional proportions. Refer to the matrix below or contact our customer support team for sizing guidance.
                 </p>
 
                 <?php if ($catSlug === 'leather-jackets'): ?>

@@ -334,11 +334,11 @@ function initWishlistEvents() {
                 if (data.added) {
                     btn.classList.add('active');
                     btn.innerHTML = '<i class="bi bi-heart-fill"></i>';
-                    showToast('Saved to Wishlist', 'Product added to your curations');
+                    showToast('Saved to Wishlist', 'Product added to your wishlist');
                 } else {
                     btn.classList.remove('active');
                     btn.innerHTML = '<i class="bi bi-heart"></i>';
-                    showToast('Wishlist Updated', 'Product removed from your curations');
+                    showToast('Wishlist Updated', 'Product removed from your wishlist');
                 }
                 const badges = document.querySelectorAll('.wishlist-count-badge');
                 badges.forEach(b => {

@@ -20,7 +20,7 @@ require __DIR__ . '/../layouts/header.php';
 <section class="py-5" style="background-color: var(--color-ivory);">
     <div class="container">
         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-baseline gap-2 mb-4 pb-2 border-bottom">
-            <h1 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: clamp(1.7rem, 6vw, 2.2rem);">Your Curations Bag</h1>
+            <h1 class="font-serif mb-0" style="color: var(--color-espresso-deep); font-size: clamp(1.7rem, 6vw, 2.2rem);">Your Shopping Bag</h1>
             <span class="text-muted small d-inline-flex align-items-center gap-1">Delivering to <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?> <strong><?= e($activeCountry['name']) ?></strong></span>
         </div>
 
@@ -29,7 +29,7 @@ require __DIR__ . '/../layouts/header.php';
                 <i class="bi bi-bag text-muted" style="font-size: 3.5rem;"></i>
                 <h3 class="font-serif mt-3" style="color: var(--color-espresso-deep);">Your Shopping Bag Is Empty</h3>
                 <p class="text-muted small mb-4">Discover our handcrafted full-grain leather jackets, executive luggage, and accessories.</p>
-                <a href="<?= url('shop') ?>" class="btn btn-buller-primary btn-lg">Explore Master Curations</a>
+                <a href="<?= url('shop') ?>" class="btn btn-buller-primary btn-lg">Explore All Products</a>
             </div>
         <?php else: ?>
             <div class="row g-5">
@@ -40,7 +40,7 @@ require __DIR__ . '/../layouts/header.php';
                             <table class="table table-borderless align-middle mb-0" style="min-width: 580px;">
                                 <thead>
                                     <tr class="border-bottom text-muted small text-uppercase" style="letter-spacing: 0.08em;">
-                                        <th style="width: 48%;">Atelier Piece</th>
+                                        <th style="width: 48%;">Item Details</th>
                                         <th>Unit Price</th>
                                         <th>Quantity</th>
                                         <th class="text-end">Subtotal</th>
@@ -105,7 +105,7 @@ require __DIR__ . '/../layouts/header.php';
 
                         <?php if ($summary['discount_amount'] > 0): ?>
                             <div class="d-flex justify-content-between mb-2 text-success">
-                                <span>Privé Coupon Discount</span>
+                                <span>Coupon Discount</span>
                                 <span>-<?= $summary['formatted_discount'] ?></span>
                             </div>
                         <?php endif; ?>

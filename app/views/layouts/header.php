@@ -77,7 +77,7 @@ $currentUser = Auth::user();
 
 
                 <!-- 1. Search Trigger -->
-                <button type="button" id="bullerSearchBtn" class="btn nav-actions-icon nav-action-search" data-bs-toggle="modal" data-bs-target="#searchModal" title="Search Curations" aria-label="Search">
+                <button type="button" id="bullerSearchBtn" class="btn nav-actions-icon nav-action-search" data-bs-toggle="modal" data-bs-target="#searchModal" title="Search Products" aria-label="Search">
                     <i class="bi bi-search"></i>
                 </button>
 
@@ -114,8 +114,8 @@ $currentUser = Auth::user();
                             <li><a class="dropdown-item py-2 text-danger" href="<?= url('logout') ?>"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
                         <?php else: ?>
                             <li class="px-3 py-2">
-                                <div class="fw-bold mb-1 font-serif" style="color: var(--color-espresso-deep); font-size: 1.05rem;">Client Concierge</div>
-                                <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.4;">Sign in to access bespoke commissions, order tracking, and generational guarantees.</p>
+                                <div class="fw-bold mb-1 font-serif" style="color: var(--color-espresso-deep); font-size: 1.05rem;">Customer Support</div>
+                                <p class="text-muted small mb-3" style="font-size: 0.78rem; line-height: 1.4;">Sign in to access custom orders, order tracking, and lifetime warranty.</p>
                                 <a href="<?= url('login') ?>" class="btn btn-buller-primary btn-sm w-100 mb-2">Sign In</a>
                                 <div class="text-center small mb-2">
                                     New client? <a href="<?= url('register') ?>" class="text-decoration-underline fw-semibold" style="color: var(--color-cognac);">Create Account</a>
@@ -123,7 +123,7 @@ $currentUser = Auth::user();
                                 <hr class="dropdown-divider my-2">
                                 <div>
                                     <a class="dropdown-item py-1 px-1 text-muted small" href="<?= url('track') ?>"><i class="bi bi-truck me-2 text-gold"></i> Track Order Delivery</a>
-                                    <a class="dropdown-item py-1 px-1 text-muted small" href="<?= url('contact') ?>"><i class="bi bi-headset me-2 text-gold"></i> Atelier Concierge</a>
+                                    <a class="dropdown-item py-1 px-1 text-muted small" href="<?= url('contact') ?>"><i class="bi bi-headset me-2 text-gold"></i> Customer Support</a>
                                 </div>
                             </li>
                         <?php endif; ?>
@@ -158,21 +158,21 @@ $currentUser = Auth::user();
                             Collections <i class="bi bi-chevron-down ms-1" style="font-size: 0.62rem; opacity: 0.7;"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-buller shadow-lg border-0 py-2" aria-labelledby="collectionsDropdown">
-                            <li><a class="dropdown-item py-2 px-3 fw-semibold" href="<?= url('shop') ?>"><i class="bi bi-grid me-2 text-warning"></i> View All Curations</a></li>
+                            <li><a class="dropdown-item py-2 px-3 fw-semibold" href="<?= url('shop') ?>"><i class="bi bi-grid me-2 text-warning"></i> View All Products</a></li>
                             <li><hr class="dropdown-divider my-1"></li>
                             <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=leather-jackets') ?>"><i class="bi bi-tag me-2"></i> Tuscan Leather Jackets</a></li>
                             <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=bags-briefcases') ?>"><i class="bi bi-briefcase me-2"></i> Bags & Briefcases</a></li>
                             <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=wallets-accessories') ?>"><i class="bi bi-wallet2 me-2"></i> Wallets & Small Goods</a></li>
                             <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=handcrafted-belts') ?>"><i class="bi bi-slash-circle me-2"></i> Handcrafted Belts</a></li>
                             <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=footwear-boots') ?>"><i class="bi bi-boot me-2"></i> Footwear & Boots</a></li>
-                            <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=travel-accessories') ?>"><i class="bi bi-compass me-2"></i> Desk & Travel Curations</a></li>
+                            <li><a class="dropdown-item py-2 px-3" href="<?= url('shop?category=travel-accessories') ?>"><i class="bi bi-compass me-2"></i> Desk & Travel Accessories</a></li>
                             <li><hr class="dropdown-divider my-1"></li>
-                            <li><a class="dropdown-item py-2 px-3 text-danger fw-semibold" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-2 text-warning"></i> Privé Archive Sale</a></li>
+                            <li><a class="dropdown-item py-2 px-3 text-danger fw-semibold" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-2 text-warning"></i> Special Archive Sale</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link nav-link-buller nav-link-prive <?= (($_GET['route'] ?? '') === 'sale' || ($_GET['filter'] ?? '') === 'sale') ? 'active' : '' ?>" href="<?= url('shop?filter=sale') ?>">
-                            Privé Sale <span class="badge-sale-dot"></span>
+                            Special Sale <span class="badge-sale-dot"></span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -235,21 +235,21 @@ $currentUser = Auth::user();
                         </a>
                         <div class="collapse ps-3 pe-1 py-1" id="drawerCollectionsCollapse">
                             <ul class="nav flex-column border-start ps-2" style="border-color: rgba(197, 168, 128, 0.4) !important;">
-                                <li class="nav-item"><a class="nav-link py-2 px-2 small fw-bold text-dark" href="<?= url('shop') ?>"><i class="bi bi-arrow-right-short text-warning"></i> View All Curations</a></li>
+                                <li class="nav-item"><a class="nav-link py-2 px-2 small fw-bold text-dark" href="<?= url('shop') ?>"><i class="bi bi-arrow-right-short text-warning"></i> View All Products</a></li>
                                 <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=leather-jackets') ?>"><i class="bi bi-tag me-1 text-gold"></i> Tuscan Leather Jackets</a></li>
                                 <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=bags-briefcases') ?>"><i class="bi bi-briefcase me-1 text-gold"></i> Bags & Briefcases</a></li>
                                 <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=wallets-accessories') ?>"><i class="bi bi-wallet2 me-1 text-gold"></i> Wallets & Small Goods</a></li>
                                 <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=handcrafted-belts') ?>"><i class="bi bi-slash-circle me-1 text-gold"></i> Handcrafted Belts</a></li>
                                 <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=footwear-boots') ?>"><i class="bi bi-boot me-1 text-gold"></i> Footwear & Boots</a></li>
-                                <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=travel-accessories') ?>"><i class="bi bi-compass me-1 text-gold"></i> Desk & Travel Curations</a></li>
-                                <li class="nav-item"><a class="nav-link py-1 px-2 small text-danger fw-semibold" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-1 text-warning"></i> Privé Archive Sale</a></li>
+                                <li class="nav-item"><a class="nav-link py-1 px-2 small text-muted" href="<?= url('shop?category=travel-accessories') ?>"><i class="bi bi-compass me-1 text-gold"></i> Desk & Travel Accessories</a></li>
+                                <li class="nav-item"><a class="nav-link py-1 px-2 small text-danger fw-semibold" href="<?= url('shop?filter=sale') ?>"><i class="bi bi-stars me-1 text-warning"></i> Special Archive Sale</a></li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link py-2 px-3 fw-semibold rounded mobile-drawer-link text-danger <?= (($_GET['route'] ?? '') === 'sale' || ($_GET['filter'] ?? '') === 'sale') ? 'active' : '' ?>" href="<?= url('shop?filter=sale') ?>">
-                            <i class="bi bi-stars me-2 text-warning"></i> Privé Sale
+                            <i class="bi bi-stars me-2 text-warning"></i> Special Sale
                         </a>
                     </li>
                     <li class="nav-item">
@@ -259,7 +259,7 @@ $currentUser = Auth::user();
                     </li>
                     <li class="nav-item">
                         <a class="nav-link py-2 px-3 fw-semibold rounded mobile-drawer-link <?= (($_GET['route'] ?? '') === 'contact') ? 'active' : '' ?>" href="<?= url('contact') ?>">
-                            <i class="bi bi-headset me-2 text-gold"></i> Contact Concierge
+                            <i class="bi bi-headset me-2 text-gold"></i> Contact Support
                         </a>
                     </li>
                     <li class="nav-item">
@@ -271,7 +271,7 @@ $currentUser = Auth::user();
 
                 <!-- Client Account Drawer Section -->
                 <div class="pt-3 border-top" style="border-color: var(--color-border) !important;">
-                    <div class="small text-uppercase fw-bold text-muted mb-2 px-2" style="letter-spacing: 0.1em; font-size: 0.7rem;">Client Concierge</div>
+                    <div class="small text-uppercase fw-bold text-muted mb-2 px-2" style="letter-spacing: 0.1em; font-size: 0.7rem;">Customer Support</div>
                     <?php if ($currentUser): ?>
                         <div class="p-2 mb-2 rounded bg-white border d-flex align-items-center justify-content-between">
                             <div class="text-truncate me-2">
@@ -292,8 +292,8 @@ $currentUser = Auth::user();
                         </div>
                     <?php else: ?>
                         <div class="d-grid gap-2 mb-3">
-                            <a href="<?= url('login') ?>" class="btn btn-buller-primary btn-sm py-2">Sign In to Atelier</a>
-                            <a href="<?= url('register') ?>" class="btn btn-outline-secondary btn-sm py-2">Create VIP Account</a>
+                            <a href="<?= url('login') ?>" class="btn btn-buller-primary btn-sm py-2">Sign In to Account</a>
+                            <a href="<?= url('register') ?>" class="btn btn-outline-secondary btn-sm py-2">Create Customer Account</a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -309,7 +309,7 @@ $currentUser = Auth::user();
         <div class="modal-dialog modal-dialog-centered modal-lg mx-auto px-2 px-sm-0">
             <div class="modal-content border-0 shadow-deep rounded-3" style="background-color: var(--color-ivory);">
                 <div class="modal-header border-0 pb-1 pt-3 px-3 px-sm-4 d-flex justify-content-between align-items-center">
-                    <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 0.15em; font-size: 0.72rem;">Buller Atelier Search</span>
+                    <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 0.15em; font-size: 0.72rem;">Search Buller Leather</span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3 p-sm-4 pt-1">
@@ -324,7 +324,7 @@ $currentUser = Auth::user();
                         </div>
                     </form>
                     <div class="mt-3">
-                        <div class="text-muted small mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Suggested Master Curations:</div>
+                        <div class="text-muted small mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Suggested Searches:</div>
                         <div class="d-flex flex-wrap gap-1">
                             <a href="<?= url('shop?q=Full-Grain') ?>" class="badge bg-white text-dark border py-2 px-2 text-decoration-none">Full-Grain</a>
                             <a href="<?= url('shop?q=Vachetta') ?>" class="badge bg-white text-dark border py-2 px-2 text-decoration-none">Tuscan Vachetta</a>

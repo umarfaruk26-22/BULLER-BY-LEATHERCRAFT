@@ -1,7 +1,7 @@
 <?php
 use App\Core\Auth;
 $isSuper = Auth::isSuperAdmin();
-$pageTitle = 'Patron Product Reviews & Moderation';
+$pageTitle = 'Customer Product Reviews & Moderation';
 $currentStatusFilter = $_GET['status'] ?? 'all';
 require __DIR__ . '/../layouts/admin_header.php';
 ?>
@@ -12,7 +12,7 @@ require __DIR__ . '/../layouts/admin_header.php';
         <div class="alert alert-dark border border-warning d-flex justify-content-between align-items-center py-2 px-3 mb-4 shadow-sm" style="background: #1a120b;">
             <div class="text-white small">
                 <i class="bi bi-shield-check text-warning me-2 fs-5 align-middle"></i>
-                <strong class="text-warning">Global Super Admin Mode:</strong> Moderating Client Reviews & Testimonials
+                <strong class="text-warning">Global Super Admin Mode:</strong> Moderating Customer Reviews
             </div>
             <a href="<?= url('superadmin/dashboard') ?>" class="btn btn-outline-warning btn-sm py-1">
                 <i class="bi bi-arrow-left me-1"></i> Back to Global Dashboard
@@ -23,7 +23,7 @@ require __DIR__ . '/../layouts/admin_header.php';
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h1 class="h3 font-serif mb-1 d-flex align-items-center gap-2" style="color: var(--color-espresso-deep);">
-                <i class="bi bi-star-fill text-warning"></i> Patron Reviews & Testimonial Moderation
+                <i class="bi bi-star-fill text-warning"></i> Customer Reviews & Moderation
             </h1>
             <p class="text-muted small mb-0">Review, approve, or reject customer feedback and satisfaction ratings across regional boutiques.</p>
         </div>
@@ -115,7 +115,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                     <thead class="table-light small text-uppercase">
                         <tr>
                             <th style="width: 25%;">Product</th>
-                            <th style="width: 15%;">Patron</th>
+                            <th style="width: 15%;">Customer</th>
                             <th style="width: 12%;">Rating</th>
                             <th style="width: 28%;">Testimonial Content</th>
                             <th style="width: 10%;">Status</th>
@@ -137,7 +137,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     </div>
                                 </td>
                                 <td>
-                                    <div><strong><?= e($rev['user_name'] ?? 'Patron') ?></strong></div>
+                                    <div><strong><?= e($rev['user_name'] ?? 'Customer') ?></strong></div>
                                     <div class="small text-muted d-flex align-items-center gap-1 mt-1">
                                         <?= country_flag($rev['country_code'] ?? '', $rev['country_name'] ?? '', 16) ?>
                                         <span><?= e($rev['country_name'] ?? 'Global') ?></span>

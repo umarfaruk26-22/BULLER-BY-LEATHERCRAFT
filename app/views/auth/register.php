@@ -35,7 +35,7 @@ require __DIR__ . '/../layouts/header.php';
 
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Full Legal Name *</label>
-                            <input type="text" name="full_name" class="form-control" required placeholder="e.g. Lord Julian Sterling">
+                            <input type="text" name="full_name" class="form-control" required placeholder="e.g. Julian Sterling">
                         </div>
 
                         <div class="row g-3 mb-3">
@@ -62,7 +62,7 @@ require __DIR__ . '/../layouts/header.php';
                                 <?php endforeach; ?>
                             </select>
                             <div class="form-text small text-muted" style="font-size: 0.75rem;">
-                                <i class="bi bi-info-circle me-1 text-gold"></i> Your portfolio, local currency (₹, $, £, AED), taxes, and courier dispatch will be permanently configured for this selected country.
+                                <i class="bi bi-info-circle me-1 text-gold"></i> Your account, local currency (₹, $, £, AED), taxes, and courier delivery will be permanently configured for this selected country.
                             </div>
                         </div>
 
@@ -85,7 +85,7 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
 
                         <button type="submit" class="btn btn-buller-primary w-100 py-3 mb-3">
-                            Create Patron Portfolio
+                            Create Customer Account
                         </button>
 
                         <div class="text-center small text-muted">

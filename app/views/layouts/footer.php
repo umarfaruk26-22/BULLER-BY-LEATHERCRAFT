@@ -49,7 +49,7 @@ $activeCountry = MarketContext::getCountry();
                         <li><a href="<?= url('customer/orders') ?>" class="footer-link">Order Invoices</a></li>
                         <li><a href="<?= url('shipping-policy') ?>" class="footer-link">Shipping Policy</a></li>
                         <li><a href="<?= url('returns-policy') ?>" class="footer-link">Returns Policy</a></li>
-                        <li><a href="<?= url('contact') ?>" class="footer-link">Atelier Desk</a></li>
+                        <li><a href="<?= url('contact') ?>" class="footer-link">Support Desk</a></li>
                     </ul>
                 </div>
 

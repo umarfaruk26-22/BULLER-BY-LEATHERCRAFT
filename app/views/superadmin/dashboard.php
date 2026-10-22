@@ -8,7 +8,7 @@ require __DIR__ . '/../layouts/admin_header.php';
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="h3 font-serif mb-1" style="color: var(--color-espresso-deep);">Global Enterprise Overview</h1>
-            <p class="text-muted small mb-0">Unified administrative intelligence spanning all international markets and regional ateliers.</p>
+            <p class="text-muted small mb-0">Unified administrative intelligence spanning all international markets and regional stores.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="<?= url('superadmin/countries') ?>" class="btn btn-outline-dark btn-sm">
@@ -56,7 +56,7 @@ require __DIR__ . '/../layouts/admin_header.php';
             <div class="kpi-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <div class="kpi-label">Registered Patrons</div>
+                        <div class="kpi-label">Registered Customers</div>
                         <div class="kpi-value"><?= (int)($kpis['total_customers'] ?? 389) ?></div>
                         <small class="text-info fw-semibold"><i class="bi bi-people me-1"></i> Active Global Profiles</small>
                     </div>
