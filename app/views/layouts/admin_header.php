@@ -56,10 +56,7 @@ $currentRoute = $_GET['route'] ?? '';
                 <button class="btn btn-outline-dark btn-sm d-lg-none p-1 px-2" type="button" onclick="document.querySelector('.admin-sidebar').classList.toggle('show'); document.querySelector('.admin-sidebar-backdrop').classList.toggle('show');" aria-label="Toggle navigation">
                     <i class="bi bi-list fs-5"></i>
                 </button>
-                <a href="<?= url('') ?>" class="navbar-brand-logo text-decoration-none d-lg-none me-1" title="Buller Leather - Return to Storefront">
-                    <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon" style="height: 28px; width: auto;">
-                </a>
-                <h4 class="mb-0 font-serif fw-bold text-truncate admin-topbar-title" style="color: var(--color-espresso-deep); font-size: 1.05rem; max-width: 180px;">
+                <h4 class="mb-0 font-serif fw-bold text-truncate admin-topbar-title" style="color: var(--color-espresso-deep); font-size: 1.05rem; max-width: 140px;">
                     <?= isset($pageTitle) ? e($pageTitle) : 'Buller Administration' ?>
                 </h4>
             </div>
