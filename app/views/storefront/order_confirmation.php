@@ -110,7 +110,7 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
                             </tr>
                             <tr class="fs-6">
                                 <th colspan="3" class="text-end fw-bold">Grand Total (<?= e($order['currency_code']) ?>):</th>
-                                <td class="text-end fw-bold text-dark" style="font-family: var(--font-sans); font-variant-numeric: tabular-nums;"><?= e($order['currency_symbol']) . number_format($order['grand_total'], 2) ?></td>
+                                <td class="text-end fw-bold text-dark font-price" style="font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;"><?= e($order['currency_symbol']) . number_format($order['grand_total'], 2) ?></td>
                             </tr>
                         </tfoot>
                     </table>

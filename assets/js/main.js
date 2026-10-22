@@ -184,7 +184,7 @@ async function refreshCartDrawer() {
                                 <span class="px-2" style="font-size: 0.85rem; font-weight: 600;">${item.quantity}</span>
                                 <button class="cart-qty-btn" data-action="inc" data-product-id="${item.product_id}" data-current-qty="${item.quantity}">+</button>
                             </div>
-                            <div class="fw-bold" style="font-size: 0.95rem; color: var(--color-espresso-deep);">
+                            <div class="fw-bold font-price cart-item-total" style="font-size: 0.95rem; color: var(--color-espresso-deep); font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;">
                                 ${item.formatted_total}
                             </div>
                         </div>

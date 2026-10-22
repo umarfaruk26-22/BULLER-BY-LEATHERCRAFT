@@ -74,7 +74,7 @@ $cartSummary = Cart::getSummary();
                                 <span class="px-2" style="font-size: 0.85rem; font-weight: 600;"><?= $item['quantity'] ?></span>
                                 <button class="cart-qty-btn" data-action="inc" data-product-id="<?= $item['product_id'] ?>" data-current-qty="<?= $item['quantity'] ?>">+</button>
                             </div>
-                            <div class="fw-bold" style="font-size: 0.95rem; color: var(--color-espresso-deep);">
+                            <div class="fw-bold font-price cart-item-total" style="font-size: 0.95rem; color: var(--color-espresso-deep); font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;">
                                 <?= $item['formatted_total'] ?>
                             </div>
                         </div>
@@ -88,7 +88,7 @@ $cartSummary = Cart::getSummary();
     <div class="offcanvas-footer p-4 border-top bg-white" style="border-color: var(--color-border) !important;">
         <div class="d-flex justify-content-between align-items-baseline mb-2">
             <span class="text-muted" style="text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem;">Estimated Subtotal</span>
-            <span class="fs-5 fw-bold font-serif" id="cart-drawer-subtotal" style="color: var(--color-espresso-deep);">
+            <span class="fs-5 fw-bold font-price" id="cart-drawer-subtotal" style="color: var(--color-espresso-deep); font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;">
                 <?= $cartSummary['formatted_subtotal'] ?>
             </span>
         </div>

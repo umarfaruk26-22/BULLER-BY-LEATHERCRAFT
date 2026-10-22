@@ -216,7 +216,7 @@ require __DIR__ . '/../layouts/header.php';
 
                         <div class="d-flex justify-content-between align-items-baseline mb-4">
                             <span class="fs-5 font-serif fw-bold" style="color: var(--color-espresso-deep);">Grand Total</span>
-                            <span class="fs-4 fw-bold" style="color: var(--color-espresso-deep); font-family: var(--font-sans); font-variant-numeric: tabular-nums;"><?= $summary['formatted_grand_total'] ?></span>
+                            <span class="fs-4 fw-bold font-price" style="color: var(--color-espresso-deep); font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;"><?= $summary['formatted_grand_total'] ?></span>
                         </div>
 
                         <div class="p-3 bg-light border small text-muted">

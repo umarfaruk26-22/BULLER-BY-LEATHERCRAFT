@@ -145,7 +145,7 @@ require __DIR__ . '/../layouts/header.php';
                     <!-- 2. Localized Pricing Block (Immediate Visibility) -->
                     <div class="pdp-pricing-block p-2.5 p-md-3 bg-white border shadow-xs mb-3 position-relative" style="border-radius: 4px; border-left: 3px solid var(--color-gold) !important;">
                         <div class="d-flex flex-wrap align-items-baseline gap-2 gap-md-3">
-                            <span class="pdp-price-value fw-bold" style="font-size: 1.45rem; color: var(--color-espresso-deep); font-family: var(--font-serif);">
+                            <span class="pdp-price-value fw-bold" style="font-size: 1.45rem; color: var(--color-espresso-deep); font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;">
                                 <?= $pricing['formatted_final'] ?>
                             </span>
                             <?php if ($pricing['is_discounted']): ?>
@@ -721,7 +721,7 @@ require __DIR__ . '/../layouts/header.php';
 
                                 <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mt-2 pt-2 border-top gap-1">
                                     <div>
-                                        <strong class="font-serif" style="color: var(--color-espresso-deep); font-size: clamp(0.85rem, 2vw, 1rem);">
+                                        <strong class="font-price price-current" style="color: var(--color-espresso-deep); font-size: clamp(0.85rem, 2vw, 1rem); font-family: var(--font-price);">
                                             <?= $relPrice['formatted_final'] ?>
                                         </strong>
                                         <?php if ($relPrice['is_discounted']): ?>
@@ -858,8 +858,9 @@ require __DIR__ . '/../layouts/header.php';
 .pdp-price-value {
     color: var(--color-espresso-deep);
     font-size: clamp(1.6rem, 5.5vw, 2.2rem);
-    font-family: var(--font-sans);
-    font-variant-numeric: tabular-nums;
+    font-family: var(--font-price) !important;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.01em;
     line-height: 1.1;
 }
 
@@ -1056,6 +1057,8 @@ require __DIR__ . '/../layouts/header.php';
         font-size: 1.35rem !important;
         font-weight: 700;
         color: var(--color-espresso-deep);
+        font-family: var(--font-price) !important;
+        font-variant-numeric: tabular-nums lining-nums !important;
     }
     .pdp-pricing-block .pdp-price-orig {
         font-size: 0.82rem !important;

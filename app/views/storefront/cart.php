@@ -77,7 +77,7 @@ require __DIR__ . '/../layouts/header.php';
                                                     <button class="cart-qty-btn" data-action="inc" data-product-id="<?= $item['product_id'] ?>" data-current-qty="<?= $item['quantity'] ?>">+</button>
                                                 </div>
                                             </td>
-                                            <td class="text-end fw-bold" style="color: var(--color-espresso-deep); font-size: 1.05rem; font-family: var(--font-sans); font-variant-numeric: tabular-nums;">
+                                            <td class="text-end fw-bold font-price" style="color: var(--color-espresso-deep); font-size: 1.05rem; font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;">
                                                 <?= $item['formatted_total'] ?>
                                             </td>
                                             <td class="text-end">
@@ -122,7 +122,7 @@ require __DIR__ . '/../layouts/header.php';
 
                         <div class="d-flex justify-content-between align-items-baseline mb-4">
                             <span class="fs-5 font-serif fw-bold" style="color: var(--color-espresso-deep);">Estimated Total</span>
-                            <span class="fs-4 fw-bold" style="color: var(--color-espresso-deep); font-family: var(--font-sans); font-variant-numeric: tabular-nums;"><?= $summary['formatted_grand_total'] ?></span>
+                            <span class="fs-4 fw-bold font-price" style="color: var(--color-espresso-deep); font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;"><?= $summary['formatted_grand_total'] ?></span>
                         </div>
 
                         <a href="<?= url('checkout') ?>" class="btn btn-buller-gold w-100 py-3 text-center mb-3">
