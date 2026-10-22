@@ -103,17 +103,73 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
                         </div>
                     </div>
 
-                    <!-- Available Colors -->
-                    <div class="mb-3 p-3 bg-light border rounded">
-                        <label class="form-label small fw-bold text-dark d-flex align-items-center justify-content-between">
-                            <span><i class="bi bi-palette-fill text-warning me-1"></i> Available Colors (Comma-Separated) *</span>
-                            <span class="small text-muted fw-normal">Used to generate color swatches on PDP</span>
-                        </label>
-                        <input type="text" id="colorInput" name="color" class="form-control mb-2" placeholder="e.g. Espresso Brown, Cognac Tan, Classic Black, Oxblood Burgundy" value="Espresso Brown, Cognac Tan, Classic Black" required>
-                        <div class="d-flex align-items-center gap-2">
-                            <small class="text-muted">Active Color Swatches:</small>
-                            <div id="colorBadgesContainer" class="d-flex flex-wrap gap-1.5">
+                    <!-- Available Colors & Custom Color Generator -->
+                    <div class="mb-4 p-3 bg-light border rounded shadow-xs">
+                        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 mb-2 pb-2 border-bottom">
+                            <div>
+                                <label class="form-label small fw-bold text-dark mb-0">
+                                    <i class="bi bi-palette-fill text-warning me-1"></i> Product Leather Colors & Swatches *
+                                </label>
+                                <div class="small text-muted" style="font-size: 0.76rem;">Customers can switch photos & purchase in any of these colors.</div>
+                            </div>
+                            <span class="badge bg-white text-dark border shadow-xs" id="colorCountBadge">3 Colors Active</span>
+                        </div>
+
+                        <!-- Active Color Badges (Removable Tags) -->
+                        <div class="mb-3">
+                            <label class="small text-muted fw-bold d-block mb-1.5" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Active Product Colors:</label>
+                            <div id="activeColorsContainer" class="d-flex flex-wrap gap-2 align-items-center mb-1">
                                 <!-- Populated dynamically by JS -->
+                            </div>
+                            <input type="hidden" id="finalColorInput" name="color" value="Espresso Brown, Cognac Tan, Classic Black" required>
+                        </div>
+
+                        <!-- Add Any New Custom Color Box -->
+                        <div class="p-2.5 bg-white border rounded mb-3">
+                            <label class="small fw-bold text-dark d-block mb-1">
+                                <i class="bi bi-plus-circle-fill text-warning me-1"></i> Add Any New Custom Color:
+                            </label>
+                            <div class="input-group">
+                                <input type="color" id="customColorPicker" class="form-control form-control-color p-1" value="#5c3a21" title="Choose color shade" style="max-width: 45px; height: 38px;">
+                                <input type="text" id="customColorNameInput" class="form-control" placeholder="Type color name (e.g. Royal Navy, Desert Sand, Oxblood Red, Vintage Olive...)" autocomplete="off">
+                                <button type="button" class="btn btn-buller-gold px-3 fw-semibold" onclick="addNewCustomColor()">
+                                    <i class="bi bi-plus-lg me-1"></i> Add Color
+                                </button>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.75rem;">Type any custom name of your choice and click "Add Color" (or press Enter). It will immediately appear in your gallery photo dropdowns.</small>
+                        </div>
+
+                        <!-- Quick-Add Popular Leather Shades -->
+                        <div>
+                            <label class="small text-muted fw-bold d-block mb-1.5" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Quick-Add Popular Leather Shades (1-Click):</label>
+                            <div class="d-flex flex-wrap gap-1.5" id="quickPaletteContainer">
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Espresso Brown', '#2e1c14')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #2e1c14;"></span> Espresso Brown
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Cognac Tan', '#9a532e')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #9a532e;"></span> Cognac Tan
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Classic Black', '#181818')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #181818;"></span> Classic Black
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Chestnut Brown', '#5c3a21')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #5c3a21;"></span> Chestnut Brown
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Oxblood Burgundy', '#4c1e1a')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #4c1e1a;"></span> Oxblood Burgundy
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Midnight Navy', '#1c2833')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #1c2833;"></span> Midnight Navy
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Forest Olive', '#3d493a')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #3d493a;"></span> Forest Olive
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Desert Sand', '#d4b895')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #d4b895;"></span> Desert Sand
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Slate Charcoal', '#4f4f4f')" style="font-size: 0.75rem;">
+                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #4f4f4f;"></span> Slate Charcoal
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -361,71 +417,177 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 2. Dynamic Colors Parser & Swatch Generator
-    const colorInput = document.getElementById('colorInput');
-    const badgesContainer = document.getElementById('colorBadgesContainer');
-
-    function parseColors() {
-        const raw = colorInput.value || '';
-        return raw.split(',')
-            .map(c => c.trim())
-            .filter(c => c.length > 0);
+    // 2. Interactive Dynamic Custom Color Manager
+    const customNameInput = document.getElementById('customColorNameInput');
+    if (customNameInput) {
+        customNameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addNewCustomColor();
+            }
+        });
     }
 
-    function refreshColorSwatches() {
-        const colors = parseColors();
-        badgesContainer.innerHTML = '';
-        if (colors.length === 0) {
-            badgesContainer.innerHTML = '<span class="text-danger small">No colors defined yet.</span>';
-        } else {
-            colors.forEach(col => {
-                const badge = document.createElement('span');
-                badge.className = 'badge border bg-white text-dark shadow-xs';
-                badge.style.fontSize = '0.78rem';
-                badge.innerHTML = `<i class="bi bi-circle-fill me-1 text-warning"></i>${col}`;
-                badgesContainer.appendChild(badge);
-            });
-        }
-        updateAllColorDropdowns(colors);
-    }
-
-    colorInput.addEventListener('input', refreshColorSwatches);
-    refreshColorSwatches();
+    // Initialize default colors
+    initDefaultColors(['Espresso Brown', 'Cognac Tan', 'Classic Black']);
 });
 
-// Update all color dropdowns in gallery rows
-function updateAllColorDropdowns(colors) {
-    if (!colors) {
-        const raw = document.getElementById('colorInput').value || '';
-        colors = raw.split(',').map(c => c.trim()).filter(c => c.length > 0);
+// State of active colors: [{ name: '...', hex: '...' }]
+let productColors = [];
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function getSmartHex(name) {
+    const lc = name.toLowerCase();
+    if (lc.includes('black') || lc.includes('raven') || lc.includes('noir') || lc.includes('dark')) return '#181818';
+    if (lc.includes('cognac') || lc.includes('tan') || lc.includes('caramel') || lc.includes('camel')) return '#9a532e';
+    if (lc.includes('espresso') || lc.includes('brown') || lc.includes('chocolate')) return '#2e1c14';
+    if (lc.includes('chestnut') || lc.includes('wood') || lc.includes('cedar')) return '#5c3a21';
+    if (lc.includes('oxblood') || lc.includes('burgundy') || lc.includes('wine') || lc.includes('maroon') || lc.includes('bordeaux')) return '#4c1e1a';
+    if (lc.includes('navy') || lc.includes('blue') || lc.includes('indigo') || lc.includes('sapphire')) return '#1c2833';
+    if (lc.includes('olive') || lc.includes('green') || lc.includes('forest') || lc.includes('sage')) return '#3d493a';
+    if (lc.includes('grey') || lc.includes('gray') || lc.includes('slate') || lc.includes('charcoal')) return '#4f4f4f';
+    if (lc.includes('sand') || lc.includes('beige') || lc.includes('cream') || lc.includes('ivory') || lc.includes('nude') || lc.includes('taupe')) return '#d4b895';
+    if (lc.includes('red') || lc.includes('ruby')) return '#8b1e1a';
+    if (lc.includes('gold') || lc.includes('yellow') || lc.includes('mustard')) return '#c5a059';
+    if (lc.includes('orange') || lc.includes('rust') || lc.includes('copper')) return '#b85d19';
+    if (lc.includes('white') || lc.includes('pearl')) return '#f0f0f0';
+    return '#5c3a21';
+}
+
+function initDefaultColors(names) {
+    productColors = [];
+    names.forEach(n => {
+        if (n && n.trim()) {
+            const clean = n.trim();
+            productColors.push({ name: clean, hex: getSmartHex(clean) });
+        }
+    });
+    renderColorBadges();
+}
+
+function renderColorBadges() {
+    const container = document.getElementById('activeColorsContainer');
+    const badgeCount = document.getElementById('colorCountBadge');
+    const finalInput = document.getElementById('finalColorInput');
+
+    container.innerHTML = '';
+    if (productColors.length === 0) {
+        container.innerHTML = '<span class="text-danger small fst-italic">Please add at least one color for this product.</span>';
+        if (badgeCount) badgeCount.textContent = '0 Colors';
+        finalInput.value = '';
+        updateAllColorDropdowns();
+        return;
     }
 
+    if (badgeCount) badgeCount.textContent = `${productColors.length} Color${productColors.length > 1 ? 's' : ''} Active`;
+    finalInput.value = productColors.map(c => c.name).join(', ');
+
+    productColors.forEach((col, index) => {
+        const pill = document.createElement('div');
+        pill.className = 'd-inline-flex align-items-center gap-1.5 py-1 px-2.5 bg-white border rounded shadow-xs';
+        pill.style.fontSize = '0.82rem';
+        pill.innerHTML = `
+            <span class="rounded-circle border" style="width: 13px; height: 13px; background-color: ${col.hex}; display: inline-block;"></span>
+            <strong class="text-dark">${escapeHtml(col.name)}</strong>
+            <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-1" onclick="removeColor(${index})" title="Remove ${escapeHtml(col.name)}" style="text-decoration: none; line-height: 1;">
+                <i class="bi bi-x-circle-fill" style="font-size: 0.85rem;"></i>
+            </button>
+        `;
+        container.appendChild(pill);
+    });
+
+    updateAllColorDropdowns();
+}
+
+function addNewCustomColor() {
+    const nameInput = document.getElementById('customColorNameInput');
+    const picker = document.getElementById('customColorPicker');
+    const name = nameInput.value.trim();
+    if (!name) {
+        nameInput.focus();
+        return;
+    }
+
+    // Check if already exists
+    if (productColors.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+        alert(`Color "${name}" is already in your product colors list.`);
+        nameInput.value = '';
+        return;
+    }
+
+    const hex = picker.value || getSmartHex(name);
+    productColors.push({ name: name, hex: hex });
+    nameInput.value = '';
+    renderColorBadges();
+}
+
+function addQuickColor(name, hex) {
+    if (productColors.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+        return; // already present
+    }
+    productColors.push({ name: name, hex: hex });
+    renderColorBadges();
+}
+
+function removeColor(index) {
+    productColors.splice(index, 1);
+    renderColorBadges();
+}
+
+// Update all color dropdowns in gallery rows
+function updateAllColorDropdowns() {
     document.querySelectorAll('.color-select-dropdown').forEach(select => {
         const currentVal = select.value;
         select.innerHTML = '<option value="">-- General (All Colors) --</option>';
-        colors.forEach(col => {
+        productColors.forEach(col => {
             const opt = document.createElement('option');
-            opt.value = col;
-            opt.textContent = col;
+            opt.value = col.name;
+            opt.textContent = col.name;
             if (opt.value === currentVal) opt.selected = true;
             select.appendChild(opt);
         });
+        const customOpt = document.createElement('option');
+        customOpt.value = '__ADD_NEW__';
+        customOpt.textContent = '➕ Add New Custom Color...';
+        customOpt.style.fontWeight = 'bold';
+        customOpt.style.color = '#c5a059';
+        select.appendChild(customOpt);
     });
+}
+
+function handleColorSelectChange(selectElem) {
+    if (selectElem.value === '__ADD_NEW__') {
+        const newColor = prompt('Enter New Color Name (e.g. Royal Navy, Olive Green, Bordeaux):');
+        if (newColor && newColor.trim()) {
+            const cleanName = newColor.trim();
+            if (!productColors.some(c => c.name.toLowerCase() === cleanName.toLowerCase())) {
+                productColors.push({ name: cleanName, hex: getSmartHex(cleanName) });
+                renderColorBadges();
+            }
+            selectElem.value = cleanName;
+        } else {
+            selectElem.value = '';
+        }
+    }
 }
 
 // Add new gallery photo row
 function addGalleryPhotoRow() {
     const container = document.getElementById('galleryRowsContainer');
-    const raw = document.getElementById('colorInput').value || '';
-    const colors = raw.split(',').map(c => c.trim()).filter(c => c.length > 0);
 
     const div = document.createElement('div');
     div.className = 'gallery-photo-row p-3 border rounded bg-light position-relative';
     
     let optionsHtml = '<option value="">-- General (All Colors) --</option>';
-    colors.forEach(col => {
-        optionsHtml += `<option value="${col}">${col}</option>`;
+    productColors.forEach(col => {
+        optionsHtml += `<option value="${escapeHtml(col.name)}">${escapeHtml(col.name)}</option>`;
     });
+    optionsHtml += '<option value="__ADD_NEW__" style="font-weight:bold; color:#c5a059;">➕ Add New Custom Color...</option>';
 
     div.innerHTML = `
         <div class="row g-3 align-items-center">
@@ -440,7 +602,7 @@ function addGalleryPhotoRow() {
             </div>
             <div class="col-md-5">
                 <label class="form-label small fw-bold">Assign to Color Swatch</label>
-                <select name="gallery_colors[]" class="form-select form-select-sm color-select-dropdown">
+                <select name="gallery_colors[]" class="form-select form-select-sm color-select-dropdown" onchange="handleColorSelectChange(this)">
                     ${optionsHtml}
                 </select>
             </div>

@@ -161,3 +161,28 @@ if (!function_exists('upload_multiple_images')) {
     }
 }
 
+if (!function_exists('get_swatch_color')) {
+    function get_swatch_color(string $c): string {
+        $lc = strtolower(trim($c));
+        if (preg_match('/#([a-f0-9]{3}|[a-f0-9]{6})\b/i', $lc, $m)) {
+            return '#' . $m[1];
+        }
+        if (str_contains($lc, 'black') || str_contains($lc, 'raven') || str_contains($lc, 'obsidian') || str_contains($lc, 'noir') || str_contains($lc, 'dark')) return '#181818';
+        if (str_contains($lc, 'cognac') || str_contains($lc, 'tan') || str_contains($lc, 'caramel') || str_contains($lc, 'camel')) return '#9a532e';
+        if (str_contains($lc, 'espresso') || str_contains($lc, 'chocolate')) return '#2e1c14';
+        if (str_contains($lc, 'chestnut') || str_contains($lc, 'cedar') || str_contains($lc, 'wood') || str_contains($lc, 'brown')) return '#5c3a21';
+        if (str_contains($lc, 'oxblood') || str_contains($lc, 'burgundy') || str_contains($lc, 'wine') || str_contains($lc, 'maroon') || str_contains($lc, 'bordeaux') || str_contains($lc, 'mahogany')) return '#4c1e1a';
+        if (str_contains($lc, 'navy') || str_contains($lc, 'blue') || str_contains($lc, 'indigo') || str_contains($lc, 'sapphire')) return '#1c2833';
+        if (str_contains($lc, 'olive') || str_contains($lc, 'green') || str_contains($lc, 'forest') || str_contains($lc, 'sage') || str_contains($lc, 'moss') || str_contains($lc, 'army')) return '#3d493a';
+        if (str_contains($lc, 'grey') || str_contains($lc, 'gray') || str_contains($lc, 'slate') || str_contains($lc, 'charcoal') || str_contains($lc, 'graphite') || str_contains($lc, 'ash') || str_contains($lc, 'smoke')) return '#4f4f4f';
+        if (str_contains($lc, 'sand') || str_contains($lc, 'beige') || str_contains($lc, 'cream') || str_contains($lc, 'ivory') || str_contains($lc, 'nude') || str_contains($lc, 'taupe') || str_contains($lc, 'khaki') || str_contains($lc, 'desert')) return '#d4b895';
+        if (str_contains($lc, 'red') || str_contains($lc, 'ruby') || str_contains($lc, 'crimson') || str_contains($lc, 'scarlet')) return '#8b1e1a';
+        if (str_contains($lc, 'gold') || str_contains($lc, 'yellow') || str_contains($lc, 'mustard') || str_contains($lc, 'honey')) return '#c5a059';
+        if (str_contains($lc, 'orange') || str_contains($lc, 'rust') || str_contains($lc, 'copper') || str_contains($lc, 'amber')) return '#b85d19';
+        if (str_contains($lc, 'white') || str_contains($lc, 'pearl') || str_contains($lc, 'snow') || str_contains($lc, 'chalk')) return '#f5f5f5';
+        if (str_contains($lc, 'purple') || str_contains($lc, 'violet') || str_contains($lc, 'plum')) return '#4a235a';
+        if (str_contains($lc, 'pink') || str_contains($lc, 'rose') || str_contains($lc, 'blush')) return '#c0392b';
+        if (str_contains($lc, 'teal') || str_contains($lc, 'cyan') || str_contains($lc, 'turquoise')) return '#117864';
+        return '#5c3a21';
+    }
+}

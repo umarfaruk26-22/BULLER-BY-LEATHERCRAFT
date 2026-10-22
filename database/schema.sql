@@ -127,7 +127,7 @@ CREATE TABLE `products` (
     `category_id` INT NOT NULL,
     `leather_type` VARCHAR(100) NULL,          -- e.g. Full-Grain Italian Vachetta, Top-Grain Buffalo
     `hardware_finish` VARCHAR(100) NULL,      -- e.g. Hand-Burnished Solid Brass
-    `color` VARCHAR(50) NULL,                 -- e.g. Espresso Brown, Cognac Tan, Raven Black
+    `color` VARCHAR(255) NULL,                -- e.g. Espresso Brown, Cognac Tan, Raven Black
     `dimensions` VARCHAR(100) NULL,           -- e.g. 42cm x 30cm x 12cm
     `short_description` VARCHAR(500) NULL,
     `detailed_description` LONGTEXT NULL,
