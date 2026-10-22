@@ -102,76 +102,7 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
                         </div>
                     </div>
 
-                    <!-- Available Colors & Custom Color Generator -->
-                    <div class="mb-4 p-3 bg-light border rounded shadow-xs">
-                        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 mb-2 pb-2 border-bottom">
-                            <div>
-                                <label class="form-label small fw-bold text-dark mb-0">
-                                    <i class="bi bi-palette-fill text-warning me-1"></i> Product Leather Colors & Swatches *
-                                </label>
-                                <div class="small text-muted" style="font-size: 0.76rem;">Customers can switch photos & purchase in any of these colors.</div>
-                            </div>
-                            <span class="badge bg-white text-dark border shadow-xs" id="colorCountBadge">Active Colors</span>
-                        </div>
 
-                        <!-- Active Color Badges (Removable Tags) -->
-                        <div class="mb-3">
-                            <label class="small text-muted fw-bold d-block mb-1.5" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Active Product Colors:</label>
-                            <div id="activeColorsContainer" class="d-flex flex-wrap gap-2 align-items-center mb-1">
-                                <!-- Populated dynamically by JS -->
-                            </div>
-                            <input type="hidden" id="finalColorInput" name="color" value="<?= e($product['color']) ?>" required>
-                        </div>
-
-                        <!-- Add Any New Custom Color Box -->
-                        <div class="p-2.5 bg-white border rounded mb-3">
-                            <label class="small fw-bold text-dark d-block mb-1">
-                                <i class="bi bi-plus-circle-fill text-warning me-1"></i> Add Any New Custom Color:
-                            </label>
-                            <div class="input-group">
-                                <input type="color" id="customColorPicker" class="form-control form-control-color p-1" value="#5c3a21" title="Choose color shade" style="max-width: 45px; height: 38px;">
-                                <input type="text" id="customColorNameInput" class="form-control" placeholder="Type color name (e.g. Royal Navy, Desert Sand, Oxblood Red, Vintage Olive...)" autocomplete="off">
-                                <button type="button" class="btn btn-buller-gold px-3 fw-semibold" onclick="addNewCustomColor()">
-                                    <i class="bi bi-plus-lg me-1"></i> Add Color
-                                </button>
-                            </div>
-                            <small class="text-muted" style="font-size: 0.75rem;">Type any custom name of your choice and click "Add Color" (or press Enter). It will immediately appear in your gallery photo dropdowns.</small>
-                        </div>
-
-                        <!-- Quick-Add Popular Leather Shades -->
-                        <div>
-                            <label class="small text-muted fw-bold d-block mb-1.5" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">Quick-Add Popular Leather Shades (1-Click):</label>
-                            <div class="d-flex flex-wrap gap-1.5" id="quickPaletteContainer">
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Espresso Brown', '#2e1c14')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #2e1c14;"></span> Espresso Brown
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Cognac Tan', '#9a532e')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #9a532e;"></span> Cognac Tan
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Classic Black', '#181818')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #181818;"></span> Classic Black
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Chestnut Brown', '#5c3a21')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #5c3a21;"></span> Chestnut Brown
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Oxblood Burgundy', '#4c1e1a')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #4c1e1a;"></span> Oxblood Burgundy
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Midnight Navy', '#1c2833')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #1c2833;"></span> Midnight Navy
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Forest Olive', '#3d493a')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #3d493a;"></span> Forest Olive
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Desert Sand', '#d4b895')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #d4b895;"></span> Desert Sand
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-dark bg-white py-1 px-2 d-inline-flex align-items-center gap-1.5" onclick="addQuickColor('Slate Charcoal', '#4f4f4f')" style="font-size: 0.75rem;">
-                                    <span class="rounded-circle d-inline-block border" style="width: 12px; height: 12px; background: #4f4f4f;"></span> Slate Charcoal
-                                </button>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Short Product Summary</label>
@@ -216,6 +147,33 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
                                     <img id="primaryPreview" src="<?= asset($product['primary_image']) ?>" alt="Primary Preview" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div class="small text-muted mt-1">Current Primary Image</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Minimal Product Colors Bar (Directly Linked to Gallery Photos) -->
+                    <div class="p-3 bg-light border rounded mb-4">
+                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                            <!-- Left: Active Color Pills -->
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="small fw-bold text-dark d-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                                    <i class="bi bi-palette-fill text-warning"></i> Product Colors:
+                                </span>
+                                <div id="activeColorsContainer" class="d-flex flex-wrap gap-1.5 align-items-center">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                                <input type="hidden" id="finalColorInput" name="color" value="<?= e($product['color']) ?>" required>
+                            </div>
+
+                            <!-- Right: Compact Inline Custom Color Creator -->
+                            <div class="d-flex align-items-center gap-2 ms-md-auto">
+                                <div class="input-group input-group-sm" style="max-width: 270px;">
+                                    <input type="color" id="customColorPicker" class="form-control form-control-color p-0 border" value="#5c3a21" title="Pick color shade" style="width: 32px; height: 31px; border-radius: 4px 0 0 4px;">
+                                    <input type="text" id="customColorNameInput" class="form-control form-control-sm" placeholder="Add new color..." autocomplete="off">
+                                    <button type="button" class="btn btn-buller-gold btn-sm px-2.5 fw-semibold text-nowrap" onclick="addNewCustomColor()">
+                                        <i class="bi bi-plus-lg"></i> Add
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -502,13 +460,13 @@ function renderColorBadges() {
 
     productColors.forEach((col, index) => {
         const pill = document.createElement('div');
-        pill.className = 'd-inline-flex align-items-center gap-1.5 py-1 px-2.5 bg-white border rounded shadow-xs';
-        pill.style.fontSize = '0.82rem';
+        pill.className = 'd-inline-flex align-items-center gap-1.5 py-0.5 px-2 bg-white border rounded shadow-xs';
+        pill.style.fontSize = '0.78rem';
         pill.innerHTML = `
-            <span class="rounded-circle border" style="width: 13px; height: 13px; background-color: ${col.hex}; display: inline-block;"></span>
+            <span class="rounded-circle border" style="width: 11px; height: 11px; background-color: ${col.hex}; display: inline-block;"></span>
             <strong class="text-dark">${escapeHtml(col.name)}</strong>
             <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-1" onclick="removeColor(${index})" title="Remove ${escapeHtml(col.name)}" style="text-decoration: none; line-height: 1;">
-                <i class="bi bi-x-circle-fill" style="font-size: 0.85rem;"></i>
+                <i class="bi bi-x-circle-fill" style="font-size: 0.8rem;"></i>
             </button>
         `;
         container.appendChild(pill);
