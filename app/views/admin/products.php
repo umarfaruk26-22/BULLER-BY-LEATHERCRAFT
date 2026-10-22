@@ -124,6 +124,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                         <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                         <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
                                         <input type="hidden" name="country_id" value="<?= $currentCountry['id'] ?>">
+                                        <input type="hidden" name="redirect_route" value="admin/products?country_id=<?= $currentCountry['id'] ?>">
                                         <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Product">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -145,6 +146,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                             <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                             <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
                                             <input type="hidden" name="country_id" value="<?= $currentCountry['id'] ?>">
+                                            <input type="hidden" name="redirect_route" value="admin/products?country_id=<?= $currentCountry['id'] ?>">
 
                                             <div class="modal-body p-4 text-start">
                                                 <!-- SECTION 1: MASTER ATTRIBUTES -->
@@ -357,6 +359,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                         <input type="hidden" name="image_id" value="<?= $gImg['id'] ?>">
                                         <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
                                         <input type="hidden" name="country_id" value="<?= $currentCountry['id'] ?>">
+                                        <input type="hidden" name="redirect_route" value="admin/products?country_id=<?= $currentCountry['id'] ?>">
                                     </form>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -384,6 +387,7 @@ require __DIR__ . '/../layouts/admin_header.php';
             <form action="<?= url('admin/products/create') ?>" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                 <input type="hidden" name="country_id" value="<?= $currentCountry['id'] ?>">
+                <input type="hidden" name="redirect_route" value="admin/products?country_id=<?= $currentCountry['id'] ?>">
 
                 <div class="modal-body p-4 text-start">
                     <!-- SECTION 1: MASTER INFO -->

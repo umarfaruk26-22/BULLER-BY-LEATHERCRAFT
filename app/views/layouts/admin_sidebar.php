@@ -32,11 +32,17 @@ $currentRoute = $_GET['route'] ?? '';
             <a href="<?= url('superadmin/products') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/products') ? 'active' : '' ?>">
                 <i class="bi bi-box-seam-fill"></i> Master Product Catalog
             </a>
+            <a href="<?= url('admin/products') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/product')) ? 'active' : '' ?>">
+                <i class="bi bi-box-seam"></i> Products & Local Pricing
+            </a>
             <a href="<?= url('superadmin/categories') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/categories')) ? 'active' : '' ?>">
                 <i class="bi bi-tags-fill"></i> Product Categories
             </a>
             <a href="<?= url('superadmin/orders') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/orders') ? 'active' : '' ?>">
                 <i class="bi bi-receipt"></i> Global Orders & Fulfillment
+            </a>
+            <a href="<?= url('admin/orders') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/order')) ? 'active' : '' ?>">
+                <i class="bi bi-truck"></i> Orders & Dispatch Tracking
             </a>
             <a href="<?= url('superadmin/coupons') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'superadmin/coupons')) ? 'active' : '' ?>">
                 <i class="bi bi-ticket-perforated-fill"></i> Promotional Coupons

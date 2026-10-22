@@ -821,11 +821,9 @@ switch ($route) {
     case 'admin/dashboard':
     case 'admin/products':
     case 'admin/orders':
-        // Strict Role Isolation: Super Admin must NEVER be trapped in scoped Country Admin pages
-        if (Auth::isSuperAdmin()) {
-            if ($route === 'admin/dashboard') redirect('superadmin/dashboard');
-            if ($route === 'admin/products') redirect('superadmin/products');
-            if ($route === 'admin/orders') redirect('superadmin/orders');
+        // Super Admin dashboard redirect (Super Admin can access admin/products and admin/orders to manage local pricing and dispatches)
+        if (Auth::isSuperAdmin() && $route === 'admin/dashboard') {
+            redirect('superadmin/dashboard');
         }
 
         if (!Auth::isCountryAdmin()) {

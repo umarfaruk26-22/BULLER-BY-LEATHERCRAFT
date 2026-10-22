@@ -62,14 +62,14 @@ $currentRoute = $_GET['route'] ?? '';
             </div>
 
             <div class="d-flex align-items-center gap-2 gap-sm-3">
-                <?php if (isset($permittedCountries) && count($permittedCountries) > 1 && !$isSuper): ?>
-                    <!-- Scoped Country Selector (Country Admins with multiple markets) -->
+                <?php if (isset($permittedCountries) && count($permittedCountries) > 1): ?>
+                    <!-- Market Country Selector -->
                     <div class="d-flex align-items-center gap-1">
-                        <span class="small text-muted text-nowrap d-none d-md-inline">Market:</span>
-                        <select class="form-select form-select-sm" style="max-width: 120px;" onchange="switchAdminMarket(this.value)">
+                        <span class="small text-muted text-nowrap d-none d-md-inline"><i class="bi bi-geo-alt-fill text-danger me-1"></i>Market:</span>
+                        <select class="form-select form-select-sm" style="max-width: 150px;" onchange="switchAdminMarket(this.value)">
                             <?php foreach ($permittedCountries as $pc): ?>
                                 <option value="<?= $pc['id'] ?>" <?= (isset($selectedCountryId) && $selectedCountryId == $pc['id']) ? 'selected' : '' ?>>
-                                    <?= e($pc['code']) ?> (<?= e($pc['currency_symbol']) ?>)
+                                    <?= e($pc['name']) ?> (<?= e($pc['currency_symbol']) ?>)
                                 </option>
                             <?php endforeach; ?>
                         </select>
