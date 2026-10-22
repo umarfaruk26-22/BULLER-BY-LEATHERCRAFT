@@ -213,13 +213,15 @@ require __DIR__ . '/../layouts/header.php';
                         <input type="hidden" id="selectedProductColor" value="<?= e($activeColor) ?>">
                     </div>
 
-                    <!-- 4. Dynamic Size Selector (Only for categories with real sizes: Jackets, Shoes, Belts) -->
+                    <!-- 4. Dynamic Size Selector (Garment sizes or category-based: Jackets, Shoes, Belts) -->
                     <?php 
                         $catSlug = $product['category_slug'] ?? '';
                         $isJacket = ($catSlug === 'leather-jackets');
                         $isShoes  = ($catSlug === 'shoes-boots' || $catSlug === 'footwear-boots');
                         $isBelts  = ($catSlug === 'belts' || $catSlug === 'handcrafted-belts');
-                        $hasSizes = ($isJacket || $isShoes || $isBelts);
+                        $customSizesList = !empty($product['sizes']) ? array_filter(array_map('trim', explode(',', $product['sizes']))) : [];
+                        $hasSizes = !empty($customSizesList) || ($isJacket || $isShoes || $isBelts);
+                        $defaultSize = !empty($customSizesList) ? reset($customSizesList) : ($isJacket ? '38 (S)' : ($isShoes ? 'UK 8 / US 9' : ($isBelts ? '34 in' : 'Standard Fit')));
                     ?>
                     <?php if ($hasSizes): ?>
                         <div class="pdp-size-block mb-3">
@@ -231,7 +233,11 @@ require __DIR__ . '/../layouts/header.php';
                             </div>
 
                             <div class="d-flex flex-wrap gap-1.5" id="productSizeOptions">
-                                <?php if ($isJacket): ?>
+                                <?php if (!empty($customSizesList)): ?>
+                                    <?php foreach ($customSizesList as $sIdx => $sVal): ?>
+                                        <button type="button" class="size-pill-btn <?= ($sIdx === 0) ? 'active' : '' ?>" onclick="selectProductSize(this, '<?= e($sVal) ?>')"><?= e($sVal) ?></button>
+                                    <?php endforeach; ?>
+                                <?php elseif ($isJacket): ?>
                                     <button type="button" class="size-pill-btn active" onclick="selectProductSize(this, '38 (S)')">38 (S)</button>
                                     <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 (M)')">40 (M)</button>
                                     <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '42 (L)')">42 (L)</button>
@@ -251,7 +257,7 @@ require __DIR__ . '/../layouts/header.php';
                                     <button type="button" class="size-pill-btn" onclick="selectProductSize(this, '40 in')">40"</button>
                                 <?php endif; ?>
                             </div>
-                            <input type="hidden" id="selectedProductSize" value="<?= $isJacket ? '38 (S)' : ($isShoes ? 'UK 8 / US 9' : '34 in') ?>">
+                            <input type="hidden" id="selectedProductSize" value="<?= e($defaultSize) ?>">
                         </div>
                     <?php else: ?>
                         <input type="hidden" id="selectedProductSize" value="Standard Fit">

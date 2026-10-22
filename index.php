@@ -940,6 +940,7 @@ switch ($route) {
             $categoryId = (int)($_POST['category_id'] ?? 1);
             $leatherType = trim($_POST['leather_type'] ?? 'Full-Grain Artisan Leather');
             $hardwareFinish = trim($_POST['hardware_finish'] ?? 'Antique Brass');
+            $sizes = trim($_POST['sizes'] ?? 'S, M, L, XL, XXL');
             $color = trim($_POST['color'] ?? 'Espresso Brown, Cognac Tan, Classic Black');
             if (!empty($_POST['color_names']) && is_array($_POST['color_names'])) {
                 $cleanNames = array_values(array_filter(array_map('trim', $_POST['color_names'])));
@@ -962,6 +963,12 @@ switch ($route) {
                 $uploadedColorPhotos = upload_multiple_images('color_photos', 'products');
             }
 
+            // Upload gallery images
+            $uploadedGallery = [];
+            if (isset($_FILES['gallery_images'])) {
+                $uploadedGallery = upload_multiple_images('gallery_images', 'products');
+            }
+
             // Primary image upload or fallback
             $primaryImage = null;
             if (isset($_FILES['primary_image']) && $_FILES['primary_image']['error'] === UPLOAD_ERR_OK) {
@@ -974,21 +981,24 @@ switch ($route) {
             }
 
             if (!$primaryImage) {
-                if (!empty($uploadedColorPhotos)) {
+                if (!empty($uploadedGallery)) {
+                    $primaryImage = reset($uploadedGallery);
+                } elseif (!empty($uploadedColorPhotos)) {
                     $primaryImage = reset($uploadedColorPhotos);
                 } else {
                     $primaryImage = 'assets/images/products/briefcase-1.jpg';
                 }
             }
 
-            // Insert product
-            $insProd = $db->prepare("INSERT INTO products (sku, title, slug, category_id, leather_type, hardware_finish, color, dimensions, short_description, detailed_description, care_instructions, primary_image, is_featured, is_bestseller, is_new_arrival, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $insProd->execute([$sku, $title, $slug, $categoryId, $leatherType, $hardwareFinish, $color, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status]);
+            // Insert product with sizes & hardware_finish
+            $insProd = $db->prepare("INSERT INTO products (sku, title, slug, category_id, leather_type, hardware_finish, color, sizes, dimensions, short_description, detailed_description, care_instructions, primary_image, is_featured, is_bestseller, is_new_arrival, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insProd->execute([$sku, $title, $slug, $categoryId, $leatherType, $hardwareFinish, $color, $sizes, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status]);
             $productId = (int)$db->lastInsertId();
 
             // Populate product_country_pricing
             $basePrice = (float)($_POST['original_price'] ?? 150.00);
-            $discountPrice = !empty($_POST['discount_price']) ? (float)$_POST['discount_price'] : null;
+            $sellPrice = !empty($_POST['selling_price']) ? (float)$_POST['selling_price'] : (!empty($_POST['discount_price']) ? (float)$_POST['discount_price'] : null);
+            $discountPrice = ($sellPrice !== null && $sellPrice < $basePrice) ? $sellPrice : null;
             $discStart = !empty($_POST['discount_start_date']) ? $_POST['discount_start_date'] : null;
             $discEnd = !empty($_POST['discount_end_date']) ? $_POST['discount_end_date'] : null;
             $stockQty = (int)($_POST['stock_quantity'] ?? 25);
@@ -1020,17 +1030,18 @@ switch ($route) {
             if (!empty($uploadedColorPhotos)) {
                 $colorNames = $_POST['color_names'] ?? [];
                 foreach ($uploadedColorPhotos as $idx => $imgPath) {
+                    if ($imgPath === $primaryImage) continue;
                     $cTag = !empty($colorNames[$idx]) ? trim($colorNames[$idx]) : null;
                     $insImg->execute([$productId, $imgPath, $title . ' - ' . ($cTag ?: 'Color ' . $order), $cTag, $order]);
                     $order++;
                 }
             }
 
-            // Legacy gallery images support
-            if (isset($_FILES['gallery_images'])) {
-                $uploadedGallery = upload_multiple_images('gallery_images', 'products');
+            // Gallery images support
+            if (!empty($uploadedGallery)) {
                 $galleryColors = $_POST['gallery_colors'] ?? [];
                 foreach ($uploadedGallery as $idx => $imgPath) {
+                    if ($imgPath === $primaryImage) continue;
                     $colorTag = !empty($galleryColors[$idx]) ? trim($galleryColors[$idx]) : null;
                     $insImg->execute([$productId, $imgPath, $title . ' - ' . ($colorTag ?: 'Angle ' . $order), $colorTag, $order]);
                     $order++;
@@ -1084,7 +1095,9 @@ switch ($route) {
             $slug = slugify(trim($_POST['slug'] ?? '') ?: $title);
             $sku = strtoupper(trim($_POST['sku'] ?? $product['sku']));
             $categoryId = (int)($_POST['category_id'] ?? $product['category_id']);
-            $leatherType = trim($_POST['leather_type'] ?? $product['leather_type']);
+            $leatherType = trim($_POST['leather_type'] ?? ($product['leather_type'] ?? 'Full-Grain Artisan Leather'));
+            $hardwareFinish = trim($_POST['hardware_finish'] ?? ($product['hardware_finish'] ?? 'Antique Brass'));
+            $sizes = trim($_POST['sizes'] ?? ($product['sizes'] ?? 'S, M, L, XL, XXL'));
             $color = trim($_POST['color'] ?? $product['color']);
             $allActiveColors = [];
             $deletedIds = $_POST['delete_image_ids'] ?? [];
@@ -1124,18 +1137,19 @@ switch ($route) {
             }
 
             // Update master product
-            $upProd = $db->prepare("UPDATE products SET title = ?, slug = ?, sku = ?, category_id = ?, leather_type = ?, color = ?, dimensions = ?, short_description = ?, detailed_description = ?, care_instructions = ?, primary_image = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?, status = ? WHERE id = ?");
-            $upProd->execute([$title, $slug, $sku, $categoryId, $leatherType, $color, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status, $productId]);
+            $upProd = $db->prepare("UPDATE products SET title = ?, slug = ?, sku = ?, category_id = ?, leather_type = ?, hardware_finish = ?, color = ?, sizes = ?, dimensions = ?, short_description = ?, detailed_description = ?, care_instructions = ?, primary_image = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?, status = ? WHERE id = ?");
+            $upProd->execute([$title, $slug, $sku, $categoryId, $leatherType, $hardwareFinish, $color, $sizes, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status, $productId]);
 
             // Update country pricing & stock for current country
             if (isset($_POST['original_price'])) {
                 $origPrice = (float)$_POST['original_price'];
-                $discPrice = !empty($_POST['discount_price']) ? (float)$_POST['discount_price'] : null;
+                $sellPrice = !empty($_POST['selling_price']) ? (float)$_POST['selling_price'] : (!empty($_POST['discount_price']) ? (float)$_POST['discount_price'] : null);
+                $discPrice = ($sellPrice !== null && $sellPrice < $origPrice) ? $sellPrice : null;
                 $discStart = !empty($_POST['discount_start_date']) ? $_POST['discount_start_date'] : null;
                 $discEnd = !empty($_POST['discount_end_date']) ? $_POST['discount_end_date'] : null;
                 $stockQty = (int)($_POST['stock_quantity'] ?? 0);
                 $threshold = (int)($_POST['low_stock_threshold'] ?? 5);
-                $isAvailable = isset($_POST['is_available']) ? 1 : 0;
+                $isAvailable = isset($_POST['is_available']) ? 1 : 1;
 
                 $upPcp = $db->prepare("INSERT INTO product_country_pricing (product_id, country_id, original_price, discount_price, discount_start_date, discount_end_date, stock_quantity, low_stock_threshold, is_available) 
                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
