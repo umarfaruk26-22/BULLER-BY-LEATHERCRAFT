@@ -12,11 +12,16 @@ define('APP_NAME', 'Buller Leather');
 define('APP_TAGLINE', 'Generational Leather Craftsmanship & Heritage Luxury');
 define('APP_VERSION', '1.0.0');
 
+// If accessed via old staging URL (nexalogictechno.com/buller), 301 Redirect to official domain
+if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'nexalogictechno.com') !== false) {
+    $uri = $_SERVER['REQUEST_URI'] ?? '/';
+    $cleanUri = preg_replace('#^/buller(/|$)#', '/', $uri);
+    header("Location: https://bullerleather.com" . $cleanUri, true, 301);
+    exit;
+}
+
 // Database Credentials (XAMPP / MySQL & Live Hostinger)
-$isLive = (isset($_SERVER['HTTP_HOST']) && (
-    strpos($_SERVER['HTTP_HOST'], 'nexalogictechno.com') !== false ||
-    strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false
-));
+$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false);
 
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');

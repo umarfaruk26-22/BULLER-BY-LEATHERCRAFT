@@ -1,7 +1,7 @@
 <?php
 /**
  * BULLER LEATHER — AUTOMATED 1-CLICK WEB INSTALLER FOR HOSTINGER
- * Access via: https://nexalogictechno.com/buller/install.php
+ * Access via: https://bullerleather.com/install.php
  */
 
 ini_set('display_errors', 1);
@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="install-card">
         <div class="brand-title">BULLER LEATHER</div>
-        <p class="text-center text-muted small mb-4">Hostinger 1-Click Automated Setup for <code>nexalogictechno.com/buller</code></p>
+        <p class="text-center text-muted small mb-4">Hostinger 1-Click Automated Setup for <code>bullerleather.com</code></p>
 
         <?php if ($installed): ?>
             <div class="alert alert-success bg-opacity-10 border border-success text-success p-3 rounded mb-3">
