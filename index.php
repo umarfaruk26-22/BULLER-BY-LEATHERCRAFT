@@ -941,6 +941,12 @@ switch ($route) {
             $leatherType = trim($_POST['leather_type'] ?? 'Full-Grain Artisan Leather');
             $hardwareFinish = trim($_POST['hardware_finish'] ?? 'Antique Brass');
             $color = trim($_POST['color'] ?? 'Espresso Brown, Cognac Tan, Classic Black');
+            if (!empty($_POST['color_names']) && is_array($_POST['color_names'])) {
+                $cleanNames = array_values(array_filter(array_map('trim', $_POST['color_names'])));
+                if (!empty($cleanNames)) {
+                    $color = implode(', ', array_unique($cleanNames));
+                }
+            }
             $dimensions = trim($_POST['dimensions'] ?? '');
             $shortDesc = trim($_POST['short_description'] ?? '');
             $detailedDesc = trim($_POST['detailed_description'] ?? '');
@@ -950,8 +956,14 @@ switch ($route) {
             $isNewArrival = isset($_POST['is_new_arrival']) ? 1 : 0;
             $status = in_array($_POST['status'] ?? '', ['published', 'draft', 'archived']) ? $_POST['status'] : 'published';
 
+            // Upload dedicated color photos
+            $uploadedColorPhotos = [];
+            if (isset($_FILES['color_photos'])) {
+                $uploadedColorPhotos = upload_multiple_images('color_photos', 'products');
+            }
+
             // Primary image upload or fallback
-            $primaryImage = 'assets/images/products/briefcase-1.jpg';
+            $primaryImage = null;
             if (isset($_FILES['primary_image']) && $_FILES['primary_image']['error'] === UPLOAD_ERR_OK) {
                 $uploaded = upload_image_file($_FILES['primary_image'], 'products');
                 if ($uploaded) {
@@ -959,6 +971,14 @@ switch ($route) {
                 }
             } elseif (!empty($_POST['primary_image_url'])) {
                 $primaryImage = trim($_POST['primary_image_url']);
+            }
+
+            if (!$primaryImage) {
+                if (!empty($uploadedColorPhotos)) {
+                    $primaryImage = reset($uploadedColorPhotos);
+                } else {
+                    $primaryImage = 'assets/images/products/briefcase-1.jpg';
+                }
             }
 
             // Insert product
@@ -989,8 +1009,6 @@ switch ($route) {
             }
 
             // Gallery images & color assignments
-            $uploadedGallery = upload_multiple_images('gallery_images', 'products');
-            $galleryColors = $_POST['gallery_colors'] ?? [];
             $insImg = $db->prepare("INSERT INTO product_images (product_id, image_url, alt_text, color_name, sort_order) VALUES (?, ?, ?, ?, ?)");
             
             // First color from comma-separated list
@@ -998,10 +1016,25 @@ switch ($route) {
             $insImg->execute([$productId, $primaryImage, $title . ' Primary View', $firstColor, 0]);
 
             $order = 1;
-            foreach ($uploadedGallery as $idx => $imgPath) {
-                $colorTag = !empty($galleryColors[$idx]) ? trim($galleryColors[$idx]) : null;
-                $insImg->execute([$productId, $imgPath, $title . ' - ' . ($colorTag ?: 'Angle ' . $order), $colorTag, $order]);
-                $order++;
+            // Insert color-dedicated photos
+            if (!empty($uploadedColorPhotos)) {
+                $colorNames = $_POST['color_names'] ?? [];
+                foreach ($uploadedColorPhotos as $idx => $imgPath) {
+                    $cTag = !empty($colorNames[$idx]) ? trim($colorNames[$idx]) : null;
+                    $insImg->execute([$productId, $imgPath, $title . ' - ' . ($cTag ?: 'Color ' . $order), $cTag, $order]);
+                    $order++;
+                }
+            }
+
+            // Legacy gallery images support
+            if (isset($_FILES['gallery_images'])) {
+                $uploadedGallery = upload_multiple_images('gallery_images', 'products');
+                $galleryColors = $_POST['gallery_colors'] ?? [];
+                foreach ($uploadedGallery as $idx => $imgPath) {
+                    $colorTag = !empty($galleryColors[$idx]) ? trim($galleryColors[$idx]) : null;
+                    $insImg->execute([$productId, $imgPath, $title . ' - ' . ($colorTag ?: 'Angle ' . $order), $colorTag, $order]);
+                    $order++;
+                }
             }
 
             AuditLogger::log(Auth::id(), 'create_product', 'products', $productId, ['title' => $title, 'sku' => $sku]);
@@ -1053,6 +1086,26 @@ switch ($route) {
             $categoryId = (int)($_POST['category_id'] ?? $product['category_id']);
             $leatherType = trim($_POST['leather_type'] ?? $product['leather_type']);
             $color = trim($_POST['color'] ?? $product['color']);
+            $allActiveColors = [];
+            $deletedIds = $_POST['delete_image_ids'] ?? [];
+
+            if (!empty($_POST['existing_color_name']) && is_array($_POST['existing_color_name'])) {
+                foreach ($_POST['existing_color_name'] as $imgId => $cName) {
+                    if (!in_array((string)$imgId, array_map('strval', $deletedIds)) && trim($cName)) {
+                        $allActiveColors[] = trim($cName);
+                    }
+                }
+            }
+            if (!empty($_POST['new_color_names']) && is_array($_POST['new_color_names'])) {
+                foreach ($_POST['new_color_names'] as $cName) {
+                    if (trim($cName)) {
+                        $allActiveColors[] = trim($cName);
+                    }
+                }
+            }
+            if (!empty($allActiveColors)) {
+                $color = implode(', ', array_unique($allActiveColors));
+            }
             $dimensions = trim($_POST['dimensions'] ?? $product['dimensions']);
             $shortDesc = trim($_POST['short_description'] ?? $product['short_description']);
             $detailedDesc = trim($_POST['detailed_description'] ?? $product['detailed_description']);
@@ -1090,7 +1143,24 @@ switch ($route) {
                 $upPcp->execute([$productId, $currentCountryId, $origPrice, $discPrice, $discStart, $discEnd, $stockQty, $threshold, $isAvailable]);
             }
 
-            // Update color associations on existing gallery images
+            // 1. Delete removed photos
+            if (!empty($deletedIds) && is_array($deletedIds)) {
+                $delStmt = $db->prepare("DELETE FROM product_images WHERE id = ? AND product_id = ?");
+                foreach ($deletedIds as $dId) {
+                    $delStmt->execute([(int)$dId, $productId]);
+                }
+            }
+
+            // 2. Update color names on existing images
+            if (!empty($_POST['existing_color_name']) && is_array($_POST['existing_color_name'])) {
+                $upImgColor = $db->prepare("UPDATE product_images SET color_name = ? WHERE id = ? AND product_id = ?");
+                foreach ($_POST['existing_color_name'] as $imgId => $cName) {
+                    if (!in_array((string)$imgId, array_map('strval', $deletedIds))) {
+                        $cVal = trim($cName) ?: null;
+                        $upImgColor->execute([$cVal, (int)$imgId, $productId]);
+                    }
+                }
+            }
             if (!empty($_POST['existing_image_color']) && is_array($_POST['existing_image_color'])) {
                 $upImgColor = $db->prepare("UPDATE product_images SET color_name = ? WHERE id = ? AND product_id = ?");
                 foreach ($_POST['existing_image_color'] as $imgId => $cName) {
@@ -1099,7 +1169,44 @@ switch ($route) {
                 }
             }
 
-            // Upload any new gallery photos
+            // 3. Replace existing photos if new file was selected
+            if (isset($_FILES['replace_color_photo']) && is_array($_FILES['replace_color_photo']['name'])) {
+                $upImgUrl = $db->prepare("UPDATE product_images SET image_url = ? WHERE id = ? AND product_id = ?");
+                foreach ($_FILES['replace_color_photo']['name'] as $imgId => $rName) {
+                    if (!empty($rName) && $_FILES['replace_color_photo']['error'][$imgId] === UPLOAD_ERR_OK) {
+                        $singleFile = [
+                            'name'     => $_FILES['replace_color_photo']['name'][$imgId],
+                            'type'     => $_FILES['replace_color_photo']['type'][$imgId],
+                            'tmp_name' => $_FILES['replace_color_photo']['tmp_name'][$imgId],
+                            'error'    => $_FILES['replace_color_photo']['error'][$imgId],
+                            'size'     => $_FILES['replace_color_photo']['size'][$imgId],
+                        ];
+                        $uploadedPath = upload_image_file($singleFile, 'products');
+                        if ($uploadedPath) {
+                            $upImgUrl->execute([$uploadedPath, (int)$imgId, $productId]);
+                        }
+                    }
+                }
+            }
+
+            // 4. Upload any new dedicated color photos
+            if (isset($_FILES['new_color_photos'])) {
+                $newUploaded = upload_multiple_images('new_color_photos', 'products');
+                $newNames = $_POST['new_color_names'] ?? [];
+                $insImg = $db->prepare("INSERT INTO product_images (product_id, image_url, alt_text, color_name, sort_order) VALUES (?, ?, ?, ?, ?)");
+                
+                $maxStmt = $db->prepare("SELECT COALESCE(MAX(sort_order), 0) FROM product_images WHERE product_id = ?");
+                $maxStmt->execute([$productId]);
+                $currMax = (int)$maxStmt->fetchColumn();
+
+                foreach ($newUploaded as $idx => $imgPath) {
+                    $currMax++;
+                    $cTag = !empty($newNames[$idx]) ? trim($newNames[$idx]) : null;
+                    $insImg->execute([$productId, $imgPath, $title . ' - ' . ($cTag ?: 'Variant'), $cTag, $currMax]);
+                }
+            }
+
+            // 5. Legacy gallery photos support
             if (isset($_FILES['gallery_images'])) {
                 $newUploaded = upload_multiple_images('gallery_images', 'products');
                 $newGalleryColors = $_POST['gallery_colors'] ?? [];
