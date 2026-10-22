@@ -153,6 +153,7 @@ CREATE TABLE `product_images` (
     `product_id` INT NOT NULL,
     `image_url` VARCHAR(255) NOT NULL,
     `alt_text` VARCHAR(200) NULL,
+    `color_name` VARCHAR(100) NULL DEFAULT NULL,
     `sort_order` INT NOT NULL DEFAULT 0,
     CONSTRAINT `fk_pi_product` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

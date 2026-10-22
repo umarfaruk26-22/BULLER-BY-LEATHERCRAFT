@@ -730,6 +730,7 @@ switch ($route) {
         Auth::requireSuperAdmin();
         $catStmt = $db->query("SELECT p.*, c.name as category_name FROM products p JOIN categories c ON p.category_id = c.id ORDER BY p.id ASC");
         $catalog = $catStmt->fetchAll();
+        $imgStmt = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY sort_order ASC, id ASC");
         foreach ($catalog as &$prod) {
             $prStmt = $db->prepare("SELECT pcp.*, co.name as country_name, co.code as country_code, co.currency_symbol, co.currency_code 
                                     FROM product_country_pricing pcp 
@@ -737,7 +738,11 @@ switch ($route) {
                                     WHERE pcp.product_id = ? ORDER BY co.id ASC");
             $prStmt->execute([$prod['id']]);
             $prod['country_prices'] = $prStmt->fetchAll();
+
+            $imgStmt->execute([$prod['id']]);
+            $prod['gallery_images'] = $imgStmt->fetchAll();
         }
+        $allCategories = $db->query("SELECT * FROM categories ORDER BY sort_order ASC, name ASC")->fetchAll();
         require __DIR__ . '/app/views/superadmin/products.php';
         break;
 
@@ -874,6 +879,14 @@ switch ($route) {
             $prodStmt->execute([$selectedCountryId]);
             $products = $prodStmt->fetchAll();
 
+            $imgStmt = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY sort_order ASC, id ASC");
+            foreach ($products as &$p) {
+                $imgStmt->execute([$p['id']]);
+                $p['gallery_images'] = $imgStmt->fetchAll();
+            }
+
+            $allCategories = $db->query("SELECT * FROM categories ORDER BY sort_order ASC, name ASC")->fetchAll();
+
             require __DIR__ . '/app/views/admin/products.php';
         } elseif ($route === 'admin/orders') {
             $ordSql = "SELECT * FROM orders WHERE country_id = ? ORDER BY id DESC";
@@ -885,6 +898,249 @@ switch ($route) {
         }
         break;
 
+    // ---------------------------------------------------------------------
+    // PRODUCT CRUD ACTIONS (COUNTRY ADMIN & SUPER ADMIN)
+    // ---------------------------------------------------------------------
+    case 'admin/products/create':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("Security token mismatch.");
+
+            $title = trim($_POST['title'] ?? '');
+            if (empty($title)) {
+                flash('admin_error', 'Product Title is required.');
+                redirect('admin/products');
+            }
+
+            $slug = slugify(trim($_POST['slug'] ?? '') ?: $title);
+            $sku = strtoupper(trim($_POST['sku'] ?? ''));
+            if (empty($sku)) {
+                $sku = 'BLR-' . strtoupper(substr(md5(uniqid()), 0, 8));
+            }
+
+            // Ensure unique slug
+            $chkSlug = $db->prepare("SELECT id FROM products WHERE slug = ? LIMIT 1");
+            $chkSlug->execute([$slug]);
+            if ($chkSlug->fetch()) {
+                $slug .= '-' . rand(100, 999);
+            }
+
+            // Ensure unique SKU
+            $chkSku = $db->prepare("SELECT id FROM products WHERE sku = ? LIMIT 1");
+            $chkSku->execute([$sku]);
+            if ($chkSku->fetch()) {
+                $sku .= '-' . rand(10, 99);
+            }
+
+            $categoryId = (int)($_POST['category_id'] ?? 1);
+            $leatherType = trim($_POST['leather_type'] ?? 'Full-Grain Artisan Leather');
+            $hardwareFinish = trim($_POST['hardware_finish'] ?? 'Antique Brass');
+            $color = trim($_POST['color'] ?? 'Espresso Brown, Cognac Tan, Classic Black');
+            $dimensions = trim($_POST['dimensions'] ?? '');
+            $shortDesc = trim($_POST['short_description'] ?? '');
+            $detailedDesc = trim($_POST['detailed_description'] ?? '');
+            $careInstructions = trim($_POST['care_instructions'] ?? '');
+            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+            $isBestseller = isset($_POST['is_bestseller']) ? 1 : 0;
+            $isNewArrival = isset($_POST['is_new_arrival']) ? 1 : 0;
+            $status = in_array($_POST['status'] ?? '', ['published', 'draft', 'archived']) ? $_POST['status'] : 'published';
+
+            // Primary image upload or fallback
+            $primaryImage = 'assets/images/products/briefcase-1.jpg';
+            if (isset($_FILES['primary_image']) && $_FILES['primary_image']['error'] === UPLOAD_ERR_OK) {
+                $uploaded = upload_image_file($_FILES['primary_image'], 'products');
+                if ($uploaded) {
+                    $primaryImage = $uploaded;
+                }
+            } elseif (!empty($_POST['primary_image_url'])) {
+                $primaryImage = trim($_POST['primary_image_url']);
+            }
+
+            // Insert product
+            $insProd = $db->prepare("INSERT INTO products (sku, title, slug, category_id, leather_type, hardware_finish, color, dimensions, short_description, detailed_description, care_instructions, primary_image, is_featured, is_bestseller, is_new_arrival, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insProd->execute([$sku, $title, $slug, $categoryId, $leatherType, $hardwareFinish, $color, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status]);
+            $productId = (int)$db->lastInsertId();
+
+            // Populate product_country_pricing
+            $basePrice = (float)($_POST['original_price'] ?? 150.00);
+            $discountPrice = !empty($_POST['discount_price']) ? (float)$_POST['discount_price'] : null;
+            $discStart = !empty($_POST['discount_start_date']) ? $_POST['discount_start_date'] : null;
+            $discEnd = !empty($_POST['discount_end_date']) ? $_POST['discount_end_date'] : null;
+            $stockQty = (int)($_POST['stock_quantity'] ?? 25);
+            $threshold = (int)($_POST['low_stock_threshold'] ?? 5);
+            $currentCountryId = (int)($_POST['country_id'] ?? 1);
+
+            $allCountries = $db->query("SELECT id, currency_code FROM countries")->fetchAll();
+            $insPcp = $db->prepare("INSERT INTO product_country_pricing (product_id, country_id, original_price, discount_price, discount_start_date, discount_end_date, stock_quantity, low_stock_threshold, is_available) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)");
+            foreach ($allCountries as $c) {
+                $cPrice = $basePrice;
+                if ($c['currency_code'] === 'INR' && $basePrice < 5000) $cPrice = $basePrice * 80;
+                elseif ($c['currency_code'] === 'GBP') $cPrice = round($basePrice * 0.8, 2);
+                elseif ($c['currency_code'] === 'AED') $cPrice = round($basePrice * 3.67, 2);
+                if ((int)$c['id'] === $currentCountryId) {
+                    $cPrice = $basePrice;
+                }
+                $insPcp->execute([$productId, $c['id'], $cPrice, ((int)$c['id'] === $currentCountryId ? $discountPrice : null), ((int)$c['id'] === $currentCountryId ? $discStart : null), ((int)$c['id'] === $currentCountryId ? $discEnd : null), $stockQty, $threshold]);
+            }
+
+            // Gallery images & color assignments
+            $uploadedGallery = upload_multiple_images('gallery_images', 'products');
+            $galleryColors = $_POST['gallery_colors'] ?? [];
+            $insImg = $db->prepare("INSERT INTO product_images (product_id, image_url, alt_text, color_name, sort_order) VALUES (?, ?, ?, ?, ?)");
+            
+            // First color from comma-separated list
+            $firstColor = !empty($color) ? trim(explode(',', $color)[0]) : null;
+            $insImg->execute([$productId, $primaryImage, $title . ' Primary View', $firstColor, 0]);
+
+            $order = 1;
+            foreach ($uploadedGallery as $idx => $imgPath) {
+                $colorTag = !empty($galleryColors[$idx]) ? trim($galleryColors[$idx]) : null;
+                $insImg->execute([$productId, $imgPath, $title . ' - ' . ($colorTag ?: 'Angle ' . $order), $colorTag, $order]);
+                $order++;
+            }
+
+            AuditLogger::log(Auth::id(), 'create_product', 'products', $productId, ['title' => $title, 'sku' => $sku]);
+            flash('admin_success', "Product '{$title}' successfully published to the catalog!");
+            
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            redirect($redirectTarget);
+        }
+        break;
+
+    case 'admin/products/edit':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("Security token mismatch.");
+            $productId = (int)($_POST['product_id'] ?? 0);
+            $currentCountryId = (int)($_POST['country_id'] ?? 1);
+
+            $stmt = $db->prepare("SELECT * FROM products WHERE id = ?");
+            $stmt->execute([$productId]);
+            $product = $stmt->fetch();
+            if (!$product) {
+                flash('admin_error', 'Product not found.');
+                redirect('admin/products?country_id=' . $currentCountryId);
+            }
+
+            $title = trim($_POST['title'] ?? $product['title']);
+            $slug = slugify(trim($_POST['slug'] ?? '') ?: $title);
+            $sku = strtoupper(trim($_POST['sku'] ?? $product['sku']));
+            $categoryId = (int)($_POST['category_id'] ?? $product['category_id']);
+            $leatherType = trim($_POST['leather_type'] ?? $product['leather_type']);
+            $color = trim($_POST['color'] ?? $product['color']);
+            $dimensions = trim($_POST['dimensions'] ?? $product['dimensions']);
+            $shortDesc = trim($_POST['short_description'] ?? $product['short_description']);
+            $detailedDesc = trim($_POST['detailed_description'] ?? $product['detailed_description']);
+            $careInstructions = trim($_POST['care_instructions'] ?? $product['care_instructions']);
+            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+            $isBestseller = isset($_POST['is_bestseller']) ? 1 : 0;
+            $isNewArrival = isset($_POST['is_new_arrival']) ? 1 : 0;
+            $status = in_array($_POST['status'] ?? '', ['published', 'draft', 'archived']) ? $_POST['status'] : $product['status'];
+
+            $primaryImage = $product['primary_image'];
+            if (isset($_FILES['primary_image']) && $_FILES['primary_image']['error'] === UPLOAD_ERR_OK) {
+                $uploaded = upload_image_file($_FILES['primary_image'], 'products');
+                if ($uploaded) {
+                    $primaryImage = $uploaded;
+                }
+            }
+
+            // Update master product
+            $upProd = $db->prepare("UPDATE products SET title = ?, slug = ?, sku = ?, category_id = ?, leather_type = ?, color = ?, dimensions = ?, short_description = ?, detailed_description = ?, care_instructions = ?, primary_image = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?, status = ? WHERE id = ?");
+            $upProd->execute([$title, $slug, $sku, $categoryId, $leatherType, $color, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status, $productId]);
+
+            // Update country pricing & stock for current country
+            if (isset($_POST['original_price'])) {
+                $origPrice = (float)$_POST['original_price'];
+                $discPrice = !empty($_POST['discount_price']) ? (float)$_POST['discount_price'] : null;
+                $discStart = !empty($_POST['discount_start_date']) ? $_POST['discount_start_date'] : null;
+                $discEnd = !empty($_POST['discount_end_date']) ? $_POST['discount_end_date'] : null;
+                $stockQty = (int)($_POST['stock_quantity'] ?? 0);
+                $threshold = (int)($_POST['low_stock_threshold'] ?? 5);
+                $isAvailable = isset($_POST['is_available']) ? 1 : 0;
+
+                $upPcp = $db->prepare("INSERT INTO product_country_pricing (product_id, country_id, original_price, discount_price, discount_start_date, discount_end_date, stock_quantity, low_stock_threshold, is_available) 
+                                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+                                       ON DUPLICATE KEY UPDATE original_price = VALUES(original_price), discount_price = VALUES(discount_price), discount_start_date = VALUES(discount_start_date), discount_end_date = VALUES(discount_end_date), stock_quantity = VALUES(stock_quantity), low_stock_threshold = VALUES(low_stock_threshold), is_available = VALUES(is_available)");
+                $upPcp->execute([$productId, $currentCountryId, $origPrice, $discPrice, $discStart, $discEnd, $stockQty, $threshold, $isAvailable]);
+            }
+
+            // Update color associations on existing gallery images
+            if (!empty($_POST['existing_image_color']) && is_array($_POST['existing_image_color'])) {
+                $upImgColor = $db->prepare("UPDATE product_images SET color_name = ? WHERE id = ? AND product_id = ?");
+                foreach ($_POST['existing_image_color'] as $imgId => $cName) {
+                    $cVal = trim($cName) ?: null;
+                    $upImgColor->execute([$cVal, (int)$imgId, $productId]);
+                }
+            }
+
+            // Upload any new gallery photos
+            if (isset($_FILES['gallery_images'])) {
+                $newUploaded = upload_multiple_images('gallery_images', 'products');
+                $newGalleryColors = $_POST['gallery_colors'] ?? [];
+                $insImg = $db->prepare("INSERT INTO product_images (product_id, image_url, alt_text, color_name, sort_order) VALUES (?, ?, ?, ?, ?)");
+                
+                $maxStmt = $db->prepare("SELECT COALESCE(MAX(sort_order), 0) FROM product_images WHERE product_id = ?");
+                $maxStmt->execute([$productId]);
+                $currMax = (int)$maxStmt->fetchColumn();
+
+                foreach ($newUploaded as $idx => $imgPath) {
+                    $currMax++;
+                    $cTag = !empty($newGalleryColors[$idx]) ? trim($newGalleryColors[$idx]) : null;
+                    $insImg->execute([$productId, $imgPath, $title . ' - ' . ($cTag ?: 'Gallery'), $cTag, $currMax]);
+                }
+            }
+
+            AuditLogger::log(Auth::id(), 'update_product', 'products', $productId, ['title' => $title]);
+            flash('admin_success', "Product '{$title}' updated successfully!");
+
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            redirect($redirectTarget);
+        }
+        break;
+
+    case 'admin/products/delete':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("Security token mismatch.");
+            $productId = (int)($_POST['product_id'] ?? 0);
+            $currentCountryId = (int)($_POST['country_id'] ?? 1);
+
+            $stmt = $db->prepare("SELECT title FROM products WHERE id = ?");
+            $stmt->execute([$productId]);
+            $title = $stmt->fetchColumn() ?: 'Product';
+
+            $db->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$productId]);
+            $db->prepare("DELETE FROM product_country_pricing WHERE product_id = ?")->execute([$productId]);
+            $db->prepare("DELETE FROM cart_items WHERE product_id = ?")->execute([$productId]);
+            $db->prepare("DELETE FROM wishlist_items WHERE product_id = ?")->execute([$productId]);
+            $db->prepare("DELETE FROM products WHERE id = ?")->execute([$productId]);
+
+            AuditLogger::log(Auth::id(), 'delete_product', 'products', $productId, ['title' => $title]);
+            flash('admin_success', "Product '{$title}' permanently removed from catalog.");
+
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            redirect($redirectTarget);
+        }
+        break;
+
+    case 'admin/products/delete-image':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
+            $imageId = (int)($_POST['image_id'] ?? 0);
+            $productId = (int)($_POST['product_id'] ?? 0);
+            $currentCountryId = (int)($_POST['country_id'] ?? 1);
+
+            $db->prepare("DELETE FROM product_images WHERE id = ?")->execute([$imageId]);
+            AuditLogger::log(Auth::id(), 'delete_product_image', 'product_images', $imageId, ['product_id' => $productId]);
+            flash('admin_success', 'Gallery photo removed.');
+
+            $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : ('admin/products?country_id=' . $currentCountryId);
+            redirect($redirectTarget);
+        }
+        break;
+
     case 'admin/products/update-pricing':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -892,7 +1148,6 @@ switch ($route) {
             $countryId = (int)($_POST['country_id'] ?? 0);
             $productId = (int)($_POST['product_id'] ?? 0);
 
-            // Strict authorization check
             Auth::enforceCountryAccess($countryId);
 
             $originalPrice = (float)($_POST['original_price'] ?? 0);
@@ -911,6 +1166,119 @@ switch ($route) {
             AuditLogger::log(Auth::id(), 'update_pricing', 'product_country_pricing', $productId, ['country_id' => $countryId, 'price' => $originalPrice, 'discount' => $discountPrice]);
             flash('admin_success', 'Regional pricing and stock levels successfully updated.');
             redirect('admin/products?country_id=' . $countryId);
+        }
+        break;
+
+    // ---------------------------------------------------------------------
+    // CATEGORY CRUD ACTIONS (COUNTRY ADMIN & SUPER ADMIN)
+    // ---------------------------------------------------------------------
+    case 'admin/categories':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        $catSql = "SELECT c.*, COUNT(p.id) as product_count 
+                   FROM categories c 
+                   LEFT JOIN products p ON c.id = p.category_id 
+                   GROUP BY c.id 
+                   ORDER BY c.sort_order ASC, c.name ASC";
+        $categories = $db->query($catSql)->fetchAll();
+        require __DIR__ . '/app/views/admin/categories.php';
+        break;
+
+    case 'admin/categories/create':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF validation error.");
+            $name = trim($_POST['name'] ?? '');
+            if (empty($name)) {
+                flash('admin_error', 'Category Name is required.');
+                redirect('admin/categories');
+            }
+            $slug = slugify(trim($_POST['slug'] ?? '') ?: $name);
+            $description = trim($_POST['description'] ?? '');
+            $sortOrder = (int)($_POST['sort_order'] ?? 0);
+            $status = in_array($_POST['status'] ?? '', ['active', 'inactive']) ? $_POST['status'] : 'active';
+
+            $check = $db->prepare("SELECT id FROM categories WHERE slug = ? LIMIT 1");
+            $check->execute([$slug]);
+            if ($check->fetch()) {
+                $slug .= '-' . time();
+            }
+
+            $imageUrl = null;
+            if (isset($_FILES['category_image']) && $_FILES['category_image']['error'] === UPLOAD_ERR_OK) {
+                $imageUrl = upload_image_file($_FILES['category_image'], 'categories');
+            }
+
+            $stmt = $db->prepare("INSERT INTO categories (name, slug, description, image_url, sort_order, status) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $slug, $description, $imageUrl, $sortOrder, $status]);
+            $newCatId = (int)$db->lastInsertId();
+
+            AuditLogger::log(Auth::id(), 'create_category', 'categories', $newCatId, ['name' => $name, 'slug' => $slug]);
+            flash('admin_success', "Category '{$name}' successfully created.");
+            redirect('admin/categories');
+        }
+        break;
+
+    case 'admin/categories/edit':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF validation error.");
+            $catId = (int)($_POST['category_id'] ?? 0);
+            $name = trim($_POST['name'] ?? '');
+            $slug = slugify(trim($_POST['slug'] ?? '') ?: $name);
+            $description = trim($_POST['description'] ?? '');
+            $sortOrder = (int)($_POST['sort_order'] ?? 0);
+            $status = in_array($_POST['status'] ?? '', ['active', 'inactive']) ? $_POST['status'] : 'active';
+
+            $exStmt = $db->prepare("SELECT * FROM categories WHERE id = ?");
+            $exStmt->execute([$catId]);
+            $existing = $exStmt->fetch();
+            if (!$existing) {
+                flash('admin_error', 'Category not found.');
+                redirect('admin/categories');
+            }
+
+            $check = $db->prepare("SELECT id FROM categories WHERE slug = ? AND id != ? LIMIT 1");
+            $check->execute([$slug, $catId]);
+            if ($check->fetch()) {
+                $slug .= '-' . time();
+            }
+
+            $imageUrl = $existing['image_url'];
+            if (isset($_FILES['category_image']) && $_FILES['category_image']['error'] === UPLOAD_ERR_OK) {
+                $uploaded = upload_image_file($_FILES['category_image'], 'categories');
+                if ($uploaded) {
+                    $imageUrl = $uploaded;
+                }
+            }
+
+            $stmt = $db->prepare("UPDATE categories SET name = ?, slug = ?, description = ?, image_url = ?, sort_order = ?, status = ? WHERE id = ?");
+            $stmt->execute([$name, $slug, $description, $imageUrl, $sortOrder, $status, $catId]);
+
+            AuditLogger::log(Auth::id(), 'update_category', 'categories', $catId, ['name' => $name, 'slug' => $slug]);
+            flash('admin_success', "Category '{$name}' successfully updated.");
+            redirect('admin/categories');
+        }
+        break;
+
+    case 'admin/categories/delete':
+        if (!Auth::isCountryAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF validation error.");
+            $catId = (int)($_POST['category_id'] ?? 0);
+
+            $chkStmt = $db->prepare("SELECT COUNT(*) FROM products WHERE category_id = ?");
+            $chkStmt->execute([$catId]);
+            $pCount = (int)$chkStmt->fetchColumn();
+
+            if ($pCount > 0) {
+                flash('admin_error', "Cannot delete category: {$pCount} products are currently assigned to this category. Please reassign those products first.");
+                redirect('admin/categories');
+            }
+
+            $db->prepare("DELETE FROM categories WHERE id = ?")->execute([$catId]);
+            AuditLogger::log(Auth::id(), 'delete_category', 'categories', $catId);
+            flash('admin_success', "Category permanently deleted.");
+            redirect('admin/categories');
         }
         break;
 

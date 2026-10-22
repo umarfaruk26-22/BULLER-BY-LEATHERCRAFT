@@ -77,17 +77,18 @@ require __DIR__ . '/../layouts/header.php';
                     </div>
 
                     <!-- Interactive Angle Thumbnails Strip -->
-                    <?php if (!empty($galleryImages)): ?>
-                        <div class="pdp-thumbnails-strip d-flex gap-2 mb-3 mb-md-4">
+                    <div id="pdpThumbnailsStrip" class="pdp-thumbnails-strip d-flex gap-2 mb-3 mb-md-4">
+                        <?php if (!empty($galleryImages)): ?>
                             <?php foreach ($galleryImages as $idx => $img): ?>
                                 <div class="product-thumb-box border bg-white cursor-pointer <?= ($idx === 0) ? 'active-thumb' : '' ?>" 
+                                     data-color="<?= e(strtolower(trim($img['color_name'] ?? ''))) ?>"
                                      style="border-color: <?= ($idx === 0) ? 'var(--color-gold) !important; box-shadow: 0 0 0 1px var(--color-gold);' : 'var(--color-border);' ?>"
                                      onclick="switchProductPhoto(this, '<?= asset($img['image_url']) ?>')">
                                     <img src="<?= asset($img['image_url']) ?>" alt="<?= e($img['alt_text'] ?? $product['title']) ?>" class="w-100 h-100" style="object-fit: cover;">
                                 </div>
                             <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
 
                     <!-- Craftsmanship Certification Banner (Desktop sticky column only) -->
                     <div class="p-3 bg-white border shadow-soft d-none d-lg-flex align-items-center justify-content-between rounded-1 small text-muted" style="border-color: var(--color-border);">
@@ -163,29 +164,46 @@ require __DIR__ . '/../layouts/header.php';
                     </div>
 
                     <!-- 3. Curated Leather Shade Selector -->
+                    <?php
+                    $availableColors = [];
+                    if (!empty($product['color'])) {
+                        $availableColors = array_map('trim', explode(',', $product['color']));
+                    }
+                    if (empty($availableColors)) {
+                        $availableColors = ['Espresso Brown', 'Cognac Tan', 'Classic Black'];
+                    }
+                    $activeColor = $availableColors[0];
+
+                    if (!function_exists('get_swatch_color')) {
+                        function get_swatch_color(string $c): string {
+                            $lc = strtolower($c);
+                            if (str_contains($lc, 'black') || str_contains($lc, 'raven') || str_contains($lc, 'obsidian') || str_contains($lc, 'noir')) return '#181818';
+                            if (str_contains($lc, 'cognac') || str_contains($lc, 'tan') || str_contains($lc, 'caramel') || str_contains($lc, 'camel')) return '#9a532e';
+                            if (str_contains($lc, 'espresso') || str_contains($lc, 'dark brown') || str_contains($lc, 'chocolate')) return '#2e1c14';
+                            if (str_contains($lc, 'mahogany') || str_contains($lc, 'oxblood') || str_contains($lc, 'burgundy') || str_contains($lc, 'wine')) return '#4c1e1a';
+                            if (str_contains($lc, 'navy') || str_contains($lc, 'blue')) return '#1c2833';
+                            if (str_contains($lc, 'olive') || str_contains($lc, 'green')) return '#3d493a';
+                            if (str_contains($lc, 'grey') || str_contains($lc, 'gray')) return '#4f4f4f';
+                            return '#4a2c1d';
+                        }
+                    }
+                    ?>
                     <div class="pdp-color-block mb-3">
                         <div class="d-flex align-items-center justify-content-between mb-1.5">
                             <div class="small">
                                 <span class="text-muted">Curated Leather:</span>
-                                <strong id="selectedColorName" class="text-dark ms-1" style="font-size: 0.82rem;"><?= e($product['color'] ?? 'Heritage Deep Espresso') ?></strong>
+                                <strong id="selectedColorName" class="text-dark ms-1" style="font-size: 0.82rem;"><?= e($activeColor) ?></strong>
                             </div>
                         </div>
                         
                         <div class="d-flex align-items-center gap-2" id="productColorOptions">
-                            <button type="button" class="color-swatch-btn active" onclick="selectProductColor(this, '<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>')" title="<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>">
-                                <span class="swatch-circle" style="background-color: <?= ($product['color'] === 'Espresso Brown' || $product['color'] === 'Dark Mahogany') ? '#2e1c14' : (($product['color'] === 'Cognac Tan' || str_contains($product['color'] ?? '', 'Tan') || str_contains($product['color'] ?? '', 'Chestnut')) ? '#8c4a2f' : '#1a1a1a') ?>;"></span>
-                            </button>
-                            <button type="button" class="color-swatch-btn" onclick="selectProductColor(this, 'Tuscan Cognac Tan')" title="Tuscan Cognac Tan">
-                                <span class="swatch-circle" style="background-color: #8c4a2f;"></span>
-                            </button>
-                            <button type="button" class="color-swatch-btn" onclick="selectProductColor(this, 'Obsidian Raven Black')" title="Obsidian Raven Black">
-                                <span class="swatch-circle" style="background-color: #161616;"></span>
-                            </button>
-                            <button type="button" class="color-swatch-btn" onclick="selectProductColor(this, 'Dark Mahogany Brown')" title="Dark Mahogany Brown">
-                                <span class="swatch-circle" style="background-color: #3b2219;"></span>
-                            </button>
+                            <?php foreach ($availableColors as $cIdx => $cName): ?>
+                                <button type="button" class="color-swatch-btn <?= ($cIdx === 0) ? 'active' : '' ?>" onclick="selectProductColor(this, '<?= e(addslashes($cName)) ?>')" title="<?= e($cName) ?>">
+                                    <span class="swatch-circle" style="background-color: <?= get_swatch_color($cName) ?>;"></span>
+                                </button>
+                            <?php endforeach; ?>
                         </div>
-                        <input type="hidden" id="selectedProductColor" value="<?= e($product['color'] ?? 'Heritage Deep Espresso') ?>">
+                        <input type="hidden" id="selectedProductColor" value="<?= e($activeColor) ?>">
                     </div>
 
                     <!-- 4. Dynamic Size Selector (Only for categories with real sizes: Jackets, Shoes, Belts) -->
@@ -1239,15 +1257,32 @@ require __DIR__ . '/../layouts/header.php';
 </style>
 
 <script>
+const productGallery = <?= json_encode(array_map(function($g) {
+    return [
+        'url' => asset($g['image_url']),
+        'alt' => $g['alt_text'] ?? '',
+        'color' => strtolower(trim($g['color_name'] ?? ''))
+    ];
+}, $galleryImages)) ?>;
+
 // Switch main gallery photo
 function switchProductPhoto(thumbElement, newSrc) {
-    document.getElementById('mainProductPhoto').src = newSrc;
+    const mainImg = document.getElementById('mainProductPhoto');
+    if (mainImg) {
+        mainImg.style.opacity = '0.5';
+        setTimeout(() => {
+            mainImg.src = newSrc;
+            mainImg.style.opacity = '1';
+        }, 100);
+    }
     document.querySelectorAll('.product-thumb-box').forEach(el => {
         el.classList.remove('active-thumb');
         el.style.borderColor = 'var(--color-border)';
     });
-    thumbElement.classList.add('active-thumb');
-    thumbElement.style.borderColor = 'var(--color-gold)';
+    if (thumbElement) {
+        thumbElement.classList.add('active-thumb');
+        thumbElement.style.borderColor = 'var(--color-gold)';
+    }
 }
 
 // Select product size
@@ -1258,14 +1293,49 @@ function selectProductSize(button, sizeValue) {
     if (sizeInput) sizeInput.value = sizeValue;
 }
 
-// Select product colorway
+// Select product colorway & dynamically switch photos assigned to this color
 function selectProductColor(button, colorName) {
     document.querySelectorAll('#productColorOptions .color-swatch-btn').forEach(btn => btn.classList.remove('active'));
-    button.classList.add('active');
+    if (button) button.classList.add('active');
+    
     const colorLabel = document.getElementById('selectedColorName');
     if (colorLabel) colorLabel.textContent = colorName;
     const colorInput = document.getElementById('selectedProductColor');
     if (colorInput) colorInput.value = colorName;
+
+    // Filter gallery photos for this color
+    const targetColor = colorName.toLowerCase().trim();
+    const matchingPhotos = productGallery.filter(item => {
+        return item.color && (item.color === targetColor || item.color.includes(targetColor) || targetColor.includes(item.color));
+    });
+
+    const displayPhotos = matchingPhotos.length > 0 ? matchingPhotos : productGallery;
+
+    if (displayPhotos.length > 0) {
+        // Switch main photo to first match
+        switchProductPhoto(null, displayPhotos[0].url);
+
+        // Re-render thumbnail strip
+        const strip = document.getElementById('pdpThumbnailsStrip');
+        if (strip) {
+            strip.innerHTML = '';
+            displayPhotos.forEach((item, idx) => {
+                const thumbBox = document.createElement('div');
+                thumbBox.className = 'product-thumb-box border bg-white cursor-pointer ' + (idx === 0 ? 'active-thumb' : '');
+                thumbBox.style.borderColor = idx === 0 ? 'var(--color-gold) !important; box-shadow: 0 0 0 1px var(--color-gold);' : 'var(--color-border)';
+                thumbBox.onclick = function() { switchProductPhoto(this, item.url); };
+                
+                const img = document.createElement('img');
+                img.src = item.url;
+                img.alt = item.alt || colorName;
+                img.className = 'w-100 h-100';
+                img.style.objectFit = 'cover';
+                
+                thumbBox.appendChild(img);
+                strip.appendChild(thumbBox);
+            });
+        }
+    }
 }
 
 // Instant Buy Now Checkout

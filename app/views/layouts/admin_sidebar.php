@@ -38,6 +38,9 @@ $currentRoute = $_GET['route'] ?? '';
             <a href="<?= url('superadmin/products') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/products') ? 'active' : '' ?>">
                 <i class="bi bi-box-seam-fill"></i> Master Catalog & Matrix
             </a>
+            <a href="<?= url('admin/categories') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/categories')) ? 'active' : '' ?>">
+                <i class="bi bi-tags-fill"></i> Product Categories
+            </a>
             <a href="<?= url('superadmin/orders') ?>" class="admin-nav-link <?= ($currentRoute === 'superadmin/orders') ? 'active' : '' ?>">
                 <i class="bi bi-receipt"></i> Global Orders & Fulfillment
             </a>
@@ -48,7 +51,13 @@ $currentRoute = $_GET['route'] ?? '';
                 <i class="bi bi-shield-shaded"></i> Security Audit Logs
             </a>
 
-            <div class="admin-nav-heading">Regional & Marketing Tools</div>
+            <div class="admin-nav-heading">Regional Market Scopes</div>
+            <a href="<?= url('admin/products') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/products')) ? 'active' : '' ?>">
+                <i class="bi bi-box-seam"></i> Regional Product Pricing
+            </a>
+            <a href="<?= url('admin/orders') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/orders')) ? 'active' : '' ?>">
+                <i class="bi bi-truck"></i> Regional Orders Dispatch
+            </a>
             <a href="<?= url('admin/coupons') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/coupons')) ? 'active' : '' ?>">
                 <i class="bi bi-ticket-perforated"></i> Promotional Coupons
             </a>
@@ -67,6 +76,9 @@ $currentRoute = $_GET['route'] ?? '';
             </a>
             <a href="<?= url('admin/products') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/product')) ? 'active' : '' ?>">
                 <i class="bi bi-box-seam"></i> Products & Local Pricing
+            </a>
+            <a href="<?= url('admin/categories') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/categories')) ? 'active' : '' ?>">
+                <i class="bi bi-tags-fill"></i> Product Categories
             </a>
             <a href="<?= url('admin/orders') ?>" class="admin-nav-link <?= (str_starts_with($currentRoute, 'admin/order')) ? 'active' : '' ?>">
                 <i class="bi bi-receipt"></i> Orders & Dispatch Tracking
