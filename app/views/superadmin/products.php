@@ -13,9 +13,9 @@ require __DIR__ . '/../layouts/admin_header.php';
             <p class="text-muted small mb-0">Centralized governance of handcrafted leather goods, master SKUs, and cross-border currency price tiers.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <button type="button" class="btn btn-buller-gold btn-sm d-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#addSuperProductModal">
+            <a href="<?= url('admin/products/create?redirect_route=superadmin/products') ?>" class="btn btn-buller-gold btn-sm d-flex align-items-center gap-1 shadow-sm">
                 <i class="bi bi-plus-circle-fill"></i> Add New Product
-            </button>
+            </a>
         </div>
     </div>
 
@@ -102,9 +102,9 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     </div>
                                 </td>
                                 <td class="text-end text-nowrap">
-                                    <button type="button" class="btn btn-outline-dark btn-sm me-1" data-bs-toggle="modal" data-bs-target="#editSuperProductModal_<?= $prod['id'] ?>" title="Edit Master Piece & Photos">
+                                    <a href="<?= url('admin/products/edit?id=' . $prod['id'] . '&redirect_route=superadmin/products') ?>" class="btn btn-outline-dark btn-sm me-1" title="Edit Master Piece & Photos">
                                         <i class="bi bi-pencil-square"></i> Edit
-                                    </button>
+                                    </a>
                                     <form action="<?= url('admin/products/delete') ?>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete <?= e(addslashes($prod['title'])) ?>?');">
                                         <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                         <input type="hidden" name="product_id" value="<?= $prod['id'] ?>">

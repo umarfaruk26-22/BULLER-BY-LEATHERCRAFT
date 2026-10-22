@@ -1011,6 +1011,24 @@ switch ($route) {
             $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
             redirect($redirectTarget);
         }
+
+        // GET: Dedicated Product Create Page
+        $currentCountryId = isset($_GET['country_id']) ? (int)$_GET['country_id'] : (int)(Auth::getPermittedCountryIds()[0] ?? 1);
+        if (!Auth::isSuperAdmin()) {
+            Auth::enforceCountryAccess($currentCountryId);
+        }
+        $permittedIds = Auth::getPermittedCountryIds();
+        $inPerm = implode(',', array_fill(0, count($permittedIds), '?'));
+        $pStmt = $db->prepare("SELECT * FROM countries WHERE id IN ($inPerm) ORDER BY name ASC");
+        $pStmt->execute($permittedIds);
+        $permittedCountries = $pStmt->fetchAll();
+
+        $ccStmt = $db->prepare("SELECT * FROM countries WHERE id = ?");
+        $ccStmt->execute([$currentCountryId]);
+        $currentCountry = $ccStmt->fetch() ?: $permittedCountries[0];
+
+        $categories = $db->query("SELECT * FROM categories WHERE status = 'active' ORDER BY sort_order ASC, name ASC")->fetchAll();
+        require __DIR__ . '/app/views/admin/product_create.php';
         break;
 
     case 'admin/products/edit':
@@ -1105,6 +1123,51 @@ switch ($route) {
             $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
             redirect($redirectTarget);
         }
+
+        // GET: Dedicated Product Edit Page
+        $productId = (int)($_GET['id'] ?? 0);
+        $stmt = $db->prepare("SELECT * FROM products WHERE id = ?");
+        $stmt->execute([$productId]);
+        $product = $stmt->fetch();
+        if (!$product) {
+            flash('admin_error', 'Product not found.');
+            redirect('admin/products');
+        }
+
+        $currentCountryId = isset($_GET['country_id']) ? (int)$_GET['country_id'] : (int)(Auth::getPermittedCountryIds()[0] ?? 1);
+        if (!Auth::isSuperAdmin()) {
+            Auth::enforceCountryAccess($currentCountryId);
+        }
+        $permittedIds = Auth::getPermittedCountryIds();
+        $inPerm = implode(',', array_fill(0, count($permittedIds), '?'));
+        $pStmt = $db->prepare("SELECT * FROM countries WHERE id IN ($inPerm) ORDER BY name ASC");
+        $pStmt->execute($permittedIds);
+        $permittedCountries = $pStmt->fetchAll();
+
+        $ccStmt = $db->prepare("SELECT * FROM countries WHERE id = ?");
+        $ccStmt->execute([$currentCountryId]);
+        $currentCountry = $ccStmt->fetch() ?: $permittedCountries[0];
+
+        // Fetch pricing for this country
+        $pcpStmt = $db->prepare("SELECT * FROM product_country_pricing WHERE product_id = ? AND country_id = ?");
+        $pcpStmt->execute([$productId, $currentCountryId]);
+        $pricing = $pcpStmt->fetch() ?: [
+            'original_price' => 0,
+            'discount_price' => null,
+            'discount_start_date' => null,
+            'discount_end_date' => null,
+            'stock_quantity' => 0,
+            'low_stock_threshold' => 5,
+            'is_available' => 1
+        ];
+
+        // Fetch gallery images
+        $imgStmt = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY sort_order ASC, id ASC");
+        $imgStmt->execute([$productId]);
+        $galleryImages = $imgStmt->fetchAll();
+
+        $categories = $db->query("SELECT * FROM categories WHERE status = 'active' ORDER BY sort_order ASC, name ASC")->fetchAll();
+        require __DIR__ . '/app/views/admin/product_edit.php';
         break;
 
     case 'admin/products/delete':

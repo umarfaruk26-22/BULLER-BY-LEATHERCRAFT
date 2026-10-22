@@ -17,9 +17,9 @@ require __DIR__ . '/../layouts/admin_header.php';
             <div class="badge p-2 px-3 fs-6 d-none d-sm-inline-block" style="background-color: var(--color-espresso-deep); color: var(--color-gold);">
                 Currency: <?= e($currentCountry['currency_code']) ?> (<?= e($currentCountry['currency_symbol']) ?>)
             </div>
-            <button type="button" class="btn btn-buller-gold btn-sm d-flex align-items-center gap-1.5 shadow-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <a href="<?= url('admin/products/create?country_id=' . $currentCountry['id']) ?>" class="btn btn-buller-gold btn-sm d-flex align-items-center gap-1.5 shadow-sm">
                 <i class="bi bi-plus-circle-fill"></i> Add New Product
-            </button>
+            </a>
         </div>
     </div>
 
@@ -117,9 +117,9 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     </span>
                                 </td>
                                 <td class="text-end text-nowrap">
-                                    <button type="button" class="btn btn-sm btn-outline-dark me-1" data-bs-toggle="modal" data-bs-target="#editProductModal_<?= $p['id'] ?>" title="Edit Details, Pricing & Color Photos">
+                                    <a href="<?= url('admin/products/edit?id=' . $p['id'] . '&country_id=' . $currentCountry['id']) ?>" class="btn btn-sm btn-outline-dark me-1" title="Edit Details, Pricing & Color Photos">
                                         <i class="bi bi-pencil-square"></i> Edit
-                                    </button>
+                                    </a>
                                     <form action="<?= url('admin/products/delete') ?>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete <?= e(addslashes($p['title'])) ?>? This cannot be undone.');">
                                         <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                         <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
