@@ -185,7 +185,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                     </small>
                     <div class="d-flex gap-2">
                         <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-dark btn-sm px-4 fw-bold shadow-sm" style="background: #0f382a !important; border-color: #0f382a;">
+                        <button type="submit" id="provisionSubmitBtn" class="btn btn-dark btn-sm px-4 fw-bold shadow-sm" style="background: #0f382a !important; border-color: #0f382a;">
                             <i class="bi bi-plus-circle me-1"></i> Provision Regional Market
                         </button>
                     </div>
@@ -197,6 +197,10 @@ require __DIR__ . '/../layouts/admin_header.php';
 
 <!-- Smart Country Data & Auto-Fill Script -->
 <script>
+// Existing countries in database
+const EXISTING_COUNTRY_CODES = <?= json_encode(array_map('strtoupper', array_column($countries, 'code'))) ?>;
+const EXISTING_COUNTRY_NAMES = <?= json_encode(array_map('strtolower', array_column($countries, 'name'))) ?>;
+
 // Comprehensive world countries specifications database
 const WORLD_COUNTRIES = [
     { name: "Canada", code: "CA", flag: "🇨🇦", currCode: "CAD", currSym: "$", currName: "Canadian Dollar", taxName: "GST / HST", taxRate: 13.00, flatShip: 25.00, freeShip: 200.00, returnDays: 30, phone: "+1" },
@@ -247,17 +251,41 @@ document.addEventListener('DOMContentLoaded', function() {
         WORLD_COUNTRIES.sort((a, b) => a.name.localeCompare(b.name));
 
         WORLD_COUNTRIES.forEach(item => {
+            const isAlreadyAdded = EXISTING_COUNTRY_CODES.includes(item.code.toUpperCase());
+            const statusLabel = isAlreadyAdded ? " (Already in Store)" : "";
+
             // Populate datalist options
             const opt = document.createElement('option');
             opt.value = item.name;
-            opt.label = `${item.flag} ${item.currCode} (${item.currSym}) - Tax: ${item.taxRate}%`;
+            opt.label = `${item.flag} ${item.currCode} (${item.currSym})${statusLabel}`;
             datalist.appendChild(opt);
 
             // Populate quick preset select
             const dropOpt = document.createElement('option');
             dropOpt.value = item.name;
-            dropOpt.textContent = `${item.flag} ${item.name} (${item.currCode} - ${item.currSym})`;
+            dropOpt.textContent = `${item.flag} ${item.name} (${item.currCode} - ${item.currSym})${statusLabel}`;
+            if (isAlreadyAdded) {
+                dropOpt.style.color = '#94a3b8';
+            }
             dropdown.appendChild(dropOpt);
+        });
+    }
+
+    // Double-click form submission prevention
+    const form = document.getElementById('provisionCountryForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const code = (document.getElementById('countryCodeInput').value || '').trim().toUpperCase();
+            if (EXISTING_COUNTRY_CODES.includes(code)) {
+                e.preventDefault();
+                alert(`The country market with ISO code '${code}' is already added in your store!`);
+                return false;
+            }
+            const btn = document.getElementById('provisionSubmitBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Provisioning Market...';
+            }
         });
     }
 });
@@ -332,16 +360,38 @@ function applyCountrySpecs(countryName, syncNameInput = true) {
     if (returnWinInp) returnWinInp.value = data.returnDays;
     if (phoneInp) phoneInp.value = data.phone;
 
-    // Show friendly success notice
+    // Check if this country is already in catalog
+    const isAlreadyPresent = EXISTING_COUNTRY_CODES.includes(data.code.toUpperCase());
     const noticeBox = document.getElementById('autofillNotice');
     const noticeText = document.getElementById('autofillNoticeText');
-    if (noticeBox && noticeText) {
-        noticeText.innerHTML = `<strong>Auto-filled specifications for ${data.flag} ${data.name}:</strong> Currency: <strong>${data.currCode} (${data.currSym})</strong>, Tax: <strong>${data.taxName} (${data.taxRate}%)</strong>, Dial: <strong>${data.phone}</strong>. You can adjust any field before provisioning.`;
-        noticeBox.classList.remove('d-none');
-        noticeBox.classList.add('d-flex');
+    const submitBtn = document.getElementById('provisionSubmitBtn');
+
+    if (isAlreadyPresent) {
+        if (noticeBox && noticeText) {
+            noticeBox.className = 'alert alert-warning py-2 px-3 small d-flex align-items-center gap-2 mb-3 shadow-xs';
+            noticeText.innerHTML = `<strong>⚠️ Already in Catalog:</strong> ${data.flag} ${data.name} (Code: <code>${data.code}</code>) is already added in your store! Adding it again is not needed.`;
+            noticeBox.classList.remove('d-none');
+        }
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.65';
+            submitBtn.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i> Market Already in Store';
+        }
+    } else {
+        if (noticeBox && noticeText) {
+            noticeBox.className = 'alert alert-success py-2 px-3 small d-flex align-items-center gap-2 mb-3 shadow-xs';
+            noticeText.innerHTML = `<strong>Auto-filled specifications for ${data.flag} ${data.name}:</strong> Currency: <strong>${data.currCode} (${data.currSym})</strong>, Tax: <strong>${data.taxName} (${data.taxRate}%)</strong>, Dial: <strong>${data.phone}</strong>. You can adjust any field before provisioning.`;
+            noticeBox.classList.remove('d-none');
+        }
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Provision Regional Market';
+        }
     }
 }
 </script>
 
 <?php require __DIR__ . '/../layouts/admin_footer.php'; ?>
+
 

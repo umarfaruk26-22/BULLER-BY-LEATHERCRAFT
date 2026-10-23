@@ -636,21 +636,52 @@ switch ($route) {
             $returnWin = (int)($_POST['return_window_days'] ?? 30);
             $phoneCode = trim($_POST['phone_code'] ?? '+1');
 
-            $stmt = $db->prepare("INSERT INTO countries (code, name, currency_code, currency_symbol, currency_name, tax_rate_percent, tax_name, flat_shipping_rate, free_shipping_threshold, return_window_days, phone_code, flag_icon, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)");
-            $stmt->execute([$code, $name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag]);
-
-            $newCountryId = (int)$db->lastInsertId();
-
-            // Populate product_country_pricing for all existing master products with base defaults
-            $allProd = $db->query("SELECT id FROM products")->fetchAll(PDO::FETCH_COLUMN);
-            $pcpIns = $db->prepare("INSERT INTO product_country_pricing (product_id, country_id, original_price, stock_quantity, low_stock_threshold, is_available) VALUES (?, ?, 100.00, 20, 5, 1)");
-            foreach ($allProd as $pid) {
-                $pcpIns->execute([$pid, $newCountryId]);
+            if (empty($name) || empty($code)) {
+                flash('admin_error', 'Country Name and ISO Code are required.');
+                redirect('superadmin/countries');
             }
 
-            AuditLogger::log(Auth::id(), 'create_country', 'countries', $newCountryId, ['name' => $name, 'code' => $code]);
-            flash('admin_success', "International market '$name' successfully provisioned with default catalog pricing.");
-            redirect('superadmin/countries');
+            // Check if country already exists by code or name
+            $chk = $db->prepare("SELECT id, name, code, is_active FROM countries WHERE code = ? OR name = ? LIMIT 1");
+            $chk->execute([$code, $name]);
+            $existing = $chk->fetch();
+
+            if ($existing) {
+                if (!$existing['is_active']) {
+                    // Reactivate and update specs
+                    $up = $db->prepare("UPDATE countries SET name = ?, code = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, is_active = 1 WHERE id = ?");
+                    $up->execute([$name, $code, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $existing['id']]);
+                    flash('admin_success', "Market '{$name}' was previously inactive and has now been updated & re-activated.");
+                    redirect('superadmin/countries');
+                } else {
+                    flash('admin_error', "Country market '{$existing['name']}' (ISO Code: '{$existing['code']}') already exists in your catalog!");
+                    redirect('superadmin/countries');
+                }
+            }
+
+            try {
+                $stmt = $db->prepare("INSERT INTO countries (code, name, currency_code, currency_symbol, currency_name, tax_rate_percent, tax_name, flat_shipping_rate, free_shipping_threshold, return_window_days, phone_code, flag_icon, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)");
+                $stmt->execute([$code, $name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag]);
+                $newCountryId = (int)$db->lastInsertId();
+
+                // Populate product_country_pricing for all existing master products
+                $allProd = $db->query("SELECT id FROM products")->fetchAll(PDO::FETCH_COLUMN);
+                $pcpIns = $db->prepare("INSERT IGNORE INTO product_country_pricing (product_id, country_id, original_price, stock_quantity, low_stock_threshold, is_available) VALUES (?, ?, 100.00, 20, 5, 1)");
+                foreach ($allProd as $pid) {
+                    $pcpIns->execute([$pid, $newCountryId]);
+                }
+
+                AuditLogger::log(Auth::id(), 'create_country', 'countries', $newCountryId, ['name' => $name, 'code' => $code]);
+                flash('admin_success', "International market '{$name}' ({$code}) successfully provisioned with default catalog pricing.");
+                redirect('superadmin/countries');
+            } catch (\PDOException $e) {
+                if ($e->getCode() == 23000 || str_contains($e->getMessage(), 'Duplicate entry')) {
+                    flash('admin_error', "Cannot add '{$name}': A country market with code '{$code}' already exists in your store.");
+                } else {
+                    flash('admin_error', "Database error provisioning country: " . $e->getMessage());
+                }
+                redirect('superadmin/countries');
+            }
         }
         break;
 
