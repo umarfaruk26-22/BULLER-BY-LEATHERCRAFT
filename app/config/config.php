@@ -21,7 +21,8 @@ if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'nexalogictech
 }
 
 // Database Credentials (XAMPP / MySQL & Live Hostinger)
-$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false);
+$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false)
+    || (strpos(__DIR__, 'u121474497') !== false);
 
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
