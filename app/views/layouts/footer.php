@@ -8,7 +8,7 @@ $activeCountry = MarketContext::getCountry();
         <div class="container">
             <div class="row g-4 mb-4 mb-md-5">
                 <!-- Brand Heritage -->
-                <div class="col-12 col-lg-4 col-md-6">
+                <div class="col-12 col-md-12 col-lg-6 mb-4 mb-lg-0">
                     <a href="<?= url('') ?>" class="navbar-brand-logo mb-3" title="Buller Leather - Return to Storefront">
                         <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') ? filemtime(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') : '2.0.0' ?>" alt="Buller Leather Logo" class="brand-logo-icon">
                         <div class="brand-text-group">
@@ -16,7 +16,7 @@ $activeCountry = MarketContext::getCountry();
                             <span class="brand-sub" style="color: var(--color-gold);">By leathercraft</span>
                         </div>
                     </a>
-                    <p class="mb-4 text-light-50" style="font-size: 0.88rem; line-height: 1.7; opacity: 0.85;">
+                    <p class="mb-4 text-light-50" style="font-size: 0.88rem; line-height: 1.7; opacity: 0.85; max-width: 520px;">
                         Forged with unyielding dedication to ancestral leathercraft. We source exclusively prime full-grain hides, vegetable-tanned over months in European tanneries and constructed to outlast generations.
                     </p>
                     <div class="d-flex align-items-center gap-2 mb-3 mb-md-0">
@@ -28,7 +28,7 @@ $activeCountry = MarketContext::getCountry();
                 </div>
 
                 <!-- Curations & Categories (2-col side by side on mobile) -->
-                <div class="col-6 col-md-6 col-lg-2">
+                <div class="col-6 col-md-6 col-lg-3">
                     <h6 class="footer-heading">Collections</h6>
                     <ul class="list-unstyled mb-0 footer-links-list">
                         <li><a href="<?= url('shop?category=leather-jackets') ?>" class="footer-link">Biker & Jackets</a></li>
@@ -41,7 +41,7 @@ $activeCountry = MarketContext::getCountry();
                 </div>
 
                 <!-- Client Concierge (2-col side by side on mobile) -->
-                <div class="col-6 col-md-6 col-lg-2">
+                <div class="col-6 col-md-6 col-lg-3">
                     <h6 class="footer-heading">Client Care</h6>
                     <ul class="list-unstyled mb-0 footer-links-list">
                         <li><a href="<?= url('about') ?>" class="footer-link">About Us</a></li>
@@ -51,24 +51,6 @@ $activeCountry = MarketContext::getCountry();
                         <li><a href="<?= url('returns-policy') ?>" class="footer-link">Returns Policy</a></li>
                         <li><a href="<?= url('contact') ?>" class="footer-link">Support Desk</a></li>
                     </ul>
-                </div>
-
-                <!-- Regional Market Information -->
-                <div class="col-12 col-lg-4 col-md-12">
-
-                    <div class="footer-market-box p-3 rounded" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(197, 168, 128, 0.25);">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="market-label" style="font-size: 0.68rem; color: #b5aba0; letter-spacing: 0.1em; text-transform: uppercase;">Regional Market:</span>
-                                <strong class="text-white d-inline-flex align-items-center gap-2 mt-1" style="font-size: 0.86rem;">
-                                    <?= country_flag($activeCountry['code'], $activeCountry['name'], 20) ?> <?= e($activeCountry['name']) ?> (<?= e($activeCountry['currency_code']) ?>)
-                                </strong>
-                            </div>
-                            <span class="badge border border-warning" style="background: rgba(197, 168, 128, 0.15); color: var(--color-gold-bright); font-size: 0.68rem; padding: 0.35rem 0.65rem;">
-                                <i class="bi bi-shield-lock-fill me-1 text-warning"></i> <?= \App\Core\Auth::isLoggedIn() ? 'Fixed' : 'Active' ?>
-                            </span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
