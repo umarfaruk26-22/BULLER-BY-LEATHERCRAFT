@@ -78,128 +78,123 @@ require __DIR__ . '/../layouts/admin_header.php';
     </div>
 
     <!-- Countries Table Card -->
-    <div class="bg-white border rounded-3 p-3 p-md-4 shadow-soft" style="border-color: var(--admin-card-border);">
+    <div class="card border-0 rounded-3 shadow-soft overflow-hidden" style="background: #ffffff; border: 1px solid var(--admin-card-border) !important;">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light small text-uppercase" style="letter-spacing: 0.05em;">
-                    <tr>
-                        <th style="min-width: 170px;">Country & ISO</th>
-                        <th style="min-width: 280px;">Showroom, Address & Contact Details</th>
-                        <th style="min-width: 160px;">Currency & Tax</th>
-                        <th style="min-width: 150px;">Shipping & Policy</th>
-                        <th style="min-width: 100px;">Status</th>
-                        <th class="text-end" style="min-width: 160px;">Actions</th>
+            <table class="table table-hover align-middle mb-0" style="border-collapse: separate; border-spacing: 0;">
+                <thead style="background: #f8f6f2; border-bottom: 2px solid #e6dfd3;">
+                    <tr class="small text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.08em; color: #63341b; font-weight: 700;">
+                        <th class="py-3 px-3" style="min-width: 200px; white-space: nowrap;">Country & Market</th>
+                        <th class="py-3 px-3" style="min-width: 270px;">Regional Showroom & Presence</th>
+                        <th class="py-3 px-3" style="min-width: 150px; white-space: nowrap;">Currency & Tax</th>
+                        <th class="py-3 px-3" style="min-width: 160px; white-space: nowrap;">Shipping Policy</th>
+                        <th class="py-3 px-3" style="min-width: 110px; white-space: nowrap;">Status</th>
+                        <th class="py-3 px-3 text-end" style="min-width: 160px; white-space: nowrap;">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y">
                     <?php foreach ($countries as $c): ?>
-                        <tr>
+                        <tr style="border-bottom: 1px solid #f1ece4; transition: var(--transition-smooth);">
                             <!-- Country & Flag -->
-                            <td>
+                            <td class="py-3 px-3" style="white-space: nowrap;">
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="flex-shrink-0">
-                                        <?= country_flag($c['code'], $c['name'], 30) ?>
+                                    <div class="flex-shrink-0 shadow-xs rounded-1 overflow-hidden" style="border: 1px solid rgba(0,0,0,0.15); width: 34px; height: 24px; display: flex; align-items: center; justify-content: center; background: #ffffff;">
+                                        <?= country_flag($c['code'], $c['name'], 34) ?>
                                     </div>
-                                    <div>
+                                    <div style="line-height: 1.25;">
                                         <div class="d-flex align-items-center gap-1.5">
-                                            <strong class="text-dark" style="font-size: 0.95rem;"><?= e($c['name']) ?></strong>
-                                            <span class="badge bg-dark font-monospace" style="font-size: 0.68rem;"><?= e($c['code']) ?></span>
+                                            <span class="fw-bold text-dark font-serif" style="font-size: 0.95rem; letter-spacing: 0.01em;"><?= e($c['name']) ?></span>
+                                            <span class="badge rounded-1 font-monospace" style="background: #140d07; color: #dfc298; font-size: 0.65rem; padding: 2px 5px;"><?= e($c['code']) ?></span>
                                         </div>
-                                        <small class="text-muted d-block" style="font-size: 0.76rem;">
-                                            Dial: <span class="fw-semibold text-secondary"><?= e($c['phone_code'] ?: 'N/A') ?></span>
+                                        <small class="text-muted d-block mt-0.5" style="font-size: 0.74rem;">
+                                            Dial: <span class="font-monospace text-secondary fw-semibold"><?= e($c['phone_code'] ?: 'N/A') ?></span>
                                         </small>
                                     </div>
                                 </div>
                             </td>
 
                             <!-- Physical Showroom & Contact Details -->
-                            <td>
-                                <?php if (!empty($c['address']) || !empty($c['contact_phone'])): ?>
-                                    <div class="mb-1">
-                                        <span class="badge bg-light text-dark border me-1" style="font-size: 0.72rem;">
-                                            <i class="bi bi-geo-alt-fill text-danger me-1"></i><?= e($c['city'] ?: 'Regional Hub') ?>
+                            <td class="py-3 px-3">
+                                <?php if (!empty($c['city']) || !empty($c['atelier_title']) || !empty($c['address'])): ?>
+                                    <div class="d-flex align-items-center gap-1.5 mb-1 flex-wrap">
+                                        <span class="badge rounded-pill" style="background: rgba(140, 74, 47, 0.12); color: #8c4a2f; border: 1px solid rgba(140, 74, 47, 0.25); font-size: 0.71rem; font-weight: 600; padding: 3px 8px;">
+                                            <i class="bi bi-geo-alt-fill me-0.5"></i><?= e($c['city'] ?: 'Regional Hub') ?>
                                         </span>
-                                        <strong class="small text-dark font-serif"><?= e($c['atelier_title'] ?: 'Regional Showroom') ?></strong>
+                                        <span class="fw-semibold text-dark text-truncate font-serif" style="font-size: 0.88rem; max-width: 250px;" title="<?= e($c['atelier_title'] ?: 'Regional Showroom') ?>">
+                                            <?= e($c['atelier_title'] ?: 'Regional Showroom') ?>
+                                        </span>
                                     </div>
-                                    <?php if (!empty($c['address'])): ?>
-                                        <div class="text-muted small text-truncate mb-1" style="max-width: 320px; font-size: 0.78rem;" title="<?= e($c['address']) ?>">
-                                            <i class="bi bi-building me-1 text-secondary"></i><?= e($c['address']) ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="d-flex flex-wrap gap-2 small" style="font-size: 0.74rem;">
+                                    <div class="d-flex align-items-center gap-2 text-muted small flex-wrap" style="font-size: 0.75rem;">
                                         <?php if (!empty($c['contact_phone'])): ?>
                                             <span class="text-nowrap text-dark">
                                                 <i class="bi bi-telephone text-primary me-1"></i><?= e($c['contact_phone']) ?>
                                             </span>
                                         <?php endif; ?>
-                                        <?php if (!empty($c['contact_whatsapp'])): ?>
-                                            <span class="text-nowrap text-success">
-                                                <i class="bi bi-whatsapp me-1"></i><?= e($c['contact_whatsapp']) ?>
-                                            </span>
+                                        <?php if (!empty($c['contact_phone']) && !empty($c['contact_email'])): ?>
+                                            <span class="text-secondary opacity-50">&bull;</span>
                                         <?php endif; ?>
                                         <?php if (!empty($c['contact_email'])): ?>
-                                            <span class="text-nowrap text-secondary">
+                                            <span class="text-nowrap text-truncate text-secondary" style="max-width: 190px;" title="<?= e($c['contact_email']) ?>">
                                                 <i class="bi bi-envelope me-1"></i><?= e($c['contact_email']) ?>
                                             </span>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
-                                    <div class="py-1">
-                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle small fw-normal">
-                                            <i class="bi bi-exclamation-triangle-fill me-1 text-warning"></i> Address & Phone Pending
-                                        </span>
-                                        <small class="d-block text-muted mt-1" style="font-size: 0.73rem;">Click <strong>Edit Details</strong> to assign showroom address.</small>
-                                    </div>
+                                    <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 small fw-normal">
+                                        <i class="bi bi-clock-history me-1"></i> Address & Phone Pending
+                                    </span>
                                 <?php endif; ?>
                             </td>
 
                             <!-- Currency & Tax -->
-                            <td>
-                                <div class="fw-bold text-dark small">
+                            <td class="py-3 px-3" style="white-space: nowrap;">
+                                <div class="fw-bold text-dark font-monospace" style="font-size: 0.92rem;">
                                     <?= e($c['currency_code']) ?> (<?= e($c['currency_symbol']) ?>)
                                 </div>
-                                <div class="text-muted small mb-1" style="font-size: 0.74rem;"><?= e($c['currency_name']) ?></div>
-                                <div class="small">
-                                    <span class="badge bg-secondary-subtle text-dark border small" style="font-size: 0.7rem;">
-                                        <?= e($c['tax_name']) ?>: <strong><?= $c['tax_rate_percent'] ?>%</strong>
+                                <div class="text-muted small" style="font-size: 0.74rem;">
+                                    <?= e($c['currency_name']) ?>
+                                </div>
+                                <div class="mt-1">
+                                    <span class="badge rounded-1 bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle small fw-semibold" style="font-size: 0.68rem; padding: 2px 6px;">
+                                        <?= e($c['tax_name']) ?>: <strong><?= (float)$c['tax_rate_percent'] ?>%</strong>
                                     </span>
                                 </div>
                             </td>
 
                             <!-- Shipping & Policy -->
-                            <td>
-                                <div class="small">
-                                    Flat: <strong><?= e($c['currency_symbol']) . number_format($c['flat_shipping_rate'], 2) ?></strong>
+                            <td class="py-3 px-3" style="white-space: nowrap;">
+                                <div class="small text-dark">
+                                    Flat: <strong><?= e($c['currency_symbol']) . number_format($c['flat_shipping_rate'], 0) ?></strong>
                                 </div>
-                                <div class="small text-muted" style="font-size: 0.76rem;">
-                                    Free Over: <?= e($c['currency_symbol']) . number_format($c['free_shipping_threshold'], 2) ?>
+                                <div class="small text-muted" style="font-size: 0.74rem;">
+                                    Free &gt; <?= e($c['currency_symbol']) . number_format($c['free_shipping_threshold'], 0) ?>
                                 </div>
-                                <div class="small text-muted" style="font-size: 0.76rem;">
-                                    Returns: <strong><?= (int)$c['return_window_days'] ?> Days</strong>
+                                <div class="small text-secondary mt-0.5" style="font-size: 0.72rem;">
+                                    <i class="bi bi-arrow-repeat me-0.5"></i> <?= (int)$c['return_window_days'] ?> Days Return
                                 </div>
                             </td>
 
                             <!-- Storefront Status -->
-                            <td>
+                            <td class="py-3 px-3" style="white-space: nowrap;">
                                 <?php if ($c['is_active']): ?>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle small">
-                                        <i class="bi bi-dot"></i> Active
+                                    <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 small fw-semibold d-inline-flex align-items-center gap-1">
+                                        <i class="bi bi-check-circle-fill" style="font-size: 0.68rem;"></i> Active Market
                                     </span>
                                 <?php else: ?>
-                                    <span class="badge bg-secondary-subtle text-secondary border small">
-                                        Deactivated
+                                    <span class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 small fw-normal d-inline-flex align-items-center gap-1">
+                                        <i class="bi bi-pause-circle" style="font-size: 0.68rem;"></i> Inactive
                                     </span>
                                 <?php endif; ?>
                             </td>
 
                             <!-- Actions -->
-                            <td class="text-end">
+                            <td class="py-3 px-3 text-end" style="white-space: nowrap;">
                                 <div class="d-inline-flex align-items-center gap-1.5">
                                     <!-- Edit Country & Showroom Page Link -->
                                     <a href="<?= url('superadmin/countries/edit?id=' . $c['id']) ?>" 
-                                       class="btn btn-sm btn-outline-dark d-inline-flex align-items-center gap-1 shadow-xs fw-medium px-2.5 py-1" 
+                                       class="btn btn-sm btn-dark d-inline-flex align-items-center gap-1.5 px-3 py-1.5 shadow-xs fw-semibold" 
+                                       style="background: #140d07 !important; border-color: #140d07; font-size: 0.78rem; border-radius: 6px;"
                                        title="Edit Address, Phone & Market Specs">
-                                        <i class="bi bi-pencil-square text-primary"></i>
+                                        <i class="bi bi-pencil-square" style="color: #dfc298;"></i>
                                         <span>Edit Details</span>
                                     </a>
 
@@ -207,7 +202,10 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     <form action="<?= url('superadmin/countries/toggle') ?>" method="POST" class="d-inline mb-0">
                                         <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
                                         <input type="hidden" name="country_id" value="<?= $c['id'] ?>">
-                                        <button type="submit" class="btn btn-sm btn-outline-<?= $c['is_active'] ? 'danger' : 'success' ?> p-1 px-2" title="<?= $c['is_active'] ? 'Deactivate Market' : 'Activate Market' ?>">
+                                        <button type="submit" 
+                                                class="btn btn-sm <?= $c['is_active'] ? 'btn-outline-danger' : 'btn-outline-success' ?> p-1 px-2" 
+                                                style="border-radius: 6px;"
+                                                title="<?= $c['is_active'] ? 'Deactivate Market' : 'Activate Market' ?>">
                                             <i class="bi bi-power"></i>
                                         </button>
                                     </form>
