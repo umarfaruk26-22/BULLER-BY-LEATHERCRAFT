@@ -636,6 +636,15 @@ switch ($route) {
             $returnWin = (int)($_POST['return_window_days'] ?? 30);
             $phoneCode = trim($_POST['phone_code'] ?? '+1');
 
+            $address = trim($_POST['address'] ?? '');
+            $contactEmail = trim($_POST['contact_email'] ?? '');
+            $contactPhone = trim($_POST['contact_phone'] ?? '');
+            $contactWhatsapp = trim($_POST['contact_whatsapp'] ?? '');
+            $city = trim($_POST['city'] ?? '');
+            $atelierTitle = trim($_POST['atelier_title'] ?? '');
+            $supportHours = trim($_POST['support_hours'] ?? '');
+            $shippingPartner = trim($_POST['shipping_partner'] ?? '');
+
             if (empty($name) || empty($code)) {
                 flash('admin_error', 'Country Name and ISO Code are required.');
                 redirect('superadmin/countries');
@@ -649,8 +658,8 @@ switch ($route) {
             if ($existing) {
                 if (!$existing['is_active']) {
                     // Reactivate and update specs
-                    $up = $db->prepare("UPDATE countries SET name = ?, code = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, is_active = 1 WHERE id = ?");
-                    $up->execute([$name, $code, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $existing['id']]);
+                    $up = $db->prepare("UPDATE countries SET name = ?, code = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, address = ?, contact_email = ?, contact_phone = ?, contact_whatsapp = ?, city = ?, atelier_title = ?, support_hours = ?, shipping_partner = ?, is_active = 1 WHERE id = ?");
+                    $up->execute([$name, $code, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $address, $contactEmail, $contactPhone, $contactWhatsapp, $city, $atelierTitle, $supportHours, $shippingPartner, $existing['id']]);
                     flash('admin_success', "Market '{$name}' was previously inactive and has now been updated & re-activated.");
                     redirect('superadmin/countries');
                 } else {
@@ -660,8 +669,8 @@ switch ($route) {
             }
 
             try {
-                $stmt = $db->prepare("INSERT INTO countries (code, name, currency_code, currency_symbol, currency_name, tax_rate_percent, tax_name, flat_shipping_rate, free_shipping_threshold, return_window_days, phone_code, flag_icon, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)");
-                $stmt->execute([$code, $name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag]);
+                $stmt = $db->prepare("INSERT INTO countries (code, name, currency_code, currency_symbol, currency_name, tax_rate_percent, tax_name, flat_shipping_rate, free_shipping_threshold, return_window_days, phone_code, flag_icon, address, contact_email, contact_phone, contact_whatsapp, city, atelier_title, support_hours, shipping_partner, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)");
+                $stmt->execute([$code, $name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $address, $contactEmail, $contactPhone, $contactWhatsapp, $city, $atelierTitle, $supportHours, $shippingPartner]);
                 $newCountryId = (int)$db->lastInsertId();
 
                 // Populate product_country_pricing for all existing master products
@@ -682,6 +691,55 @@ switch ($route) {
                 }
                 redirect('superadmin/countries');
             }
+        }
+        break;
+
+    case 'superadmin/countries/edit':
+        if (!Auth::isSuperAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
+
+            $countryId = (int)($_POST['country_id'] ?? 0);
+            $stmt = $db->prepare("SELECT * FROM countries WHERE id = ?");
+            $stmt->execute([$countryId]);
+            $country = $stmt->fetch();
+
+            if (!$country) {
+                flash('admin_error', 'Country not found.');
+                redirect('superadmin/countries');
+            }
+
+            $name = trim($_POST['name'] ?? $country['name']);
+            $flag = trim($_POST['flag_icon'] ?? ($country['flag_icon'] ?: '🌐'));
+            $currCode = strtoupper(trim($_POST['currency_code'] ?? $country['currency_code']));
+            $currSym = trim($_POST['currency_symbol'] ?? $country['currency_symbol']);
+            $currName = trim($_POST['currency_name'] ?? $country['currency_name']);
+            $taxName = trim($_POST['tax_name'] ?? $country['tax_name']);
+            $taxRate = (float)($_POST['tax_rate_percent'] ?? $country['tax_rate_percent']);
+            $flatShip = (float)($_POST['flat_shipping_rate'] ?? $country['flat_shipping_rate']);
+            $freeThresh = (float)($_POST['free_shipping_threshold'] ?? $country['free_shipping_threshold']);
+            $returnWin = (int)($_POST['return_window_days'] ?? $country['return_window_days']);
+            $phoneCode = trim($_POST['phone_code'] ?? $country['phone_code']);
+            $address = trim($_POST['address'] ?? ($country['address'] ?? ''));
+            $contactEmail = trim($_POST['contact_email'] ?? ($country['contact_email'] ?? ''));
+            $contactPhone = trim($_POST['contact_phone'] ?? ($country['contact_phone'] ?? ''));
+            $contactWhatsapp = trim($_POST['contact_whatsapp'] ?? ($country['contact_whatsapp'] ?? ''));
+            $city = trim($_POST['city'] ?? ($country['city'] ?? ''));
+            $atelierTitle = trim($_POST['atelier_title'] ?? ($country['atelier_title'] ?? ''));
+            $supportHours = trim($_POST['support_hours'] ?? ($country['support_hours'] ?? ''));
+            $shippingPartner = trim($_POST['shipping_partner'] ?? ($country['shipping_partner'] ?? ''));
+            $isActive = isset($_POST['is_active']) ? (int)$_POST['is_active'] : $country['is_active'];
+
+            try {
+                $up = $db->prepare("UPDATE countries SET name = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, address = ?, contact_email = ?, contact_phone = ?, contact_whatsapp = ?, city = ?, atelier_title = ?, support_hours = ?, shipping_partner = ?, is_active = ? WHERE id = ?");
+                $up->execute([$name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $address, $contactEmail, $contactPhone, $contactWhatsapp, $city, $atelierTitle, $supportHours, $shippingPartner, $isActive, $countryId]);
+
+                AuditLogger::log(Auth::id(), 'update_country', 'countries', $countryId, ['name' => $name, 'code' => $country['code']]);
+                flash('admin_success', "Regional specifications, address, and support details for '{$name}' updated successfully.");
+            } catch (\PDOException $e) {
+                flash('admin_error', "Error updating country: " . $e->getMessage());
+            }
+            redirect('superadmin/countries');
         }
         break;
 

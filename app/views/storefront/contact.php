@@ -9,7 +9,15 @@ $pageDescription = 'Connect directly with Buller Leather regional offices across
 $currentMarket = MarketContext::getCountry();
 $selectedCountryCode = strtoupper(trim($_GET['country'] ?? $currentMarket['code'] ?? 'IN'));
 
-// Regional Directory Configuration
+// Dynamic regional showroom configuration from database
+try {
+    $db = \App\Core\Database::getConnection();
+    $dbCountries = $db->query("SELECT * FROM countries WHERE is_active = 1 ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+} catch (\Throwable $t) {
+    $dbCountries = [];
+}
+
+// Regional Directory Configuration defaults
 $regionalAteliers = [
     'IN' => [
         'name' => 'India',
@@ -125,9 +133,69 @@ $regionalAteliers = [
     ]
 ];
 
-// Fallback to IN if code not found
+// Merge and dynamically register all active countries from the database
+foreach ($dbCountries as $dc) {
+    $code = strtoupper($dc['code']);
+    $cleanFlag = strtolower($code);
+    $flagLocal = 'assets/images/flags/' . $cleanFlag . '.png';
+    $flagUrl = file_exists(dirname(__DIR__, 2) . '/' . $flagLocal) ? asset($flagLocal) : "https://flagcdn.com/w40/{$cleanFlag}.png";
+
+    if (isset($regionalAteliers[$code])) {
+        if (!empty($dc['name'])) $regionalAteliers[$code]['name'] = $dc['name'];
+        if (!empty($dc['city'])) $regionalAteliers[$code]['city'] = $dc['city'];
+        if (!empty($dc['atelier_title'])) $regionalAteliers[$code]['atelier_title'] = $dc['atelier_title'];
+        if (!empty($dc['address'])) $regionalAteliers[$code]['address'] = $dc['address'];
+        if (!empty($dc['contact_phone'])) {
+            $regionalAteliers[$code]['phone'] = $dc['contact_phone'];
+            $regionalAteliers[$code]['phone_raw'] = preg_replace('/[^0-9+]/', '', $dc['contact_phone']);
+        }
+        if (!empty($dc['phone_code'])) $regionalAteliers[$code]['phone_code'] = $dc['phone_code'];
+        if (!empty($dc['contact_email'])) $regionalAteliers[$code]['email'] = $dc['contact_email'];
+        if (!empty($dc['contact_whatsapp'])) {
+            $regionalAteliers[$code]['whatsapp'] = $dc['contact_whatsapp'];
+            $regionalAteliers[$code]['whatsapp_raw'] = preg_replace('/[^0-9]/', '', $dc['contact_whatsapp']);
+        }
+        if (!empty($dc['support_hours'])) $regionalAteliers[$code]['hours'] = $dc['support_hours'];
+        if (!empty($dc['shipping_partner'])) $regionalAteliers[$code]['shipping_partner'] = $dc['shipping_partner'];
+        $regionalAteliers[$code]['flag_img_url'] = $flagUrl;
+    } else {
+        // Construct new country showroom profile dynamically
+        $regionalAteliers[$code] = [
+            'name' => $dc['name'],
+            'code' => $code,
+            'flag' => $cleanFlag,
+            'flag_img_url' => $flagUrl,
+            'city' => !empty($dc['city']) ? $dc['city'] : $dc['name'] . ' Regional Hub',
+            'atelier_title' => !empty($dc['atelier_title']) ? $dc['atelier_title'] : $dc['name'] . ' Dedicated Showroom & Client Suites',
+            'address' => !empty($dc['address']) ? $dc['address'] : 'Executive Client Suites, ' . $dc['name'],
+            'landmark' => 'Central Business District',
+            'phone' => !empty($dc['contact_phone']) ? $dc['contact_phone'] : ($dc['phone_code'] . ' Client Desk'),
+            'phone_raw' => preg_replace('/[^0-9+]/', '', $dc['contact_phone'] ?? $dc['phone_code']),
+            'phone_code' => $dc['phone_code'] ?? '+1',
+            'email' => !empty($dc['contact_email']) ? $dc['contact_email'] : 'support.' . strtolower($code) . '@bullerleather.com',
+            'whatsapp' => !empty($dc['contact_whatsapp']) ? $dc['contact_whatsapp'] : ($dc['contact_phone'] ?? ''),
+            'whatsapp_raw' => preg_replace('/[^0-9]/', '', $dc['contact_whatsapp'] ?? $dc['contact_phone'] ?? ''),
+            'hours' => !empty($dc['support_hours']) ? $dc['support_hours'] : 'Monday – Friday: 9:00 AM – 6:00 PM Local Time',
+            'sunday' => 'Weekend: Dedicated Private Appointments',
+            'shipping_partner' => !empty($dc['shipping_partner']) ? $dc['shipping_partner'] : 'DHL Express Priority Courier',
+            'turnaround' => '1 – 3 Business Days Express Delivery',
+            'services' => [
+                'Dedicated Regional Client Concierge',
+                'Custom Leather Selection & Monogramming',
+                'Direct Regional Tax-Compliant Invoicing',
+                'Global Priority Courier Dispatch'
+            ],
+            'specialist' => 'Regional Client Concierge',
+            'specialist_title' => 'Client Advisory Desk (' . $dc['name'] . ')',
+            'badge' => $dc['name'] . ' Regional Office'
+        ];
+    }
+}
+
+// Ensure default fallback country exists in active list
 if (!isset($regionalAteliers[$selectedCountryCode])) {
-    $selectedCountryCode = 'IN';
+    $firstCode = array_key_first($regionalAteliers);
+    $selectedCountryCode = $firstCode ?: 'IN';
 }
 $currentAtelier = $regionalAteliers[$selectedCountryCode];
 
@@ -189,7 +257,7 @@ require __DIR__ . '/../layouts/header.php';
                             class="btn contact-country-btn py-1 py-sm-2 px-2 px-sm-3 <?= ($code === $selectedCountryCode) ? 'active' : '' ?>" 
                             data-country="<?= $code ?>"
                             onclick="switchContactCountry('<?= $code ?>')">
-                        <img src="<?= asset('assets/images/flags/' . $at['flag'] . '.png') ?>" alt="<?= $at['name'] ?>" width="18" height="13" class="rounded-1 shadow-xs me-1 me-sm-2">
+                        <img src="<?= $at['flag_img_url'] ?? asset('assets/images/flags/' . $at['flag'] . '.png') ?>" alt="<?= $at['name'] ?>" width="18" height="13" class="rounded-1 shadow-xs me-1 me-sm-2">
                         <span class="country-name"><?= $at['name'] ?></span>
                         <span class="country-city text-muted small ms-1">(<?= $at['city'] ?>)</span>
                     </button>
@@ -233,7 +301,7 @@ require __DIR__ . '/../layouts/header.php';
                         <span class="badge px-2 px-sm-3 py-2 text-uppercase fw-semibold" id="atelierBadge" style="background: rgba(140, 74, 47, 0.1); color: var(--color-cognac); letter-spacing: 0.12em; font-size: 0.68rem;">
                             <?= e($currentAtelier['badge']) ?>
                         </span>
-                        <img id="atelierFlagImg" src="<?= asset('assets/images/flags/' . $currentAtelier['flag'] . '.png') ?>" alt="Flag" width="28" height="20" class="rounded shadow-xs">
+                        <img id="atelierFlagImg" src="<?= $currentAtelier['flag_img_url'] ?? asset('assets/images/flags/' . $currentAtelier['flag'] . '.png') ?>" alt="Flag" width="28" height="20" class="rounded shadow-xs">
                     </div>
 
                     <h3 class="font-serif fw-bold mb-2" id="atelierTitle" style="color: var(--color-espresso-deep); font-size: 1.65rem;">
@@ -561,7 +629,7 @@ function switchContactCountry(code) {
 
     // Update Showroom Card Details
     document.getElementById('atelierBadge').textContent = at.badge;
-    document.getElementById('atelierFlagImg').src = '<?= asset('assets/images/flags/') ?>' + at.flag + '.png';
+    document.getElementById('atelierFlagImg').src = at.flag_img_url || ('<?= asset('assets/images/flags/') ?>' + at.flag + '.png');
     document.getElementById('atelierTitle').textContent = at.atelier_title;
     document.getElementById('atelierLandmark').innerHTML = '<i class="bi bi-geo text-gold me-1"></i> ' + at.landmark;
     document.getElementById('atelierAddress').textContent = at.address;
