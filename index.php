@@ -778,6 +778,20 @@ switch ($route) {
 
     case 'superadmin/settings':
         Auth::requireSuperAdmin();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+                AuditLogger::log(Auth::id(), 'csrf_violation', 'system_settings');
+                die("CSRF Security Validation Failed.");
+            }
+            $upStmt = $db->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+            foreach ($_POST as $k => $v) {
+                if ($k === 'csrf_token') continue;
+                $upStmt->execute([$k, trim($v)]);
+            }
+            AuditLogger::log(Auth::id(), 'update_settings', 'system_settings', null, ['keys' => array_keys($_POST)]);
+            flash('admin_success', 'Global system configuration successfully updated.');
+            redirect('superadmin/settings');
+        }
         $settStmt = $db->query("SELECT setting_key, setting_value FROM system_settings");
         $settings = $settStmt->fetchAll(PDO::FETCH_KEY_PAIR);
         require __DIR__ . '/app/views/superadmin/settings.php';
