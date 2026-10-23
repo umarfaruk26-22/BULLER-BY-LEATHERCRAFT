@@ -2,10 +2,10 @@
  <defs>
   <style type="text/css">
    <![CDATA[
-    .buller-gold-body {fill:#DFC298;stroke:#DFC298;stroke-width:14;stroke-linejoin:round;stroke-miterlimit:2.61313}
-    .buller-gold-detail {stroke:#140D08;stroke-width:26;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2.61313;fill:none}
-    .buller-gold-nostril {fill:#140D08;stroke:#140D08;stroke-width:14;stroke-miterlimit:2.61313}
-    .buller-gold-crest {fill:#140D08;stroke:#140D08;stroke-width:14;stroke-linejoin:round;stroke-miterlimit:2.61313}
+    .buller-gold-body {fill:#140D08;stroke:#DFC298;stroke-width:22;stroke-linejoin:round;stroke-miterlimit:2.61313}
+    .buller-gold-detail {stroke:#DFC298;stroke-width:26;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2.61313;fill:none}
+    .buller-gold-nostril {fill:#DFC298;stroke:#DFC298;stroke-width:14;stroke-miterlimit:2.61313}
+    .buller-gold-crest {fill:#DFC298;stroke:#DFC298;stroke-width:14;stroke-linejoin:round;stroke-miterlimit:2.61313}
    ]]>
   </style>
  </defs>

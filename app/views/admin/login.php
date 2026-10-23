@@ -228,7 +228,7 @@ $activeCountry = MarketContext::getCountry();
     <div class="admin-login-card">
         <div class="brand-logo-wrap">
             <a href="<?= url('') ?>" title="Buller Leather Storefront" class="text-decoration-none">
-                <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Leather" class="brand-logo-icon">
+                <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') ? filemtime(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') : '2.0.0' ?>" alt="Buller Leather" class="brand-logo-icon">
                 <h1 class="brand-title">BULLER</h1>
                 <div class="brand-sub">By leathercraft</div>
             </a>

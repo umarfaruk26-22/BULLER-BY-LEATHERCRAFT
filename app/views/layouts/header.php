@@ -57,7 +57,7 @@ $currentUser = Auth::user();
 
             <!-- Brand Logo -->
             <a class="navbar-brand navbar-brand-logo me-auto me-lg-4" href="<?= url('') ?>" title="Buller Leather - Return to Storefront">
-                <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon">
+                <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $favVer ?>" alt="Buller Leather Logo" class="brand-logo-icon">
                 <div class="brand-text-group">
                     <span class="brand-main">BULLER</span>
                     <span class="brand-sub">By leathercraft</span>
@@ -190,7 +190,7 @@ $currentUser = Auth::user();
     <div class="offcanvas offcanvas-start buller-mobile-drawer" tabindex="-1" id="bullerNavDrawer" aria-labelledby="bullerNavDrawerLabel">
         <div class="offcanvas-header border-bottom py-3 px-3" style="background-color: var(--color-espresso-deep); border-color: rgba(197, 168, 128, 0.25) !important;">
             <div class="d-flex align-items-center gap-2" id="bullerNavDrawerLabel">
-                <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Logo" style="height: 32px; width: auto;">
+                <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>?v=<?= $favVer ?>" alt="Buller Logo" style="height: 32px; width: auto;">
                 <div class="d-flex flex-column">
                     <span class="brand-main" style="color: var(--color-gold-bright); font-size: 1.15rem; font-family: var(--font-brand); letter-spacing: 0.16em; line-height: 1.1;">BULLER</span>
                     <span class="brand-sub" style="color: var(--color-gold); font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase;">By leathercraft</span>

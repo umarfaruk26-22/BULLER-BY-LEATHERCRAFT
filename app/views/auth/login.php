@@ -15,7 +15,7 @@ require __DIR__ . '/../layouts/header.php';
                 <div class="bg-white border shadow-soft p-4 p-md-5" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
                     <div class="text-center mb-4">
                         <a href="<?= url('') ?>" class="navbar-brand-logo navbar-brand-logo-stacked text-decoration-none" title="Buller Leather - Return to Storefront">
-                            <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon mb-2" style="height: 52px;">
+                            <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/images/buller-logo.svg') ? filemtime(dirname(__DIR__, 3) . '/assets/images/buller-logo.svg') : '2.0.0' ?>" alt="Buller Leather Logo" class="brand-logo-icon mb-2" style="height: 52px;">
                             <div class="brand-text-group">
                                 <span class="brand-main fs-3">BULLER</span>
                                 <span class="brand-sub">By leathercraft</span>

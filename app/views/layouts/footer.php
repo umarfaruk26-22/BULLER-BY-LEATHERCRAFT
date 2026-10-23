@@ -10,7 +10,7 @@ $activeCountry = MarketContext::getCountry();
                 <!-- Brand Heritage -->
                 <div class="col-12 col-lg-4 col-md-6">
                     <a href="<?= url('') ?>" class="navbar-brand-logo mb-3" title="Buller Leather - Return to Storefront">
-                        <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Leather Logo" class="brand-logo-icon">
+                        <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') ? filemtime(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') : '2.0.0' ?>" alt="Buller Leather Logo" class="brand-logo-icon">
                         <div class="brand-text-group">
                             <span class="brand-main" style="color: var(--color-gold-bright);">BULLER</span>
                             <span class="brand-sub" style="color: var(--color-gold);">By leathercraft</span>

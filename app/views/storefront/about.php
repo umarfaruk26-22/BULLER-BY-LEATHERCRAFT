@@ -19,7 +19,7 @@ require __DIR__ . '/../layouts/header.php';
         <div class="row align-items-center g-4 g-lg-5">
             <div class="col-lg-7">
                 <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill" style="background: rgba(197, 168, 128, 0.15); border: 1px solid rgba(197, 168, 128, 0.35);">
-                    <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>" alt="Buller Crest" style="height: 18px; width: auto; vertical-align: middle;">
+                    <img src="<?= asset('assets/images/buller-logo-gold.svg') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') ? filemtime(dirname(__DIR__, 3) . '/assets/images/buller-logo-gold.svg') : '2.0.0' ?>" alt="Buller Crest" style="height: 18px; width: auto; vertical-align: middle;">
                     <span class="text-uppercase fw-semibold" style="letter-spacing: 0.22em; font-size: 0.68rem; color: var(--color-gold-bright);">BULLER &bull; BY LEATHERCRAFT</span>
                 </div>
                 <h1 class="font-serif fw-bold mb-3 mb-md-4" style="letter-spacing: 0.02em; line-height: 1.18; color: #ffffff; font-size: clamp(1.85rem, 5.5vw, 3rem);">

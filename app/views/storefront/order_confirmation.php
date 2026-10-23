@@ -13,7 +13,7 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
             <!-- Success Banner -->
             <div class="p-4 p-md-5 bg-white border shadow-soft text-center mb-4" style="border-color: var(--color-border); border-top: 4px solid var(--color-gold) !important;">
                 <div class="mb-3">
-                    <img src="<?= asset('assets/images/buller-logo.svg') ?>" alt="Buller Leather" style="height: 62px; width: auto;">
+                    <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/images/buller-logo.svg') ? filemtime(dirname(__DIR__, 3) . '/assets/images/buller-logo.svg') : '2.0.0' ?>" alt="Buller Leather" style="height: 62px; width: auto;">
                 </div>
                 <h1 class="font-serif mb-2" style="font-size: 2.3rem; color: var(--color-espresso-deep);">Thank You For Your Order</h1>
                 <p class="text-muted mb-3">Your order has been placed successfully with Buller Leather.</p>
