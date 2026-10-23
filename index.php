@@ -696,18 +696,19 @@ switch ($route) {
 
     case 'superadmin/countries/edit':
         if (!Auth::isSuperAdmin()) redirect('admin');
+
+        $countryId = (int)($_GET['id'] ?? $_POST['country_id'] ?? 0);
+        $stmt = $db->prepare("SELECT * FROM countries WHERE id = ?");
+        $stmt->execute([$countryId]);
+        $country = $stmt->fetch();
+
+        if (!$country) {
+            flash('admin_error', 'Country market not found.');
+            redirect('superadmin/countries');
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
-
-            $countryId = (int)($_POST['country_id'] ?? 0);
-            $stmt = $db->prepare("SELECT * FROM countries WHERE id = ?");
-            $stmt->execute([$countryId]);
-            $country = $stmt->fetch();
-
-            if (!$country) {
-                flash('admin_error', 'Country not found.');
-                redirect('superadmin/countries');
-            }
 
             $name = trim($_POST['name'] ?? $country['name']);
             $flag = trim($_POST['flag_icon'] ?? ($country['flag_icon'] ?: '🌐'));
@@ -736,11 +737,15 @@ switch ($route) {
 
                 AuditLogger::log(Auth::id(), 'update_country', 'countries', $countryId, ['name' => $name, 'code' => $country['code']]);
                 flash('admin_success', "Regional specifications, address, and support details for '{$name}' updated successfully.");
+                redirect('superadmin/countries');
             } catch (\PDOException $e) {
                 flash('admin_error', "Error updating country: " . $e->getMessage());
+                redirect('superadmin/countries/edit?id=' . $countryId);
             }
-            redirect('superadmin/countries');
         }
+
+        // GET: Render dedicated edit page
+        require __DIR__ . '/app/views/superadmin/country_edit.php';
         break;
 
     case 'superadmin/countries/toggle':

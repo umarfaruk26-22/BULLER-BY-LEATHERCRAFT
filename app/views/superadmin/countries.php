@@ -195,14 +195,13 @@ require __DIR__ . '/../layouts/admin_header.php';
                             <!-- Actions -->
                             <td class="text-end">
                                 <div class="d-inline-flex align-items-center gap-1.5">
-                                    <!-- Edit Country & Showroom Button -->
-                                    <button type="button" 
-                                            class="btn btn-sm btn-outline-dark d-inline-flex align-items-center gap-1 shadow-xs fw-medium px-2.5 py-1" 
-                                            onclick='openEditCountryModal(<?= htmlspecialchars(json_encode($c), ENT_QUOTES, 'UTF-8') ?>)' 
-                                            title="Edit Address, Phone & Market Specs">
+                                    <!-- Edit Country & Showroom Page Link -->
+                                    <a href="<?= url('superadmin/countries/edit?id=' . $c['id']) ?>" 
+                                       class="btn btn-sm btn-outline-dark d-inline-flex align-items-center gap-1 shadow-xs fw-medium px-2.5 py-1" 
+                                       title="Edit Address, Phone & Market Specs">
                                         <i class="bi bi-pencil-square text-primary"></i>
                                         <span>Edit Details</span>
-                                    </button>
+                                    </a>
 
                                     <!-- Toggle Active Status Form -->
                                     <form action="<?= url('superadmin/countries/toggle') ?>" method="POST" class="d-inline mb-0">
@@ -222,188 +221,7 @@ require __DIR__ . '/../layouts/admin_header.php';
     </div>
 </div>
 
-<!-- ========================================================================= -->
-<!-- MODAL: EDIT COUNTRY & SHOWROOM CONTACT DETAILS (Full Super Admin Management) -->
-<!-- ========================================================================= -->
-<div class="modal fade" id="editCountryModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d261e 100%) !important;">
-                <div class="d-flex align-items-center gap-2.5">
-                    <span id="editModalFlagDisplay" class="fs-4">🌍</span>
-                    <div>
-                        <h5 class="modal-title font-serif mb-0" id="editModalTitle">Edit Country Specifications & Showroom</h5>
-                        <small class="text-white-50" id="editModalSubtitle" style="font-size: 0.75rem;">Modify localized atelier address, support phone, tax rates, and logistics</small>
-                    </div>
-                </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            
-            <form action="<?= url('superadmin/countries/edit') ?>" method="POST" id="editCountryForm">
-                <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
-                <input type="hidden" name="country_id" id="edit_country_id" value="">
 
-                <div class="modal-body p-4">
-                    
-                    <!-- Top Info Pill -->
-                    <div class="d-flex align-items-center justify-content-between p-2.5 px-3 bg-light rounded-2 border mb-3">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-dark font-monospace" id="edit_badge_code">ISO: --</span>
-                            <span class="fw-bold text-dark font-serif" id="edit_display_name">Country Name</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <label class="small text-muted mb-0 fw-semibold">Storefront Status:</label>
-                            <select name="is_active" id="edit_is_active" class="form-select form-select-sm" style="width: auto;">
-                                <option value="1">Active Market</option>
-                                <option value="0">Deactivated</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Section 1: Showroom Address & Customer Support Channels -->
-                    <div class="card border rounded-3 p-3 mb-3" style="background: #ffffff; border-color: #cbd5e1 !important;">
-                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
-                            <i class="bi bi-building text-primary fs-5"></i>
-                            <h6 class="fw-bold text-dark font-serif mb-0">1. Physical Showroom & Contact Details</h6>
-                            <span class="badge bg-primary-subtle text-primary ms-auto small fw-normal">Displayed on Contact Page</span>
-                        </div>
-                        
-                        <div class="row g-3">
-                            <div class="col-md-7">
-                                <label class="form-label small fw-bold text-dark mb-1">Showroom / Atelier Name</label>
-                                <input type="text" name="atelier_title" id="edit_atelier_title" class="form-control form-control-sm" placeholder="e.g. The Colaba Heritage Showroom & Workshop">
-                                <small class="text-muted" style="font-size: 0.72rem;">Title displayed to customers looking for showroom visits or appointments.</small>
-                            </div>
-                            <div class="col-md-5">
-                                <label class="form-label small fw-bold text-dark mb-1">City / Regional Hub *</label>
-                                <input type="text" name="city" id="edit_city" class="form-control form-control-sm" placeholder="e.g. Mumbai, New York, London, Dubai">
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label small fw-bold text-dark mb-1">Physical Street Address *</label>
-                                <textarea name="address" id="edit_address" rows="2" class="form-control form-control-sm" placeholder="e.g. Heritage Wing, 14 B.K. Boman Behram Marg, Colaba, Mumbai 400001"></textarea>
-                                <small class="text-muted" style="font-size: 0.72rem;">Full physical address rendered in customer contact directories & export papers.</small>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Direct Support Phone *</label>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="text" name="contact_phone" id="edit_contact_phone" class="form-control" placeholder="+91 (22) 6842 9100">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">WhatsApp Concierge Phone</label>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text text-success"><i class="bi bi-whatsapp"></i></span>
-                                    <input type="text" name="contact_whatsapp" id="edit_contact_whatsapp" class="form-control" placeholder="+91 98200 48210">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Customer Support Email *</label>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" name="contact_email" id="edit_contact_email" class="form-control" placeholder="support.in@bullerleather.com">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-dark mb-1">Showroom & Support Operating Hours</label>
-                                <input type="text" name="support_hours" id="edit_support_hours" class="form-control form-control-sm" placeholder="e.g. Monday – Saturday: 10:00 AM – 8:00 PM IST">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-dark mb-1">Regional Courier & Logistics Partner</label>
-                                <input type="text" name="shipping_partner" id="edit_shipping_partner" class="form-control form-control-sm" placeholder="e.g. Blue Dart Apex & Air Express / DHL Express">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 2: Fiscal, Tax & Shipping Policy -->
-                    <div class="card border rounded-3 p-3 mb-3" style="background: #ffffff; border-color: #cbd5e1 !important;">
-                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
-                            <i class="bi bi-receipt text-success fs-5"></i>
-                            <h6 class="fw-bold text-dark font-serif mb-0">2. Fiscal, Tax & Shipping Policies</h6>
-                            <span class="badge bg-success-subtle text-success ms-auto small fw-normal">Checkout Calculations</span>
-                        </div>
-                        
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-dark mb-1">Statutory Tax Name *</label>
-                                <input type="text" name="tax_name" id="edit_tax_name" class="form-control form-control-sm" required placeholder="VAT / GST / Sales Tax">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-dark mb-1">Tax Rate Percentage (%) *</label>
-                                <input type="number" step="0.01" name="tax_rate_percent" id="edit_tax_rate_percent" class="form-control form-control-sm" required>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Flat Shipping Fee *</label>
-                                <input type="number" step="0.01" name="flat_shipping_rate" id="edit_flat_shipping_rate" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Free Shipping Threshold *</label>
-                                <input type="number" step="0.01" name="free_shipping_threshold" id="edit_free_shipping_threshold" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Return Window (Days) *</label>
-                                <input type="number" name="return_window_days" id="edit_return_window_days" class="form-control form-control-sm" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 3: Currency & Country Identity -->
-                    <div class="card border rounded-3 p-3" style="background: #ffffff; border-color: #cbd5e1 !important;">
-                        <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
-                            <i class="bi bi-cash-coin text-warning fs-5"></i>
-                            <h6 class="fw-bold text-dark font-serif mb-0">3. Currency & Regional Specifications</h6>
-                        </div>
-                        
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-dark mb-1">Country Legal Name *</label>
-                                <input type="text" name="name" id="edit_name" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label small fw-bold text-dark mb-1">Flag Emoji / Icon</label>
-                                <input type="text" name="flag_icon" id="edit_flag_icon" class="form-control form-control-sm">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label small fw-bold text-dark mb-1">Dial Prefix</label>
-                                <input type="text" name="phone_code" id="edit_phone_code" class="form-control form-control-sm font-monospace" placeholder="+1">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Currency Code *</label>
-                                <input type="text" name="currency_code" id="edit_currency_code" class="form-control form-control-sm font-monospace text-uppercase" maxlength="5" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Currency Symbol *</label>
-                                <input type="text" name="currency_symbol" id="edit_currency_symbol" class="form-control form-control-sm font-monospace" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-dark mb-1">Currency Title *</label>
-                                <input type="text" name="currency_name" id="edit_currency_name" class="form-control form-control-sm" required>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer bg-light d-flex justify-content-between align-items-center">
-                    <small class="text-muted" style="font-size: 0.75rem;">
-                        <i class="bi bi-shield-check text-success me-1"></i> Changes take effect across storefronts and customer support instantly.
-                    </small>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-dark btn-sm px-4 fw-bold shadow-sm" style="background: #0f382a !important; border-color: #0f382a;">
-                            <i class="bi bi-check2-circle me-1"></i> Update Market Details
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- ========================================================================= -->
 <!-- MODAL: ADD NEW COUNTRY WITH SMART AUTO-FILL & SHOWROOM ADDRESS PROVISIONING -->
@@ -717,50 +535,7 @@ const WORLD_COUNTRIES = [
     }
 ];
 
-// Open Edit Country Modal with Pre-populated Data
-function openEditCountryModal(country) {
-    if (!country) return;
 
-    // IDs and core specs
-    document.getElementById('edit_country_id').value = country.id || '';
-    document.getElementById('edit_badge_code').textContent = 'ISO: ' + (country.code || '');
-    document.getElementById('edit_display_name').textContent = country.name || '';
-    document.getElementById('editModalFlagDisplay').textContent = country.flag_icon || '🌍';
-    document.getElementById('editModalTitle').textContent = 'Edit ' + (country.name || 'Country') + ' (' + (country.code || '') + ')';
-
-    // Showroom & Address Presence
-    document.getElementById('edit_atelier_title').value = country.atelier_title || '';
-    document.getElementById('edit_city').value = country.city || '';
-    document.getElementById('edit_address').value = country.address || '';
-    document.getElementById('edit_contact_phone').value = country.contact_phone || '';
-    document.getElementById('edit_contact_whatsapp').value = country.contact_whatsapp || '';
-    document.getElementById('edit_contact_email').value = country.contact_email || '';
-    document.getElementById('edit_support_hours').value = country.support_hours || '';
-    document.getElementById('edit_shipping_partner').value = country.shipping_partner || '';
-
-    // Fiscal & Policy
-    document.getElementById('edit_tax_name').value = country.tax_name || 'VAT';
-    document.getElementById('edit_tax_rate_percent').value = parseFloat(country.tax_rate_percent || 0).toFixed(2);
-    document.getElementById('edit_flat_shipping_rate').value = parseFloat(country.flat_shipping_rate || 0).toFixed(2);
-    document.getElementById('edit_free_shipping_threshold').value = parseFloat(country.free_shipping_threshold || 0).toFixed(2);
-    document.getElementById('edit_return_window_days').value = parseInt(country.return_window_days || 30);
-
-    // Identity & Status
-    document.getElementById('edit_name').value = country.name || '';
-    document.getElementById('edit_flag_icon').value = country.flag_icon || '🌐';
-    document.getElementById('edit_phone_code').value = country.phone_code || '';
-    document.getElementById('edit_currency_code').value = country.currency_code || '';
-    document.getElementById('edit_currency_symbol').value = country.currency_symbol || '';
-    document.getElementById('edit_currency_name').value = country.currency_name || '';
-    document.getElementById('edit_is_active').value = (country.is_active !== undefined && country.is_active !== null) ? country.is_active : '1';
-
-    // Open the Bootstrap modal
-    const modalEl = document.getElementById('editCountryModal');
-    if (modalEl) {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-    }
-}
 
 // Initialize Datalist and Quick Preset Dropdown on Page Load
 document.addEventListener('DOMContentLoaded', function() {
