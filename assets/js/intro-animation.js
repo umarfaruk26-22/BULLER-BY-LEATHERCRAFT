@@ -13,10 +13,10 @@
         playMode: 'always', 
         
         // Total duration of the animation before fade out starts (milliseconds)
-        durationMs: 4800,
+        durationMs: 3100,
         
         // Fade out transition duration
-        fadeDurationMs: 550,
+        fadeDurationMs: 400,
         
         // Session storage key
         storageKey: 'buller_intro_viewed_v1'

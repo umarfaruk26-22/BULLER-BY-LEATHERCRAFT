@@ -15,6 +15,9 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
 
 <!-- MASTER INTRO OVERLAY -->
 <div id="bullerIntroOverlay" role="dialog" aria-modal="true" aria-label="Buller By Leathercraft Introduction">
+    <!-- Top Luxury Animated Progress Indicator -->
+    <div class="buller-intro-progress-line" aria-hidden="true"></div>
+
     <!-- Ambient luxury vignette & subtle grain -->
     <div class="buller-intro-vignette" aria-hidden="true"></div>
 
