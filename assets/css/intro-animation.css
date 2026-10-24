@@ -327,14 +327,14 @@ body.buller-intro-locked {
 .buller-intro-master-lockup {
     display: flex;
     align-items: center;
-    gap: clamp(14px, 3vw, 24px);
-    padding: clamp(14px, 2.5vw, 22px) clamp(20px, 4vw, 36px);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(197, 168, 128, 0.4);
-    box-shadow: 0 16px 45px rgba(99, 52, 27, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    gap: clamp(20px, 4.5vw, 40px);
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .buller-intro-master-icon-wrap {
@@ -345,10 +345,10 @@ body.buller-intro-locked {
 }
 
 .buller-intro-master-icon {
-    width: clamp(52px, 8.5vw, 84px);
+    width: clamp(75px, 12vw, 130px);
     height: auto;
     display: block;
-    filter: drop-shadow(0 6px 14px rgba(99, 52, 27, 0.18));
+    filter: drop-shadow(0 10px 24px rgba(99, 52, 27, 0.22));
 }
 
 .buller-intro-master-text {
@@ -356,45 +356,48 @@ body.buller-intro-locked {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    line-height: 1.1;
+    line-height: 1.05;
     text-align: left;
 }
 
 .buller-intro-master-main {
     font-family: var(--font-brand, 'Cinzel', serif);
-    font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+    font-size: clamp(2.4rem, 6.2vw, 4.5rem);
     font-weight: 700;
     color: #120b06;
-    letter-spacing: 0.26em;
-    margin-right: -0.26em;
-    line-height: 1.05;
+    letter-spacing: 0.28em;
+    margin-right: -0.28em;
+    line-height: 1.02;
     white-space: nowrap;
+    text-shadow: 0 4px 20px rgba(18, 11, 6, 0.08);
 }
 
 .buller-intro-master-sub {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
-    font-size: clamp(0.55rem, 1.2vw, 0.8rem);
+    font-size: clamp(0.72rem, 1.6vw, 1.05rem);
     font-weight: 600;
-    letter-spacing: 0.22em;
-    margin-right: -0.22em;
+    letter-spacing: 0.26em;
+    margin-right: -0.26em;
     text-transform: uppercase;
     color: #9e7d4e;
-    margin-top: 5px;
+    margin-top: clamp(8px, 1.5vw, 14px);
     white-space: nowrap;
 }
 
+.buller-intro-master-sub .sub-dash,
 .buller-intro-master-sub .sub-dot {
     color: #c5a880;
-    font-size: 0.65em;
+    font-size: 0.85em;
+    opacity: 0.85;
 }
 
 @keyframes bullerMasterAssemble {
     0% {
         opacity: 0;
-        transform: scale(0.92) translateY(10px);
+        transform: scale(0.92) translateY(12px);
     }
     30% {
         opacity: 1;
@@ -402,7 +405,6 @@ body.buller-intro-locked {
     60% {
         opacity: 1;
         transform: scale(1) translateY(0);
-        box-shadow: 0 20px 50px rgba(99, 52, 27, 0.14), 0 0 35px rgba(223, 194, 152, 0.4);
     }
     100% {
         opacity: 1;
@@ -455,25 +457,26 @@ body.buller-intro-locked {
     }
 
     .buller-intro-master-lockup {
-        padding: 14px 18px;
-        gap: 12px;
+        padding: 0;
+        gap: 16px;
     }
 
     .buller-intro-master-icon {
-        width: 46px;
+        width: clamp(58px, 15vw, 78px);
     }
 
     .buller-intro-master-main {
-        font-size: 1.6rem;
-        letter-spacing: 0.22em;
-        margin-right: -0.22em;
+        font-size: clamp(1.85rem, 6.2vw, 2.5rem);
+        letter-spacing: 0.24em;
+        margin-right: -0.24em;
     }
 
     .buller-intro-master-sub {
-        font-size: 0.54rem;
-        letter-spacing: 0.18em;
-        margin-right: -0.18em;
-        gap: 4px;
+        font-size: clamp(0.58rem, 1.8vw, 0.72rem);
+        letter-spacing: 0.22em;
+        margin-right: -0.22em;
+        gap: 5px;
+        margin-top: 6px;
     }
 
     .buller-intro-skip-btn {

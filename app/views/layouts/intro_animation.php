@@ -54,9 +54,9 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
                 <div class="buller-intro-master-text">
                     <div class="buller-intro-master-main">BULLER</div>
                     <div class="buller-intro-master-sub">
-                        <span class="sub-dot">&bull;</span>
+                        <span class="sub-dash">&mdash;</span>
                         <span>BY LEATHERCRAFT</span>
-                        <span class="sub-dot">&bull;</span>
+                        <span class="sub-dash">&mdash;</span>
                     </div>
                 </div>
             </div>
