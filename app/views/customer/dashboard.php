@@ -2,7 +2,7 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'My Account | Customer Dashboard';
+$pageTitle = 'My Account';
 require __DIR__ . '/../layouts/header.php';
 ?>
 

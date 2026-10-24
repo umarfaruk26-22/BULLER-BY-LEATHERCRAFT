@@ -2,7 +2,7 @@
 use App\Core\MarketContext;
 use App\Core\Wishlist;
 
-$pageTitle = 'Your Wishlist';
+$pageTitle = 'Wishlist';
 $activeCountry = MarketContext::getCountry();
 
 require __DIR__ . '/../layouts/header.php';

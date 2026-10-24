@@ -2,7 +2,7 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'Sign In | Customer Account';
+$pageTitle = 'Sign In';
 $activeCountry = MarketContext::getCountry();
 
 require __DIR__ . '/../layouts/header.php';

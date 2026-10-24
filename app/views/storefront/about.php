@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'About Us — By Leathercraft | Buller Heritage';
+$pageTitle = 'About Us';
 $pageDescription = 'Discover the Buller Leather lineage. Heirloom full-grain leather goods mastercrafted with ancestral European tanning and generational devotion.';
 require __DIR__ . '/../layouts/header.php';
 ?>

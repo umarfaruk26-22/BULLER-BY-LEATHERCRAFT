@@ -1,5 +1,5 @@
 <?php
-$pageTitle = '404 - Page Not Found';
+$pageTitle = 'Page Not Found';
 require __DIR__ . '/../layouts/header.php';
 ?>
 

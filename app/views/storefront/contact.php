@@ -2,7 +2,7 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'Customer Support & Regional Offices | Buller Leather';
+$pageTitle = 'Contact Us';
 $pageDescription = 'Connect directly with Buller Leather regional offices across London, New York, Mumbai, and Dubai for bespoke fitting, corporate commissions, and customer support.';
 
 // Get active shopping market

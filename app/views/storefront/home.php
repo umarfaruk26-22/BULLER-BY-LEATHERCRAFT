@@ -2,7 +2,7 @@
 use App\Core\MarketContext;
 use App\Core\Wishlist;
 
-$pageTitle = 'Generational Leather Craftsmanship & Heritage Luxury';
+$pageTitle = 'Buller Leather';
 require __DIR__ . '/../layouts/header.php';
 require __DIR__ . '/../layouts/intro_animation.php';
 

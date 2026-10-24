@@ -17,7 +17,18 @@ $currentUser = Auth::user();
     <meta name="theme-color" content="#fdfbf7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title><?= isset($pageTitle) ? e($pageTitle) . ' | ' . APP_NAME : APP_NAME . ' | Generational Leather Craftsmanship & Heritage Luxury' ?></title>
+    <?php
+    $resolvedTitle = APP_NAME;
+    if (!empty($pageTitle) && $pageTitle !== APP_NAME && $pageTitle !== 'Buller Leather' && !str_contains($pageTitle, 'Generational Leather')) {
+        $cleanTitle = trim($pageTitle);
+        if (str_contains($cleanTitle, APP_NAME)) {
+            $resolvedTitle = $cleanTitle;
+        } else {
+            $resolvedTitle = $cleanTitle . ' | ' . APP_NAME;
+        }
+    }
+    ?>
+    <title><?= e($resolvedTitle) ?></title>
     <meta name="description" content="<?= isset($pageDescription) ? e($pageDescription) : 'Buller Leather offers heirloom-grade full-grain leather jackets, executive briefcases, travel duffels, and bespoke accessories with worldwide international delivery.' ?>">
     
     <!-- Favicon / Brand Medallion (High-Contrast for Browser Tabs) -->

@@ -11,7 +11,7 @@ $pricing = MarketContext::evaluatePricing(
     $product['discount_end_date']
 );
 $isWishlisted = Wishlist::has((int)$product['id']);
-$pageTitle = $product['title'] . ' | Buller Leather Heritage';
+$pageTitle = $product['title'];
 
 require __DIR__ . '/../layouts/header.php';
 ?>

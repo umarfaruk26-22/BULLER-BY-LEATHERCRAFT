@@ -2,7 +2,7 @@
 use App\Core\Cart;
 use App\Core\MarketContext;
 
-$pageTitle = 'Your Shopping Bag';
+$pageTitle = 'Shopping Bag';
 $summary = Cart::getSummary();
 $activeCountry = MarketContext::getCountry();
 

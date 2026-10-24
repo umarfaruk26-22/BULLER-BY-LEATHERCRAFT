@@ -3,7 +3,7 @@ use App\Core\Cart;
 use App\Core\MarketContext;
 use App\Core\Auth;
 
-$pageTitle = 'Secure International Checkout';
+$pageTitle = 'Checkout';
 $summary = Cart::getSummary();
 $activeCountry = MarketContext::getCountry();
 $currentUser = Auth::user();

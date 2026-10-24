@@ -2,7 +2,7 @@
 use App\Core\Auth;
 use App\Core\MarketContext;
 
-$pageTitle = 'Create Client Account';
+$pageTitle = 'Create Account';
 $countries = MarketContext::getAllActiveCountries();
 $activeCountry = MarketContext::getCountry();
 
