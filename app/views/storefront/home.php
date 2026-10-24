@@ -4,6 +4,7 @@ use App\Core\Wishlist;
 
 $pageTitle = 'Generational Leather Craftsmanship & Heritage Luxury';
 require __DIR__ . '/../layouts/header.php';
+require __DIR__ . '/../layouts/intro_animation.php';
 
 $activeCountry = MarketContext::getCountry();
 ?>
