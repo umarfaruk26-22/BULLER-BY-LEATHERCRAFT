@@ -1,101 +1,100 @@
 /**
- * BULLER BY LEATHERCRAFT — CINEMATIC WEBSITE INTRO CONTROLLER
- * Handles sequence timing, scroll locking, session persistence,
- * skip triggers, keyboard shortcuts, and DOM cleanup.
+ * BULLER BY LEATHERCRAFT — UNIVERSAL INTRO ANIMATION CONTROLLER
+ * Cross-platform support for iOS Safari, WebKit, Android, Windows, macOS.
+ * Handles bfcache pageshow, touch gestures, skip events, and clean DOM teardown.
  */
 (function () {
     'use strict';
 
-    // Global Intro Configuration (Easily customizable)
+    // Global Intro Configuration
     window.BULLER_INTRO_CONFIG = Object.assign({
         // 'always' = Har visit / reload par play hoga
         // 'session' = Sirf pehli visit par play hoga (sessionStorage)
         playMode: 'always', 
         
-        // Total duration of the animation before fade out starts (milliseconds)
+        // Total duration before fade out starts (milliseconds)
         durationMs: 3100,
         
         // Fade out transition duration
-        fadeDurationMs: 400,
+        fadeDurationMs: 450,
         
         // Session storage key
-        storageKey: 'buller_intro_viewed_v1'
+        storageKey: 'buller_intro_viewed_v2'
     }, window.BULLER_INTRO_CONFIG || {});
 
-    // Check URL parameters for explicit overrides:
+    // URL parameter overrides:
     // ?intro=1 forces intro replay
     // ?skip_intro=1 disables intro
     var urlParams = new URLSearchParams(window.location.search);
     var forcePlay = urlParams.get('intro') === '1';
     var forceSkip = urlParams.get('skip_intro') === '1';
 
-    // Respect user's OS-level accessibility preference
-    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var isInitialized = false;
 
     function initIntroAnimation() {
         var overlay = document.getElementById('bullerIntroOverlay');
         if (!overlay) return;
 
-        // Skip immediately if motion is reduced or forced via URL
-        if (forceSkip || prefersReducedMotion) {
+        // Force skip via URL only
+        if (forceSkip) {
             overlay.classList.add('buller-intro-hidden');
-            overlay.remove();
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
             return;
         }
 
-        // If session mode is active and user has already seen it in this browser session
+        // If session mode is requested and user already viewed in this session
         if (!forcePlay && window.BULLER_INTRO_CONFIG.playMode === 'session') {
             try {
-                if (sessionStorage.getItem(window.BULLER_INTRO_CONFIG.storageKey) === 'true') {
+                if (window.sessionStorage && sessionStorage.getItem(window.BULLER_INTRO_CONFIG.storageKey) === 'true') {
                     overlay.classList.add('buller-intro-hidden');
-                    overlay.remove();
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
                     return;
                 }
             } catch (e) {
-                // Storage access restricted (e.g. private browsing), proceed gracefully
+                // iOS Private Browsing may block sessionStorage, proceed gracefully
             }
         }
 
-        // Lock background scroll immediately
+        if (isInitialized) return;
+        isInitialized = true;
+
+        // Lock background scroll safely
         document.body.classList.add('buller-intro-locked');
 
         var isFinished = false;
         var exitTimer = null;
-        var cleanupTimer = null;
 
         function finishIntro() {
             if (isFinished) return;
             isFinished = true;
 
-            // Clear any pending timers
-            if (exitTimer) clearTimeout(exitTimer);
-            if (cleanupTimer) clearTimeout(cleanupTimer);
+            if (exitTimer) {
+                clearTimeout(exitTimer);
+                exitTimer = null;
+            }
 
-            // Record session view if in session mode
             try {
-                sessionStorage.setItem(window.BULLER_INTRO_CONFIG.storageKey, 'true');
+                if (window.sessionStorage) {
+                    sessionStorage.setItem(window.BULLER_INTRO_CONFIG.storageKey, 'true');
+                }
             } catch (e) {}
 
-            // Fade out overlay
+            // Smooth fade out
             overlay.classList.add('buller-intro-fading');
-
-            // Unlock page scrolling smoothly
             document.body.classList.remove('buller-intro-locked');
 
-            // Complete DOM cleanup after fade transition finishes
             setTimeout(function () {
                 overlay.classList.add('buller-intro-hidden');
-                // Remove overlay from DOM to free GPU memory and ensure zero interference
                 if (overlay.parentNode) {
                     overlay.parentNode.removeChild(overlay);
                 }
-
-                // Dispatch custom event for any downstream modules
-                window.dispatchEvent(new CustomEvent('buller:introComplete'));
+                try {
+                    window.dispatchEvent(new CustomEvent('buller:introComplete'));
+                } catch (e) {}
             }, window.BULLER_INTRO_CONFIG.fadeDurationMs);
         }
 
-        // Bind Skip Button Click
+        // Skip Button Listeners (both Click & Touch for iOS)
         var skipBtn = document.getElementById('bullerIntroSkipBtn');
         if (skipBtn) {
             skipBtn.addEventListener('click', function (e) {
@@ -103,9 +102,14 @@
                 e.stopPropagation();
                 finishIntro();
             });
+            skipBtn.addEventListener('touchend', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                finishIntro();
+            }, { passive: false });
         }
 
-        // Allow pressing 'Escape' key to skip
+        // Keyboard 'Escape' listener
         function onKeyDown(e) {
             if (e.key === 'Escape' || e.keyCode === 27) {
                 document.removeEventListener('keydown', onKeyDown);
@@ -114,26 +118,35 @@
         }
         document.addEventListener('keydown', onKeyDown);
 
-        // Schedule normal cinematic sequence completion
+        // Schedule completion
         exitTimer = setTimeout(function () {
             finishIntro();
         }, window.BULLER_INTRO_CONFIG.durationMs);
     }
 
-    // Expose developer / user helper function to replay intro anytime via console
+    // Expose replay helper function
     window.replayBullerIntro = function () {
         try {
-            sessionStorage.removeItem(window.BULLER_INTRO_CONFIG.storageKey);
+            if (window.sessionStorage) {
+                sessionStorage.removeItem(window.BULLER_INTRO_CONFIG.storageKey);
+            }
         } catch (e) {}
         var url = new URL(window.location.href);
         url.searchParams.set('intro', '1');
         window.location.href = url.toString();
     };
 
-    // Initialize as soon as DOM is ready
+    // Universal DOM readiness triggers (handles iOS Safari bfcache)
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initIntroAnimation);
     } else {
         initIntroAnimation();
     }
+
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            isInitialized = false;
+            initIntroAnimation();
+        }
+    });
 })();

@@ -1,35 +1,42 @@
 /* ==========================================================================
-   BULLER BY LEATHERCRAFT — CINEMATIC LUXURY WEBSITE INTRO ANIMATION
-   High-performance GPU-accelerated keyframe animation suite.
-   Colors: Warm Ivory (#fdfbf7), Espresso (#120b06), Antique Gold (#c5a880)
-   Optimized Snappy Timing: ~3.2 seconds total with zero initial blank lag.
+   BULLER BY LEATHERCRAFT — UNIVERSAL CINEMATIC LUXURY INTRO ANIMATION
+   Universal cross-platform engine with full iOS WebKit/Safari, Android,
+   Windows, macOS, Chrome, Firefox & Edge hardware acceleration.
    ========================================================================== */
 
 /* Prevent scrolling while intro overlay is active */
 body.buller-intro-locked {
     overflow: hidden !important;
+    position: relative !important;
     touch-action: none !important;
+    -webkit-overflow-scrolling: auto !important;
     user-select: none !important;
+    -webkit-user-select: none !important;
 }
 
-/* Master Fixed Overlay */
+/* Master Fixed Overlay — 100% iOS Viewport Safe */
 #bullerIntroOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    z-index: 9999999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fdfbf7 55%, #f5efe3 100%);
-    overflow: hidden;
-    pointer-events: all;
-    opacity: 1;
-    visibility: visible;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    height: -webkit-fill-available !important;
+    z-index: 2147483647 !important; /* Highest possible 32-bit z-index */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fdfbf7 55%, #f5efe3 100%) !important;
+    overflow: hidden !important;
+    pointer-events: all !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    -webkit-transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s ease;
     transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s ease;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
     will-change: opacity;
 }
 
@@ -43,9 +50,14 @@ body.buller-intro-locked {
     background: linear-gradient(90deg, #c5a880, #dfc298, #c5a880);
     box-shadow: 0 0 12px rgba(223, 194, 152, 0.7);
     z-index: 100;
+    -webkit-animation: bullerProgressFlow 3.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     animation: bullerProgressFlow 3.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@-webkit-keyframes bullerProgressFlow {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
 @keyframes bullerProgressFlow {
     0% { width: 0%; }
     100% { width: 100%; }
@@ -67,7 +79,12 @@ body.buller-intro-locked {
 /* Subtle Radial Vignette */
 .buller-intro-vignette {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(99, 52, 27, 0.04) 85%, rgba(18, 11, 6, 0.08) 100%);
     pointer-events: none;
     z-index: 1;
@@ -78,51 +95,63 @@ body.buller-intro-locked {
     position: absolute;
     top: clamp(14px, 3vh, 26px);
     right: clamp(14px, 4vw, 32px);
-    z-index: 20;
+    z-index: 200;
     display: inline-flex;
     align-items: center;
     gap: 7px;
     padding: 6px 13px;
-    background: rgba(253, 251, 247, 0.88);
-    border: 1px solid rgba(197, 168, 128, 0.45);
+    background: rgba(253, 251, 247, 0.92);
+    border: 1px solid rgba(197, 168, 128, 0.5);
     border-radius: 30px;
     color: #8c4a2f;
-    font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+    font-family: var(--font-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
     font-size: 0.66rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     cursor: pointer;
-    backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 16px rgba(18, 11, 6, 0.05);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(18, 11, 6, 0.06);
+    -webkit-transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0;
+    -webkit-animation: bullerSkipFadeIn 0.4s ease forwards 0.3s;
     animation: bullerSkipFadeIn 0.4s ease forwards 0.3s;
+    touch-action: manipulation;
 }
 
 .buller-intro-skip-btn i {
     font-size: 0.7rem;
     color: #9e7d4e;
+    -webkit-transition: -webkit-transform 0.25s ease;
     transition: transform 0.25s ease;
 }
 
-.buller-intro-skip-btn:hover {
+.buller-intro-skip-btn:hover,
+.buller-intro-skip-btn:active {
     background: #120b06;
     border-color: #c5a880;
     color: #fdfbf7;
+    -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(18, 11, 6, 0.12);
+    box-shadow: 0 6px 20px rgba(18, 11, 6, 0.14);
 }
 
-.buller-intro-skip-btn:hover i {
+.buller-intro-skip-btn:hover i,
+.buller-intro-skip-btn:active i {
     color: #dfc298;
+    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 
+@-webkit-keyframes bullerSkipFadeIn {
+    from { opacity: 0; -webkit-transform: translateY(-6px); transform: translateY(-6px); }
+    to { opacity: 0.95; -webkit-transform: translateY(0); transform: translateY(0); }
+}
 @keyframes bullerSkipFadeIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 0.9; transform: translateY(0); }
+    from { opacity: 0; -webkit-transform: translateY(-6px); transform: translateY(-6px); }
+    to { opacity: 0.95; -webkit-transform: translateY(0); transform: translateY(0); }
 }
 
 /* Master Stage Canvas (Centered Stack) */
@@ -135,8 +164,8 @@ body.buller-intro-locked {
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 1200px;
-    perspective-origin: center center;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
 
 /* --------------------------------------------------------------------------
@@ -149,43 +178,88 @@ body.buller-intro-locked {
     justify-content: center;
     pointer-events: none;
     opacity: 0;
-    transform: scale(0.15) translateZ(-150px);
+    -webkit-transform: scale(0.18);
+    transform: scale(0.18);
     filter: drop-shadow(0 18px 38px rgba(99, 52, 27, 0.22));
+    -webkit-filter: drop-shadow(0 18px 38px rgba(99, 52, 27, 0.22));
+    -webkit-animation: bullerIconCinematic 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
     animation: bullerIconCinematic 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     will-change: transform, opacity;
 }
 
 .buller-intro-stage-bull img {
     width: clamp(140px, 24vw, 240px);
     height: auto;
+    aspect-ratio: 1976 / 1853; /* Crucial for iOS Safari intrinsic ratio calculation */
     max-height: 38vh;
     display: block;
     object-fit: contain;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 
-@keyframes bullerIconCinematic {
+@-webkit-keyframes bullerIconCinematic {
     0% {
         opacity: 0;
-        transform: perspective(1000px) translateZ(-160px) scale(0.18);
+        -webkit-transform: scale(0.18);
+        transform: scale(0.18);
     }
     22% {
         opacity: 1;
     }
     58% {
         opacity: 1;
-        transform: perspective(1000px) translateZ(25px) scale(1.03);
+        -webkit-transform: scale(1.03);
+        transform: scale(1.03);
     }
     72% {
         opacity: 1;
-        transform: perspective(1000px) translateZ(0) scale(1);
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
     85% {
         opacity: 0.85;
-        transform: perspective(1000px) translateZ(-40px) scale(0.85);
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
     }
     100% {
         opacity: 0;
-        transform: perspective(1000px) translateZ(-140px) scale(0.55);
+        -webkit-transform: scale(0.55);
+        transform: scale(0.55);
+        visibility: hidden;
+    }
+}
+
+@keyframes bullerIconCinematic {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.18);
+        transform: scale(0.18);
+    }
+    22% {
+        opacity: 1;
+    }
+    58% {
+        opacity: 1;
+        -webkit-transform: scale(1.03);
+        transform: scale(1.03);
+    }
+    72% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    85% {
+        opacity: 0.85;
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(0.55);
+        transform: scale(0.55);
         visibility: hidden;
     }
 }
@@ -202,7 +276,9 @@ body.buller-intro-locked {
     text-align: center;
     pointer-events: none;
     opacity: 0;
+    -webkit-transform: scale(0.94);
     transform: scale(0.94);
+    -webkit-animation: bullerTextSequence 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.05s;
     animation: bullerTextSequence 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.05s;
     will-change: transform, opacity;
 }
@@ -218,18 +294,36 @@ body.buller-intro-locked {
     line-height: 1;
     text-shadow: 0 4px 18px rgba(18, 11, 6, 0.08);
     opacity: 0;
+    -webkit-transform: translateY(10px) scale(0.95);
     transform: translateY(10px) scale(0.95);
+    -webkit-animation: bullerWordmarkIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.08s;
     animation: bullerWordmarkIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.08s;
 }
 
-@keyframes bullerWordmarkIn {
+@-webkit-keyframes bullerWordmarkIn {
     0% {
         opacity: 0;
+        -webkit-transform: translateY(14px) scale(0.93);
         transform: translateY(14px) scale(0.93);
         letter-spacing: 0.20em;
     }
     100% {
         opacity: 1;
+        -webkit-transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1);
+        letter-spacing: 0.32em;
+    }
+}
+@keyframes bullerWordmarkIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(14px) scale(0.93);
+        transform: translateY(14px) scale(0.93);
+        letter-spacing: 0.20em;
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0) scale(1);
         transform: translateY(0) scale(1);
         letter-spacing: 0.32em;
     }
@@ -244,11 +338,12 @@ body.buller-intro-locked {
     margin-top: clamp(8px, 1.8vw, 16px);
     width: 100%;
     opacity: 0;
+    -webkit-animation: bullerTaglineIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.25s;
     animation: bullerTaglineIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.25s;
 }
 
 .buller-intro-tagline {
-    font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+    font-family: var(--font-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
     font-size: clamp(0.62rem, 1.6vw, 0.92rem);
     font-weight: 600;
     letter-spacing: 0.32em;
@@ -263,54 +358,54 @@ body.buller-intro-locked {
     height: 1px;
     width: clamp(24px, 8vw, 60px);
     background: linear-gradient(90deg, rgba(197, 168, 128, 0.1), #c5a880);
+    -webkit-transform: scaleX(0);
     transform: scaleX(0);
+    -webkit-transform-origin: center right;
     transform-origin: center right;
+    -webkit-animation: bullerLineExpand 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.35s;
     animation: bullerLineExpand 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.35s;
 }
 
 .buller-intro-line.line-right {
     background: linear-gradient(90deg, #c5a880, rgba(197, 168, 128, 0.1));
+    -webkit-transform-origin: center left;
     transform-origin: center left;
 }
 
+@-webkit-keyframes bullerTaglineIn {
+    0% { opacity: 0; -webkit-transform: translateY(8px); transform: translateY(8px); }
+    100% { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
+}
 @keyframes bullerTaglineIn {
-    0% {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    0% { opacity: 0; -webkit-transform: translateY(8px); transform: translateY(8px); }
+    100% { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
 }
 
+@-webkit-keyframes bullerLineExpand {
+    0% { -webkit-transform: scaleX(0); transform: scaleX(0); }
+    100% { -webkit-transform: scaleX(1); transform: scaleX(1); }
+}
 @keyframes bullerLineExpand {
-    0% { transform: scaleX(0); }
-    100% { transform: scaleX(1); }
+    0% { -webkit-transform: scaleX(0); transform: scaleX(0); }
+    100% { -webkit-transform: scaleX(1); transform: scaleX(1); }
 }
 
+@-webkit-keyframes bullerTextSequence {
+    0% { opacity: 1; -webkit-transform: scale(0.96); transform: scale(0.96); }
+    75% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+    90% { opacity: 0.5; -webkit-transform: scale(1.02); transform: scale(1.02); }
+    100% { opacity: 0; -webkit-transform: scale(1.04); transform: scale(1.04); visibility: hidden; }
+}
 @keyframes bullerTextSequence {
-    0% {
-        opacity: 1;
-        transform: scale(0.96);
-    }
-    75% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    90% {
-        opacity: 0.5;
-        transform: scale(1.02);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(1.04);
-        visibility: hidden;
-    }
+    0% { opacity: 1; -webkit-transform: scale(0.96); transform: scale(0.96); }
+    75% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+    90% { opacity: 0.5; -webkit-transform: scale(1.02); transform: scale(1.02); }
+    100% { opacity: 0; -webkit-transform: scale(1.04); transform: scale(1.04); visibility: hidden; }
 }
 
 /* --------------------------------------------------------------------------
    STAGE 3: COMPLETE MASTER LOGO LOCKUP (Phase 6: 2.05s – 2.95s)
+   Borderless & Enlarged — perfectly centered
    -------------------------------------------------------------------------- */
 .buller-intro-stage-master {
     position: absolute;
@@ -319,7 +414,9 @@ body.buller-intro-locked {
     justify-content: center;
     pointer-events: none;
     opacity: 0;
+    -webkit-transform: scale(0.94);
     transform: scale(0.94);
+    -webkit-animation: bullerMasterAssemble 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.05s;
     animation: bullerMasterAssemble 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.05s;
     will-change: transform, opacity;
 }
@@ -327,14 +424,15 @@ body.buller-intro-locked {
 .buller-intro-master-lockup {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: clamp(20px, 4.5vw, 40px);
     padding: 0;
     border-radius: 0;
     background: transparent;
     border: none;
     box-shadow: none;
-    backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
 }
 
 .buller-intro-master-icon-wrap {
@@ -347,8 +445,10 @@ body.buller-intro-locked {
 .buller-intro-master-icon {
     width: clamp(75px, 12vw, 130px);
     height: auto;
+    aspect-ratio: 1976 / 1853; /* Crucial for iOS Safari */
     display: block;
     filter: drop-shadow(0 10px 24px rgba(99, 52, 27, 0.22));
+    -webkit-filter: drop-shadow(0 10px 24px rgba(99, 52, 27, 0.22));
 }
 
 .buller-intro-master-text {
@@ -379,7 +479,7 @@ body.buller-intro-locked {
     justify-content: center;
     width: 100%;
     gap: 8px;
-    font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+    font-family: var(--font-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
     font-size: clamp(0.72rem, 1.6vw, 1.05rem);
     font-weight: 600;
     letter-spacing: 0.26em;
@@ -398,9 +498,10 @@ body.buller-intro-locked {
     opacity: 0.85;
 }
 
-@keyframes bullerMasterAssemble {
+@-webkit-keyframes bullerMasterAssemble {
     0% {
         opacity: 0;
+        -webkit-transform: scale(0.92) translateY(12px);
         transform: scale(0.92) translateY(12px);
     }
     30% {
@@ -408,10 +509,32 @@ body.buller-intro-locked {
     }
     60% {
         opacity: 1;
+        -webkit-transform: scale(1) translateY(0);
         transform: scale(1) translateY(0);
     }
     100% {
         opacity: 1;
+        -webkit-transform: scale(1) translateY(0);
+        transform: scale(1) translateY(0);
+    }
+}
+@keyframes bullerMasterAssemble {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.92) translateY(12px);
+        transform: scale(0.92) translateY(12px);
+    }
+    30% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(0);
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(0);
         transform: scale(1) translateY(0);
     }
 }
@@ -442,6 +565,7 @@ body.buller-intro-locked {
 
     .buller-intro-stage-bull img {
         width: clamp(120px, 42vw, 170px);
+        aspect-ratio: 1976 / 1853;
     }
 
     .buller-intro-wordmark {
@@ -467,6 +591,7 @@ body.buller-intro-locked {
 
     .buller-intro-master-icon {
         width: clamp(58px, 15vw, 78px);
+        aspect-ratio: 1976 / 1853;
     }
 
     .buller-intro-master-text {
@@ -497,19 +622,5 @@ body.buller-intro-locked {
         right: 14px;
         padding: 6px 11px;
         font-size: 0.62rem;
-    }
-}
-
-/* --------------------------------------------------------------------------
-   ACCESSIBILITY: PREFERS REDUCED MOTION
-   -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-    #bullerIntroOverlay {
-        transition: none !important;
-        animation: none !important;
-        display: none !important;
-    }
-    body.buller-intro-locked {
-        overflow: auto !important;
     }
 }

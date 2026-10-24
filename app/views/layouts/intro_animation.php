@@ -32,7 +32,7 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
         
         <!-- STAGE 1: Standalone 3D Bull Head Icon (Phases 2 & 3: Reveal, Hover, Depth Exit) -->
         <div class="buller-intro-stage-bull" id="bullerIntroStageBull" aria-hidden="true">
-            <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Heritage Crest" class="buller-intro-bull-icon">
+            <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Heritage Crest" class="buller-intro-bull-icon" width="1976" height="1853">
         </div>
 
         <!-- STAGE 2: Harmonious Typography Reveal (Phases 4 & 5: BULLER + BY LEATHERCRAFT + Golden Hairlines) -->
@@ -49,7 +49,7 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
         <div class="buller-intro-stage-master" id="bullerIntroStageMaster" aria-label="BULLER BY LEATHERCRAFT">
             <div class="buller-intro-master-lockup">
                 <div class="buller-intro-master-icon-wrap">
-                    <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Logo Icon" class="buller-intro-master-icon">
+                    <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Logo Icon" class="buller-intro-master-icon" width="1976" height="1853">
                 </div>
                 <div class="buller-intro-master-text">
                     <div class="buller-intro-master-main">BULLER</div>
