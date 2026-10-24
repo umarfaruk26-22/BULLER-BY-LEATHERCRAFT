@@ -354,10 +354,10 @@ body.buller-intro-locked {
 .buller-intro-master-text {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     line-height: 1.05;
-    text-align: left;
+    text-align: center;
 }
 
 .buller-intro-master-main {
@@ -370,11 +370,14 @@ body.buller-intro-locked {
     line-height: 1.02;
     white-space: nowrap;
     text-shadow: 0 4px 20px rgba(18, 11, 6, 0.08);
+    text-align: center;
 }
 
 .buller-intro-master-sub {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
     gap: 8px;
     font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
     font-size: clamp(0.72rem, 1.6vw, 1.05rem);
@@ -385,6 +388,7 @@ body.buller-intro-locked {
     color: #9e7d4e;
     margin-top: clamp(8px, 1.5vw, 14px);
     white-space: nowrap;
+    text-align: center;
 }
 
 .buller-intro-master-sub .sub-dash,
@@ -465,10 +469,16 @@ body.buller-intro-locked {
         width: clamp(58px, 15vw, 78px);
     }
 
+    .buller-intro-master-text {
+        align-items: center;
+        text-align: center;
+    }
+
     .buller-intro-master-main {
         font-size: clamp(1.85rem, 6.2vw, 2.5rem);
         letter-spacing: 0.24em;
         margin-right: -0.24em;
+        text-align: center;
     }
 
     .buller-intro-master-sub {
@@ -477,6 +487,9 @@ body.buller-intro-locked {
         margin-right: -0.22em;
         gap: 5px;
         margin-top: 6px;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
     }
 
     .buller-intro-skip-btn {
