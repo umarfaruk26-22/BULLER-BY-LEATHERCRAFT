@@ -29,6 +29,9 @@ if (str_starts_with($route, 'product/')) {
     $route = 'product';
 }
 
+// Inform Auth of current route context for isolated multi-role sessions
+Auth::setRoute($route);
+
 // Global Category Helper
 $catStmt = $db->query("SELECT * FROM categories WHERE status = 'active' ORDER BY sort_order ASC");
 $categories = $catStmt->fetchAll();
@@ -494,8 +497,9 @@ switch ($route) {
         break;
 
     case 'logout':
-        $wasAdmin = Auth::isSuperAdmin() || Auth::isCountryAdmin();
-        Auth::logout();
+        $requestedRole = $_GET['role'] ?? null;
+        $wasAdmin = Auth::hasSuperAdminSlot() || Auth::hasRegionalAdminSlot();
+        Auth::logout($requestedRole);
         if ($wasAdmin) {
             flash('admin_login_success', 'You have been securely signed out of the administrative session.');
             redirect('admin');
@@ -531,11 +535,14 @@ switch ($route) {
     case 'admin':
     case 'admin/login':
     case 'superadmin':
-        if (Auth::isSuperAdmin()) {
-            redirect('superadmin/dashboard');
-        }
-        if (Auth::isCountryAdmin()) {
-            redirect('admin/dashboard');
+        if ($route === 'superadmin') {
+            if (Auth::hasSuperAdminSlot()) {
+                redirect('superadmin/dashboard');
+            }
+        } else {
+            if (Auth::hasRegionalAdminSlot()) {
+                redirect('admin/dashboard');
+            }
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -546,14 +553,15 @@ switch ($route) {
             $password = $_POST['password'] ?? '';
 
             if (Auth::attempt($email, $password)) {
-                if (Auth::isSuperAdmin()) {
+                $user = Auth::user();
+                if ($user && $user['role'] === 'super_admin') {
                     redirect('superadmin/dashboard');
                 }
-                if (Auth::isCountryAdmin()) {
+                if ($user && $user['role'] === 'country_admin') {
                     redirect('admin/dashboard');
                 }
                 // If a customer attempts to sign in via /admin:
-                Auth::logout();
+                Auth::logout('customer');
                 flash('admin_login_error', 'Access Restricted: This portal is exclusively for authorized administrators. Customers please sign in via customer portal.');
                 redirect('admin');
             } else {
@@ -569,7 +577,7 @@ switch ($route) {
     // 6. SUPER ADMIN MANAGEMENT
     // ---------------------------------------------------------------------
     case 'superadmin/dashboard':
-        if (!Auth::isSuperAdmin()) {
+        if (!Auth::hasSuperAdminSlot()) {
             redirect('admin');
         }
 
@@ -938,8 +946,8 @@ switch ($route) {
     case 'admin/dashboard':
     case 'admin/products':
     case 'admin/orders':
-        // Super Admin dashboard redirect (Super Admin can access admin/products and admin/orders to manage local pricing and dispatches)
-        if (Auth::isSuperAdmin() && $route === 'admin/dashboard') {
+        // Super Admin dashboard redirect (Only if NOT logged in as a country admin)
+        if (Auth::hasSuperAdminSlot() && !Auth::hasRegionalAdminSlot() && $route === 'admin/dashboard') {
             redirect('superadmin/dashboard');
         }
 

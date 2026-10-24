@@ -99,7 +99,7 @@ $currentRoute = $_GET['route'] ?? '';
                 <strong class="text-white d-block text-truncate"><?= e(Auth::user()['name']) ?></strong>
                 <span class="badge bg-warning text-dark text-uppercase" style="font-size: 0.65rem;"><?= Auth::user()['role'] ?></span>
             </div>
-            <a href="<?= url('logout') ?>" class="text-danger" title="Sign Out">
+            <a href="<?= url('logout?role=' . (Auth::isSuperAdmin() ? 'super_admin' : 'country_admin')) ?>" class="text-danger" title="Sign Out">
                 <i class="bi bi-box-arrow-right fs-5"></i>
             </a>
         </div>
