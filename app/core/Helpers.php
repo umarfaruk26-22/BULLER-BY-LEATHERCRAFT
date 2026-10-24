@@ -186,3 +186,69 @@ if (!function_exists('get_swatch_color')) {
         return '#5c3a21';
     }
 }
+
+if (!function_exists('get_system_setting')) {
+    function get_system_setting(string $key, ?string $default = null): ?string {
+        static $cachedSettings = null;
+        if ($cachedSettings === null) {
+            try {
+                $db = \App\Core\Database::getConnection();
+                $stmt = $db->query("SELECT setting_key, setting_value FROM system_settings");
+                $cachedSettings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
+            } catch (\Throwable $t) {
+                $cachedSettings = [];
+            }
+        }
+        return $cachedSettings[$key] ?? $default;
+    }
+}
+
+if (!function_exists('get_social_links')) {
+    function get_social_links(): array {
+        $standard = [
+            'social_instagram' => ['title' => 'Instagram', 'icon' => 'bi bi-instagram', 'default' => 'https://instagram.com/bullerleather'],
+            'social_facebook'  => ['title' => 'Facebook',  'icon' => 'bi bi-facebook',  'default' => 'https://facebook.com/bullerleather'],
+            'social_youtube'   => ['title' => 'YouTube',   'icon' => 'bi bi-youtube',   'default' => ''],
+            'social_twitter'   => ['title' => 'X (Twitter)', 'icon' => 'bi bi-twitter-x', 'default' => ''],
+            'social_pinterest' => ['title' => 'Pinterest', 'icon' => 'bi bi-pinterest', 'default' => 'https://pinterest.com/bullerleather'],
+            'social_tiktok'    => ['title' => 'TikTok',    'icon' => 'bi bi-tiktok',    'default' => ''],
+            'social_linkedin'  => ['title' => 'LinkedIn',  'icon' => 'bi bi-linkedin',  'default' => ''],
+            'social_whatsapp'  => ['title' => 'WhatsApp',  'icon' => 'bi bi-whatsapp',  'default' => ''],
+        ];
+
+        $links = [];
+        foreach ($standard as $key => $meta) {
+            $url = trim(get_system_setting($key, $meta['default']) ?? '');
+            if (!empty($url) && $url !== '#') {
+                $links[] = [
+                    'title' => $meta['title'],
+                    'icon'  => $meta['icon'],
+                    'url'   => $url,
+                    'type'  => 'standard'
+                ];
+            }
+        }
+
+        // Custom channels saved as JSON in system_settings
+        $customJson = get_system_setting('custom_social_channels', '[]');
+        $customArr = json_decode($customJson ?: '[]', true);
+        if (is_array($customArr)) {
+            foreach ($customArr as $item) {
+                $url = trim($item['url'] ?? '');
+                $title = trim($item['title'] ?? 'Social Link');
+                $rawIcon = trim($item['icon'] ?? 'bi-link-45deg');
+                $icon = str_starts_with($rawIcon, 'bi ') ? $rawIcon : ('bi ' . $rawIcon);
+                if (!empty($url) && $url !== '#') {
+                    $links[] = [
+                        'title' => $title,
+                        'icon'  => $icon,
+                        'url'   => $url,
+                        'type'  => 'custom'
+                    ];
+                }
+            }
+        }
+
+        return $links;
+    }
+}

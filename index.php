@@ -871,26 +871,6 @@ switch ($route) {
         break;
 
     case 'superadmin/settings':
-        Auth::requireSuperAdmin();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-                AuditLogger::log(Auth::id(), 'csrf_violation', 'system_settings');
-                die("CSRF Security Validation Failed.");
-            }
-            $upStmt = $db->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
-            foreach ($_POST as $k => $v) {
-                if ($k === 'csrf_token') continue;
-                $upStmt->execute([$k, trim($v)]);
-            }
-            AuditLogger::log(Auth::id(), 'update_settings', 'system_settings', null, ['keys' => array_keys($_POST)]);
-            flash('admin_success', 'Global system configuration successfully updated.');
-            redirect('superadmin/settings');
-        }
-        $settStmt = $db->query("SELECT setting_key, setting_value FROM system_settings");
-        $settings = $settStmt->fetchAll(PDO::FETCH_KEY_PAIR);
-        require __DIR__ . '/app/views/superadmin/settings.php';
-        break;
-
     case 'superadmin/settings/save':
         Auth::requireSuperAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -899,14 +879,43 @@ switch ($route) {
                 die("CSRF Security Validation Failed.");
             }
             $upStmt = $db->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+
+            // Handle custom social media channels
+            if (isset($_POST['has_custom_social_section'])) {
+                $customChannels = [];
+                if (isset($_POST['custom_social_title']) && is_array($_POST['custom_social_title'])) {
+                    $titles = $_POST['custom_social_title'];
+                    $icons = $_POST['custom_social_icon'] ?? [];
+                    $urls = $_POST['custom_social_url'] ?? [];
+                    for ($i = 0; $i < count($titles); $i++) {
+                        $t = trim((string)($titles[$i] ?? ''));
+                        $u = trim((string)($urls[$i] ?? ''));
+                        $ic = trim((string)($icons[$i] ?? 'bi-link-45deg'));
+                        if (!empty($t) && !empty($u)) {
+                            $customChannels[] = [
+                                'title' => $t,
+                                'icon'  => $ic,
+                                'url'   => $u
+                            ];
+                        }
+                    }
+                }
+                $upStmt->execute(['custom_social_channels', json_encode($customChannels, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)]);
+            }
+
             foreach ($_POST as $k => $v) {
-                if ($k === 'csrf_token') continue;
-                $upStmt->execute([$k, trim($v)]);
+                if ($k === 'csrf_token' || $k === 'has_custom_social_section') continue;
+                if (in_array($k, ['custom_social_title', 'custom_social_icon', 'custom_social_url'])) continue;
+                if (is_array($v)) continue;
+                $upStmt->execute([$k, trim((string)$v)]);
             }
             AuditLogger::log(Auth::id(), 'update_settings', 'system_settings', null, ['keys' => array_keys($_POST)]);
             flash('admin_success', 'Global system configuration successfully updated.');
             redirect('superadmin/settings');
         }
+        $settStmt = $db->query("SELECT setting_key, setting_value FROM system_settings");
+        $settings = $settStmt->fetchAll(PDO::FETCH_KEY_PAIR);
+        require __DIR__ . '/app/views/superadmin/settings.php';
         break;
 
     case 'superadmin/audit-logs':

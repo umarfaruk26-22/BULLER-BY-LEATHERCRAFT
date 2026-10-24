@@ -19,12 +19,18 @@ $activeCountry = MarketContext::getCountry();
                     <p class="mb-4 text-light-50" style="font-size: 0.88rem; line-height: 1.7; opacity: 0.85; max-width: 520px;">
                         Forged with unyielding dedication to ancestral leathercraft. We source exclusively prime full-grain hides, vegetable-tanned over months in European tanneries and constructed to outlast generations.
                     </p>
-                    <div class="d-flex align-items-center gap-2 mb-3 mb-md-0">
-                        <a href="#" class="footer-social-icon" title="Instagram" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="footer-social-icon" title="Facebook" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="footer-social-icon" title="Pinterest" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
-                        <a href="#" class="footer-social-icon" title="YouTube" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                    <?php
+                    $socialLinks = function_exists('get_social_links') ? get_social_links() : [];
+                    if (!empty($socialLinks)):
+                    ?>
+                    <div class="d-flex align-items-center flex-wrap gap-2 mb-3 mb-md-0">
+                        <?php foreach ($socialLinks as $s): ?>
+                            <a href="<?= e($s['url']) ?>" class="footer-social-icon" target="_blank" rel="noopener noreferrer" title="<?= e($s['title']) ?>" aria-label="<?= e($s['title']) ?>">
+                                <i class="<?= e($s['icon']) ?>"></i>
+                            </a>
+                        <?php endforeach; ?>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Curations & Categories (2-col side by side on mobile) -->

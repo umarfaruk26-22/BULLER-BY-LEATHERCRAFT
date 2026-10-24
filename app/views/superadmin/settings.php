@@ -107,23 +107,198 @@ require __DIR__ . '/../layouts/admin_header.php';
                     </div>
                 </div>
 
-                <!-- 3. Social Media Presence -->
+                <!-- 3. Social Media Presence & Custom Channels -->
+                <?php
+                $customSocialChannels = [];
+                if (!empty($settings['custom_social_channels'])) {
+                    $decoded = json_decode($settings['custom_social_channels'], true);
+                    if (is_array($decoded)) {
+                        $customSocialChannels = $decoded;
+                    }
+                }
+                ?>
                 <div class="bg-white border rounded-3 p-4 shadow-soft mb-4" style="border-color: #e2e8f0;">
                     <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
-                        <h5 class="fw-bold mb-0 d-flex align-items-center gap-2 text-dark" style="font-size: 1.05rem;">
-                            <i class="bi bi-share text-warning fs-5"></i> Social Media & Lookbook Channels
-                        </h5>
+                        <div>
+                            <h5 class="fw-bold mb-0 d-flex align-items-center gap-2 text-dark" style="font-size: 1.05rem;">
+                                <i class="bi bi-share text-warning fs-5"></i> Social Media & Lookbook Channels
+                            </h5>
+                            <small class="text-muted" style="font-size: 0.76rem;">Configure official brand channels & custom pages. Links appear in the storefront footer.</small>
+                        </div>
                         <span class="badge bg-light text-muted border">Storefront Footer</span>
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark mb-1">Instagram Profile URL</label>
-                            <input type="url" name="social_instagram" class="form-control" value="<?= e($settings['social_instagram'] ?? 'https://instagram.com/bullerleather') ?>" placeholder="https://instagram.com/...">
+                    <!-- Hidden flag to signal social section was submitted -->
+                    <input type="hidden" name="has_custom_social_section" value="1">
+
+                    <!-- Major Standard Social Platforms (2-col grid) -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark text-uppercase tracking-wider mb-2" style="font-size: 0.72rem; letter-spacing: 0.05em; color: var(--color-espresso-deep) !important;">
+                            <i class="bi bi-grid-fill text-warning me-1"></i> Core Brand Social Channels
+                        </label>
+                        <div class="row g-2.5">
+                            <!-- Instagram -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-instagram text-danger"></i> Instagram Profile URL
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-instagram"></i></span>
+                                    <input type="url" name="social_instagram" class="form-control" value="<?= e($settings['social_instagram'] ?? 'https://instagram.com/bullerleather') ?>" placeholder="https://instagram.com/bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- Facebook -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-facebook text-primary"></i> Facebook Brand Page
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-facebook"></i></span>
+                                    <input type="url" name="social_facebook" class="form-control" value="<?= e($settings['social_facebook'] ?? 'https://facebook.com/bullerleather') ?>" placeholder="https://facebook.com/bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- YouTube -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-youtube text-danger"></i> YouTube Channel URL
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-youtube"></i></span>
+                                    <input type="url" name="social_youtube" class="form-control" value="<?= e($settings['social_youtube'] ?? '') ?>" placeholder="https://youtube.com/@bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- X (Twitter) -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-twitter-x text-dark"></i> X (Twitter) Profile
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-twitter-x"></i></span>
+                                    <input type="url" name="social_twitter" class="form-control" value="<?= e($settings['social_twitter'] ?? '') ?>" placeholder="https://x.com/bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- Pinterest -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-pinterest text-danger"></i> Pinterest Lookbook
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-pinterest"></i></span>
+                                    <input type="url" name="social_pinterest" class="form-control" value="<?= e($settings['social_pinterest'] ?? 'https://pinterest.com/bullerleather') ?>" placeholder="https://pinterest.com/bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- TikTok -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-tiktok text-dark"></i> TikTok Profile URL
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-tiktok"></i></span>
+                                    <input type="url" name="social_tiktok" class="form-control" value="<?= e($settings['social_tiktok'] ?? '') ?>" placeholder="https://tiktok.com/@bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- LinkedIn -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-linkedin text-primary"></i> LinkedIn Page
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-linkedin"></i></span>
+                                    <input type="url" name="social_linkedin" class="form-control" value="<?= e($settings['social_linkedin'] ?? '') ?>" placeholder="https://linkedin.com/company/bullerleather">
+                                </div>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label small fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <i class="bi bi-whatsapp text-success"></i> WhatsApp Concierge / Link
+                                </label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-whatsapp"></i></span>
+                                    <input type="text" name="social_whatsapp" class="form-control" value="<?= e($settings['social_whatsapp'] ?? '') ?>" placeholder="https://wa.me/447400123456 or phone">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark mb-1">Facebook Brand Page</label>
-                            <input type="url" name="social_facebook" class="form-control" value="<?= e($settings['social_facebook'] ?? 'https://facebook.com/bullerleather') ?>" placeholder="https://facebook.com/...">
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="border-top my-3 pt-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div>
+                                <label class="form-label small fw-bold text-dark text-uppercase tracking-wider mb-0" style="font-size: 0.72rem; letter-spacing: 0.05em; color: var(--color-espresso-deep) !important;">
+                                    <i class="bi bi-plus-circle-dotted text-warning me-1"></i> Custom Social Channels & Regional Pages
+                                </label>
+                                <div class="text-muted small" style="font-size: 0.72rem;">Add custom channels (Threads, Telegram, Snapchat, Discord, Behance, Spotify, etc.)</div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-dark d-inline-flex align-items-center gap-1 px-2.5 py-1" onclick="addCustomSocialRow()" style="font-size: 0.78rem; background: #1a1410 !important; border-color: #c5a880 !important; color: #fdfbf7 !important;">
+                                <i class="bi bi-plus-lg text-warning"></i> Add Channel
+                            </button>
+                        </div>
+
+                        <!-- Notice when no custom channels are present -->
+                        <div id="noCustomChannelsNotice" class="text-center py-3 px-2 border rounded-2 bg-light mb-2 <?= empty($customSocialChannels) ? '' : 'd-none' ?>">
+                            <i class="bi bi-diagram-3 text-muted fs-5 d-block mb-1"></i>
+                            <span class="small text-muted">No custom channels added yet. Click <strong>Add Channel</strong> above to add custom platforms.</span>
+                        </div>
+
+                        <!-- Dynamic Custom Channels Container -->
+                        <div id="customSocialContainer">
+                            <?php if (!empty($customSocialChannels)): ?>
+                                <?php foreach ($customSocialChannels as $ch): ?>
+                                    <?php
+                                    $chTitle = $ch['title'] ?? '';
+                                    $rawIcon = $ch['icon'] ?? 'bi-threads';
+                                    $chIcon = str_replace('bi ', '', $rawIcon);
+                                    $chUrl = $ch['url'] ?? '';
+                                    ?>
+                                    <div class="custom-social-row p-2.5 mb-2 border rounded-2 bg-light">
+                                        <div class="row g-2 align-items-center">
+                                            <div class="col-sm-4">
+                                                <label class="form-label mb-1 text-muted fw-bold" style="font-size: 0.68rem;">Platform Name</label>
+                                                <input type="text" name="custom_social_title[]" class="form-control form-control-sm custom-social-name-input" value="<?= e($chTitle) ?>" placeholder="e.g. Threads, Telegram" required>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="form-label mb-1 text-muted fw-bold" style="font-size: 0.68rem;">Icon</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text bg-white custom-social-icon-preview p-1 px-2"><i class="bi <?= e($chIcon) ?>"></i></span>
+                                                    <select name="custom_social_icon[]" class="form-select form-select-sm custom-social-icon-select" onchange="updateIconPreview(this)">
+                                                        <option value="bi-threads" <?= $chIcon === 'bi-threads' ? 'selected' : '' ?>>Threads</option>
+                                                        <option value="bi-telegram" <?= $chIcon === 'bi-telegram' ? 'selected' : '' ?>>Telegram</option>
+                                                        <option value="bi-snapchat" <?= $chIcon === 'bi-snapchat' ? 'selected' : '' ?>>Snapchat</option>
+                                                        <option value="bi-discord" <?= $chIcon === 'bi-discord' ? 'selected' : '' ?>>Discord</option>
+                                                        <option value="bi-reddit" <?= $chIcon === 'bi-reddit' ? 'selected' : '' ?>>Reddit</option>
+                                                        <option value="bi-behance" <?= $chIcon === 'bi-behance' ? 'selected' : '' ?>>Behance</option>
+                                                        <option value="bi-spotify" <?= $chIcon === 'bi-spotify' ? 'selected' : '' ?>>Spotify</option>
+                                                        <option value="bi-vimeo" <?= $chIcon === 'bi-vimeo' ? 'selected' : '' ?>>Vimeo</option>
+                                                        <option value="bi-wechat" <?= $chIcon === 'bi-wechat' ? 'selected' : '' ?>>WeChat</option>
+                                                        <option value="bi-medium" <?= $chIcon === 'bi-medium' ? 'selected' : '' ?>>Medium</option>
+                                                        <option value="bi-twitch" <?= $chIcon === 'bi-twitch' ? 'selected' : '' ?>>Twitch</option>
+                                                        <option value="bi-globe" <?= $chIcon === 'bi-globe' ? 'selected' : '' ?>>Website / Blog</option>
+                                                        <option value="bi-camera" <?= $chIcon === 'bi-camera' ? 'selected' : '' ?>>Lookbook</option>
+                                                        <option value="bi-bag-heart" <?= $chIcon === 'bi-bag-heart' ? 'selected' : '' ?>>Boutique</option>
+                                                        <option value="bi-link-45deg" <?= $chIcon === 'bi-link-45deg' ? 'selected' : '' ?>>Custom Link</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="form-label mb-1 text-muted fw-bold" style="font-size: 0.68rem;">Target URL</label>
+                                                <input type="url" name="custom_social_url[]" class="form-control form-control-sm" value="<?= e($chUrl) ?>" placeholder="https://..." required>
+                                            </div>
+                                            <div class="col-sm-1 text-end pt-sm-3">
+                                                <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2" onclick="removeCustomSocialRow(this)" title="Delete Channel">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -295,7 +470,143 @@ function updateUnsavedStatus(hasChanges) {
     }
 }
 
+// Update live icon preview
+function updateIconPreview(selectEl) {
+    const previewSpan = selectEl.closest('.input-group').querySelector('.custom-social-icon-preview');
+    if (previewSpan) {
+        const iconName = selectEl.value.replace(/^bi-/, '');
+        previewSpan.innerHTML = '<i class="bi bi-' + iconName + '"></i>';
+    }
+    updateUnsavedStatus(true);
+}
+
+// Auto-detect icon when typing platform name
+function detectPlatformIcon(nameInput) {
+    const val = nameInput.value.toLowerCase().trim();
+    const row = nameInput.closest('.custom-social-row');
+    if (!row) return;
+    const select = row.querySelector('.custom-social-icon-select');
+    if (!select) return;
+
+    let targetIcon = null;
+    if (val.includes('thread')) targetIcon = 'bi-threads';
+    else if (val.includes('telegr')) targetIcon = 'bi-telegram';
+    else if (val.includes('snap')) targetIcon = 'bi-snapchat';
+    else if (val.includes('disc')) targetIcon = 'bi-discord';
+    else if (val.includes('redd')) targetIcon = 'bi-reddit';
+    else if (val.includes('behan')) targetIcon = 'bi-behance';
+    else if (val.includes('spot')) targetIcon = 'bi-spotify';
+    else if (val.includes('vimeo')) targetIcon = 'bi-vimeo';
+    else if (val.includes('wechat')) targetIcon = 'bi-wechat';
+    else if (val.includes('medium')) targetIcon = 'bi-medium';
+    else if (val.includes('twitch')) targetIcon = 'bi-twitch';
+    else if (val.includes('web') || val.includes('site') || val.includes('blog')) targetIcon = 'bi-globe';
+    else if (val.includes('look') || val.includes('photo')) targetIcon = 'bi-camera';
+    else if (val.includes('shop') || val.includes('store') || val.includes('boutique')) targetIcon = 'bi-bag-heart';
+
+    if (targetIcon && select.value !== targetIcon) {
+        select.value = targetIcon;
+        updateIconPreview(select);
+    }
+}
+
+// Add a new custom social row
+function addCustomSocialRow(title = '', icon = 'bi-threads', url = '') {
+    const container = document.getElementById('customSocialContainer');
+    const notice = document.getElementById('noCustomChannelsNotice');
+    if (!container) return;
+
+    if (notice) notice.classList.add('d-none');
+
+    const cleanIcon = icon.replace(/^bi /, '');
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'custom-social-row p-2.5 mb-2 border rounded-2 bg-light';
+    rowDiv.innerHTML = `
+        <div class="row g-2 align-items-center">
+            <div class="col-sm-4">
+                <label class="form-label mb-1 text-muted fw-bold" style="font-size: 0.68rem;">Platform Name</label>
+                <input type="text" name="custom_social_title[]" class="form-control form-control-sm custom-social-name-input" value="${escapeHtml(title)}" placeholder="e.g. Threads, Telegram" required>
+            </div>
+            <div class="col-sm-3">
+                <label class="form-label mb-1 text-muted fw-bold" style="font-size: 0.68rem;">Icon</label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white custom-social-icon-preview p-1 px-2"><i class="bi ${escapeHtml(cleanIcon)}"></i></span>
+                    <select name="custom_social_icon[]" class="form-select form-select-sm custom-social-icon-select" onchange="updateIconPreview(this)">
+                        <option value="bi-threads" ${cleanIcon === 'bi-threads' ? 'selected' : ''}>Threads</option>
+                        <option value="bi-telegram" ${cleanIcon === 'bi-telegram' ? 'selected' : ''}>Telegram</option>
+                        <option value="bi-snapchat" ${cleanIcon === 'bi-snapchat' ? 'selected' : ''}>Snapchat</option>
+                        <option value="bi-discord" ${cleanIcon === 'bi-discord' ? 'selected' : ''}>Discord</option>
+                        <option value="bi-reddit" ${cleanIcon === 'bi-reddit' ? 'selected' : ''}>Reddit</option>
+                        <option value="bi-behance" ${cleanIcon === 'bi-behance' ? 'selected' : ''}>Behance</option>
+                        <option value="bi-spotify" ${cleanIcon === 'bi-spotify' ? 'selected' : ''}>Spotify</option>
+                        <option value="bi-vimeo" ${cleanIcon === 'bi-vimeo' ? 'selected' : ''}>Vimeo</option>
+                        <option value="bi-wechat" ${cleanIcon === 'bi-wechat' ? 'selected' : ''}>WeChat</option>
+                        <option value="bi-medium" ${cleanIcon === 'bi-medium' ? 'selected' : ''}>Medium</option>
+                        <option value="bi-twitch" ${cleanIcon === 'bi-twitch' ? 'selected' : ''}>Twitch</option>
+                        <option value="bi-globe" ${cleanIcon === 'bi-globe' ? 'selected' : ''}>Website / Blog</option>
+                        <option value="bi-camera" ${cleanIcon === 'bi-camera' ? 'selected' : ''}>Lookbook</option>
+                        <option value="bi-bag-heart" ${cleanIcon === 'bi-bag-heart' ? 'selected' : ''}>Boutique</option>
+                        <option value="bi-link-45deg" ${cleanIcon === 'bi-link-45deg' ? 'selected' : ''}>Custom Link</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label mb-1 text-muted fw-bold" style="font-size: 0.68rem;">Target URL</label>
+                <input type="url" name="custom_social_url[]" class="form-control form-control-sm" value="${escapeHtml(url)}" placeholder="https://..." required>
+            </div>
+            <div class="col-sm-1 text-end pt-sm-3">
+                <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2" onclick="removeCustomSocialRow(this)" title="Delete Channel">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(rowDiv);
+
+    // Bind auto-detect listener
+    const nameInput = rowDiv.querySelector('.custom-social-name-input');
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            detectPlatformIcon(this);
+            updateUnsavedStatus(true);
+        });
+        nameInput.focus();
+    }
+
+    updateUnsavedStatus(true);
+}
+
+// Remove custom social row
+function removeCustomSocialRow(btn) {
+    const row = btn.closest('.custom-social-row');
+    const container = document.getElementById('customSocialContainer');
+    const notice = document.getElementById('noCustomChannelsNotice');
+
+    if (row) {
+        row.remove();
+        if (container && container.querySelectorAll('.custom-social-row').length === 0) {
+            if (notice) notice.classList.remove('d-none');
+        }
+        updateUnsavedStatus(true);
+    }
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Bind auto-detect on any pre-rendered custom rows
+    document.querySelectorAll('.custom-social-name-input').forEach(function(input) {
+        input.addEventListener('input', function() {
+            detectPlatformIcon(this);
+            updateUnsavedStatus(true);
+        });
+    });
     const form = document.getElementById('settingsForm');
     if (form) {
         form.addEventListener('input', function() {
