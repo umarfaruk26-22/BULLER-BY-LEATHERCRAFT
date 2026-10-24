@@ -13,7 +13,10 @@ $currentUser = Auth::user();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title><?= isset($pageTitle) ? e($pageTitle) . ' | ' . APP_NAME : APP_NAME . ' | Generational Leather Craftsmanship & Heritage Luxury' ?></title>
     <meta name="description" content="<?= isset($pageDescription) ? e($pageDescription) : 'Buller Leather offers heirloom-grade full-grain leather jackets, executive briefcases, travel duffels, and bespoke accessories with worldwide international delivery.' ?>">
     

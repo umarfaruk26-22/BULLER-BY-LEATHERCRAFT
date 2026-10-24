@@ -58,7 +58,11 @@
         if (isInitialized) return;
         isInitialized = true;
 
+        // Reset viewport scroll to top for iOS Safari
+        try { window.scrollTo(0, 0); } catch (e) {}
+
         // Lock background scroll safely
+        document.documentElement.classList.add('buller-intro-locked');
         document.body.classList.add('buller-intro-locked');
 
         var isFinished = false;
@@ -81,6 +85,7 @@
 
             // Smooth fade out
             overlay.classList.add('buller-intro-fading');
+            document.documentElement.classList.remove('buller-intro-locked');
             document.body.classList.remove('buller-intro-locked');
 
             setTimeout(function () {

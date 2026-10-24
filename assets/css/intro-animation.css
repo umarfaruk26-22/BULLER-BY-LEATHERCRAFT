@@ -5,29 +5,43 @@
    ========================================================================== */
 
 /* Prevent scrolling while intro overlay is active */
+html.buller-intro-locked,
 body.buller-intro-locked {
     overflow: hidden !important;
-    position: relative !important;
+    height: 100% !important;
+    width: 100% !important;
     touch-action: none !important;
     -webkit-overflow-scrolling: auto !important;
     user-select: none !important;
     -webkit-user-select: none !important;
+    background-color: #fdfbf7 !important;
 }
 
-/* Master Fixed Overlay — 100% iOS Viewport Safe */
+/* Hide all background website elements while intro is active to guarantee ZERO peeking */
+body.buller-intro-locked > *:not(#bullerIntroOverlay) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Master Fixed Overlay — 100% Fullscreen on iOS Safari, Android & Desktop */
 #bullerIntroOverlay {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 0 !important;
+    bottom: -150px !important; /* Extends completely past iOS Safari bottom address bar & home indicator */
     width: 100% !important;
-    height: 100% !important;
-    height: -webkit-fill-available !important;
+    width: 100vw !important;
+    height: calc(100% + 150px) !important;
+    min-height: calc(100vh + 150px) !important;
+    min-height: calc(100dvh + 150px) !important;
     z-index: 2147483647 !important; /* Highest possible 32-bit z-index */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    padding-bottom: 150px !important; /* Keeps animation perfectly centered on visible screen */
+    box-sizing: border-box !important;
     background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fdfbf7 55%, #f5efe3 100%) !important;
     overflow: hidden !important;
     pointer-events: all !important;
@@ -93,8 +107,8 @@ body.buller-intro-locked {
 /* Top Right Luxury Skip Button */
 .buller-intro-skip-btn {
     position: absolute;
-    top: clamp(14px, 3vh, 26px);
-    right: clamp(14px, 4vw, 32px);
+    top: max(clamp(14px, 3vh, 26px), env(safe-area-inset-top, 16px));
+    right: max(clamp(14px, 4vw, 32px), env(safe-area-inset-right, 16px));
     z-index: 200;
     display: inline-flex;
     align-items: center;
