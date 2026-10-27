@@ -52,8 +52,8 @@ require __DIR__ . '/../layouts/header.php';
             <!-- Left: Multi-Angle Photography Showcase -->
             <div class="col-lg-7">
                 <div class="position-sticky" style="top: 100px;">
-                    <!-- Main Master Showcase Display -->
-                    <div class="position-relative bg-white border p-2 p-md-4 shadow-soft mb-2 mb-md-3" style="border-color: var(--color-border); border-radius: 2px;">
+                    <!-- Main Master Showcase Display (Click to open full zoom lightbox) -->
+                    <div id="mainProductPhotoContainer" class="position-relative product-photo-stage-wrapper p-2 p-md-4 shadow-soft mb-2 mb-md-3" onclick="openPhotoLightbox(document.getElementById('mainProductPhoto').src)" title="Click photo to inspect craftsmanship & high-resolution details">
                         <img id="mainProductPhoto" src="<?= asset($product['primary_image']) ?>" alt="<?= e($product['title']) ?>" class="img-fluid w-100" style="max-height: 580px; object-fit: contain; transition: transform 0.3s ease;">
                         
                         <!-- Luxury Product Badges -->
@@ -69,10 +69,10 @@ require __DIR__ . '/../layouts/header.php';
                             </span>
                         </div>
 
-                        <!-- Zoom hint icon -->
-                        <div class="position-absolute bottom-0 end-0 p-3 text-muted small d-none d-md-flex align-items-center gap-1 opacity-75">
+                        <!-- Zoom hint clickable pill (Visible on Mobile & Desktop) -->
+                        <div class="pdp-zoom-pill" onclick="event.stopPropagation(); openPhotoLightbox(document.getElementById('mainProductPhoto').src);" title="Open zoomable full-screen gallery">
                             <i class="bi bi-arrows-fullscreen"></i>
-                            <span>High-Resolution View</span>
+                            <span>Tap / Click to Zoom</span>
                         </div>
                     </div>
 
@@ -1323,6 +1323,7 @@ function selectProductColor(button, colorName) {
     });
 
     const displayPhotos = matchingPhotos.length > 0 ? matchingPhotos : productGallery;
+    activeGallery = displayPhotos;
 
     if (displayPhotos.length > 0) {
         // Switch main photo to first match
@@ -1347,6 +1348,13 @@ function selectProductColor(button, colorName) {
                 thumbBox.appendChild(img);
                 strip.appendChild(thumbBox);
             });
+        }
+
+        // Keep lightbox filmstrip synced if open
+        const lb = document.getElementById('bullerPhotoLightbox');
+        if (lb && lb.classList.contains('active')) {
+            renderLightboxFilmstrip(displayPhotos);
+            showLightboxPhoto(0);
         }
     }
 }
@@ -1385,6 +1393,428 @@ function setRating(val) {
         }
     });
 }
+
+// ==========================================================================
+// BULLER LUXURY PRODUCT PHOTO LIGHTBOX & ZOOM VIEWER (DESKTOP & MOBILE)
+// ==========================================================================
+let activeGallery = Array.isArray(productGallery) && productGallery.length > 0 ? [...productGallery] : [];
+let currentLightboxIndex = 0;
+let currentZoom = 1.0;
+let panX = 0;
+let panY = 0;
+let isPanning = false;
+let startPointerX = 0;
+let startPointerY = 0;
+let initialPanX = 0;
+let initialPanY = 0;
+let lastTouchEnd = 0;
+let initialPinchDist = 0;
+let initialPinchZoom = 1.0;
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoveX = 0;
+let touchMoveY = 0;
+let touchStartTime = 0;
+
+function getActivePhotos() {
+    if (activeGallery && activeGallery.length > 0) return activeGallery;
+    if (productGallery && productGallery.length > 0) return productGallery;
+    const mainImg = document.getElementById('mainProductPhoto');
+    return mainImg ? [{ url: mainImg.src, alt: mainImg.alt || '', color: '' }] : [];
+}
+
+function openPhotoLightbox(targetSrc) {
+    const list = getActivePhotos();
+    if (!list || list.length === 0) return;
+
+    let targetIdx = 0;
+    if (targetSrc) {
+        const found = list.findIndex(item => item.url === targetSrc || (targetSrc && item.url && (targetSrc.endsWith(item.url) || item.url.endsWith(targetSrc))));
+        if (found !== -1) targetIdx = found;
+    }
+
+    const lightbox = document.getElementById('bullerPhotoLightbox');
+    if (!lightbox) return;
+
+    // Render filmstrip thumbnails
+    renderLightboxFilmstrip(list);
+
+    // Show photo at target index
+    showLightboxPhoto(targetIdx, false);
+
+    // Open lightbox
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    // Auto fade hint after 3.5s
+    const hint = document.getElementById('lightboxGestureHint');
+    if (hint) {
+        hint.classList.remove('fade-out');
+        clearTimeout(hint._timer);
+        hint._timer = setTimeout(() => {
+            hint.classList.add('fade-out');
+        }, 3500);
+    }
+}
+
+function closePhotoLightbox() {
+    const lightbox = document.getElementById('bullerPhotoLightbox');
+    if (!lightbox) return;
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    resetLightboxZoom(false);
+    if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+    }
+}
+
+function renderLightboxFilmstrip(photos) {
+    const strip = document.getElementById('lightboxFilmstrip');
+    if (!strip) return;
+    strip.innerHTML = '';
+    photos.forEach((photo, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'lightbox-thumb-item' + (idx === currentLightboxIndex ? ' active' : '');
+        thumb.dataset.index = idx;
+        thumb.setAttribute('role', 'tab');
+        thumb.setAttribute('aria-label', 'View photo ' + (idx + 1));
+        thumb.innerHTML = `<img src="${photo.url}" alt="${photo.alt || ''}">`;
+        thumb.onclick = (e) => {
+            e.stopPropagation();
+            showLightboxPhoto(idx);
+        };
+        strip.appendChild(thumb);
+    });
+}
+
+function showLightboxPhoto(idx, animate = true) {
+    const list = getActivePhotos();
+    if (!list || list.length === 0) return;
+
+    // Wrap index circularly
+    currentLightboxIndex = (idx + list.length) % list.length;
+    const photo = list[currentLightboxIndex];
+
+    const img = document.getElementById('lightboxActiveImg');
+    if (img) {
+        img.src = photo.url;
+        img.alt = photo.alt || '';
+    }
+
+    // Reset zoom for incoming photo
+    resetLightboxZoom(animate);
+
+    // Update Counter
+    const currEl = document.getElementById('lightboxCurrentIndex');
+    const totEl = document.getElementById('lightboxTotalCount');
+    if (currEl) currEl.textContent = currentLightboxIndex + 1;
+    if (totEl) totEl.textContent = list.length;
+
+    // Update Caption
+    const capEl = document.getElementById('lightboxPhotoCaption');
+    if (capEl) {
+        capEl.textContent = photo.alt ? `— ${photo.alt}` : (photo.color ? `— ${photo.color}` : '');
+    }
+
+    // Update Filmstrip active thumb
+    const thumbs = document.querySelectorAll('.lightbox-thumb-item');
+    thumbs.forEach((t, i) => {
+        if (i === currentLightboxIndex) {
+            t.classList.add('active');
+            t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } else {
+            t.classList.remove('active');
+        }
+    });
+
+    // Also synchronize main PDP photo
+    switchProductPhoto(null, photo.url);
+}
+
+function applyLightboxTransform(animate = false) {
+    const img = document.getElementById('lightboxActiveImg');
+    const canvas = document.getElementById('lightboxCanvas');
+    const zoomText = document.getElementById('lightboxZoomLevelText');
+    if (!img) return;
+
+    if (animate) {
+        img.style.transition = 'transform 0.25s cubic-bezier(0.2, 0, 0.2, 1)';
+    } else {
+        img.style.transition = 'none';
+    }
+
+    img.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+
+    if (canvas) {
+        if (currentZoom > 1.05) {
+            canvas.classList.add('is-zoomed');
+        } else {
+            canvas.classList.remove('is-zoomed');
+            canvas.classList.remove('is-dragging');
+        }
+    }
+
+    if (zoomText) {
+        zoomText.textContent = Math.round(currentZoom * 100) + '%';
+    }
+}
+
+function setLightboxZoom(newZoom, animate = true) {
+    currentZoom = Math.min(Math.max(newZoom, 1.0), 4.0);
+    if (currentZoom <= 1.0) {
+        panX = 0;
+        panY = 0;
+    } else {
+        const canvas = document.getElementById('lightboxCanvas');
+        if (canvas) {
+            const maxPanX = (canvas.clientWidth * (currentZoom - 1)) / 1.75;
+            const maxPanY = (canvas.clientHeight * (currentZoom - 1)) / 1.75;
+            panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+            panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+        }
+    }
+    applyLightboxTransform(animate);
+}
+
+function resetLightboxZoom(animate = true) {
+    currentZoom = 1.0;
+    panX = 0;
+    panY = 0;
+    applyLightboxTransform(animate);
+}
+
+function toggleLightboxZoom() {
+    if (currentZoom > 1.15) {
+        resetLightboxZoom(true);
+    } else {
+        setLightboxZoom(2.35, true);
+    }
+}
+
+function prevLightboxPhoto() {
+    showLightboxPhoto(currentLightboxIndex - 1);
+}
+
+function nextLightboxPhoto() {
+    showLightboxPhoto(currentLightboxIndex + 1);
+}
+
+function toggleLightboxFullscreen() {
+    const lb = document.getElementById('bullerPhotoLightbox');
+    if (!lb) return;
+    if (!document.fullscreenElement) {
+        if (lb.requestFullscreen) lb.requestFullscreen();
+        else if (lb.webkitRequestFullscreen) lb.webkitRequestFullscreen();
+    } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+}
+
+// Attach Event Listeners on DOM Load
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('lightboxCanvas');
+    const img = document.getElementById('lightboxActiveImg');
+    if (!canvas || !img) return;
+
+    // Mouse Wheel Zoom
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.3 : -0.3;
+        setLightboxZoom(currentZoom + delta, false);
+    }, { passive: false });
+
+    // Click on active image to toggle zoom
+    img.addEventListener('click', (e) => {
+        if (isPanning) return;
+        toggleLightboxZoom();
+    });
+
+    // Mouse Drag / Pan
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        if (currentZoom > 1.05) {
+            isPanning = true;
+            startPointerX = e.clientX;
+            startPointerY = e.clientY;
+            initialPanX = panX;
+            initialPanY = panY;
+            canvas.classList.add('is-dragging');
+        }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        const dx = e.clientX - startPointerX;
+        const dy = e.clientY - startPointerY;
+        panX = initialPanX + dx;
+        panY = initialPanY + dy;
+        setLightboxZoom(currentZoom, false);
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (isPanning) {
+            isPanning = false;
+            canvas.classList.remove('is-dragging');
+        }
+    });
+
+    // Touch Gestures: Pinch-to-zoom, Double-tap, Drag-to-pan, Swipe to Next/Prev
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchMoveX = touchStartX;
+            touchMoveY = touchStartY;
+            touchStartTime = Date.now();
+            initialPanX = panX;
+            initialPanY = panY;
+
+            // Double tap zoom
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+                toggleLightboxZoom();
+            }
+        } else if (e.touches.length === 2) {
+            initialPinchDist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialPinchZoom = currentZoom;
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1) {
+            touchMoveX = e.touches[0].clientX;
+            touchMoveY = e.touches[0].clientY;
+            if (currentZoom > 1.05) {
+                e.preventDefault();
+                const dx = touchMoveX - touchStartX;
+                const dy = touchMoveY - touchStartY;
+                panX = initialPanX + dx;
+                panY = initialPanY + dy;
+                setLightboxZoom(currentZoom, false);
+            }
+        } else if (e.touches.length === 2 && initialPinchDist > 0) {
+            e.preventDefault();
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            const factor = dist / initialPinchDist;
+            setLightboxZoom(initialPinchZoom * factor, false);
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', (e) => {
+        lastTouchEnd = Date.now();
+        if (currentZoom <= 1.05 && e.changedTouches.length === 1) {
+            const dx = touchMoveX - touchStartX;
+            const dy = touchMoveY - touchStartY;
+            const duration = Date.now() - touchStartTime;
+            // Check horizontal swipe gesture (distance > 45px, duration < 500ms, mostly horizontal)
+            if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5 && duration < 500) {
+                if (dx < 0) {
+                    nextLightboxPhoto();
+                } else {
+                    prevLightboxPhoto();
+                }
+            }
+        }
+    });
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+        const lb = document.getElementById('bullerPhotoLightbox');
+        if (!lb || !lb.classList.contains('active')) return;
+        if (e.key === 'Escape') closePhotoLightbox();
+        else if (e.key === 'ArrowLeft') prevLightboxPhoto();
+        else if (e.key === 'ArrowRight') nextLightboxPhoto();
+        else if (e.key === '+' || e.key === '=') setLightboxZoom(currentZoom + 0.35, true);
+        else if (e.key === '-' || e.key === '_') setLightboxZoom(currentZoom - 0.35, true);
+        else if (e.key === '0') resetLightboxZoom(true);
+    });
+
+    // Close when clicking canvas backdrop (outside image)
+    canvas.addEventListener('click', (e) => {
+        if (e.target === canvas) {
+            closePhotoLightbox();
+        }
+    });
+});
 </script>
+
+<!-- Buller Luxury Masterpiece Lightbox & Zoom Viewer Modal -->
+<div id="bullerPhotoLightbox" class="buller-photo-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Product Photography Lightbox">
+    <!-- Lightbox Header Bar -->
+    <div class="lightbox-header">
+        <div class="lightbox-title-group">
+            <span class="lightbox-brand-tag">BULLER ATELIER</span>
+            <span class="lightbox-product-title"><?= e($product['title']) ?></span>
+            <span id="lightboxPhotoCaption" class="lightbox-photo-caption"></span>
+        </div>
+        <div class="lightbox-counter-pill">
+            <span id="lightboxCurrentIndex">1</span> / <span id="lightboxTotalCount">1</span>
+        </div>
+        <div class="lightbox-actions">
+            <!-- Zoom In -->
+            <button type="button" class="lightbox-action-btn" id="lightboxBtnZoomIn" onclick="setLightboxZoom(currentZoom + 0.35, true)" title="Zoom In (+)" aria-label="Zoom In">
+                <i class="bi bi-zoom-in"></i>
+            </button>
+            <!-- Zoom Out -->
+            <button type="button" class="lightbox-action-btn" id="lightboxBtnZoomOut" onclick="setLightboxZoom(currentZoom - 0.35, true)" title="Zoom Out (-)" aria-label="Zoom Out">
+                <i class="bi bi-zoom-out"></i>
+            </button>
+            <!-- Reset Zoom -->
+            <button type="button" class="lightbox-action-btn" id="lightboxBtnResetZoom" onclick="resetLightboxZoom(true)" title="Reset Zoom (100%)" aria-label="Reset Zoom">
+                <i class="bi bi-aspect-ratio"></i>
+                <span class="lightbox-zoom-badge ms-1" id="lightboxZoomLevelText">100%</span>
+            </button>
+            <!-- Fullscreen toggle -->
+            <button type="button" class="lightbox-action-btn d-none d-md-inline-flex" id="lightboxBtnFullscreen" onclick="toggleLightboxFullscreen()" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+                <i class="bi bi-fullscreen"></i>
+            </button>
+            <!-- Close -->
+            <button type="button" class="lightbox-action-btn lightbox-action-close" id="lightboxBtnClose" onclick="closePhotoLightbox()" title="Close (Esc)" aria-label="Close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Zoom Viewport & Canvas Stage -->
+    <div class="lightbox-viewport" id="lightboxViewport">
+        <!-- Previous Button -->
+        <button type="button" class="lightbox-nav-btn lightbox-nav-prev" id="lightboxBtnPrev" onclick="prevLightboxPhoto()" title="Previous Photo (Left Arrow)" aria-label="Previous Photo">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- Canvas with Active Photo -->
+        <div class="lightbox-canvas" id="lightboxCanvas">
+            <img id="lightboxActiveImg" src="<?= asset($product['primary_image']) ?>" alt="<?= e($product['title']) ?>" draggable="false">
+        </div>
+
+        <!-- Next Button -->
+        <button type="button" class="lightbox-nav-btn lightbox-nav-next" id="lightboxBtnNext" onclick="nextLightboxPhoto()" title="Next Photo (Right Arrow)" aria-label="Next Photo">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+
+        <!-- Dynamic Gesture Hints Pill (Auto fades out after 3.5s) -->
+        <div class="lightbox-gesture-hint" id="lightboxGestureHint">
+            <span class="d-none d-md-inline"><i class="bi bi-mouse me-1 text-warning"></i> Scroll wheel to zoom &bull; Drag to pan &bull; Click to toggle zoom</span>
+            <span class="d-inline d-md-none"><i class="bi bi-hand-index-thumb me-1 text-warning"></i> Pinch / Double-tap to zoom &bull; Swipe to switch &bull; Drag to pan</span>
+        </div>
+    </div>
+
+    <!-- Bottom Horizontal Filmstrip Thumbnails Track -->
+    <div class="lightbox-filmstrip-wrapper">
+        <div class="lightbox-filmstrip" id="lightboxFilmstrip" role="tablist">
+            <!-- Dynamically populated thumbnails -->
+        </div>
+    </div>
+</div>
 
 <?php require __DIR__ . '/../layouts/footer.php'; ?>
