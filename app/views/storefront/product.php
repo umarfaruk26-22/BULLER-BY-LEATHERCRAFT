@@ -250,6 +250,28 @@ require __DIR__ . '/../layouts/header.php';
                         <input type="hidden" id="selectedProductSize" value="Standard Fit">
                     <?php endif; ?>
 
+                    <!-- 4b. Customize / Bulk Order Concierge Button (Direct WhatsApp) -->
+                    <div class="pdp-bulk-custom-block mb-3">
+                        <a href="https://wa.me/919033321151" target="_blank" rel="noopener noreferrer" id="btnBulkCustomOrder" onclick="openWhatsAppBulkInquiry(event)" class="btn-bulk-custom-card text-decoration-none d-flex align-items-center justify-content-between p-2.5 p-sm-3" title="Inquire for Customization, Bespoke Sizing or Bulk Orders via WhatsApp">
+                            <div class="d-flex align-items-center gap-2.5">
+                                <div class="bulk-custom-icon-wrap">
+                                    <i class="bi bi-whatsapp"></i>
+                                </div>
+                                <div class="bulk-custom-text text-start">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="bulk-custom-main-title">Customize / Bulk Order</span>
+                                        <span class="badge-custom-bespoke">Bespoke Concierge</span>
+                                    </div>
+                                    <span class="bulk-custom-sub-title">Bespoke sizing, custom branding & wholesale bulk pricing</span>
+                                </div>
+                            </div>
+                            <div class="bulk-custom-arrow d-flex align-items-center gap-1">
+                                <span class="d-none d-md-inline small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.05em;">Inquire</span>
+                                <i class="bi bi-chevron-right fs-6"></i>
+                            </div>
+                        </a>
+                    </div>
+
                     <!-- 5. Purchase & Bag Action Buttons (Ergonomic & Aligned) -->
                     <div class="pdp-actions-container d-flex flex-column gap-2 mb-3">
                         <div class="d-flex align-items-stretch gap-2 pdp-action-group">
@@ -1286,6 +1308,58 @@ function selectProductSize(button, sizeValue) {
     button.classList.add('active');
     const sizeInput = document.getElementById('selectedProductSize');
     if (sizeInput) sizeInput.value = sizeValue;
+    updateBulkOrderWhatsAppUrl();
+}
+
+// ==========================================================================
+// BULK ORDER & BESPOKE CUSTOMIZATION WHATSAPP CONCIERGE (+91 9033321151)
+// ==========================================================================
+function getBulkOrderWhatsAppUrl() {
+    const phone = '919033321151';
+    const prodTitle = <?= json_encode($product['title']) ?>;
+    const prodSku = <?= json_encode($product['sku']) ?>;
+    const prodPrice = <?= json_encode($pricing['formatted_final']) ?>;
+    const prodUrl = window.location.href;
+    
+    const sizeInput = document.getElementById('selectedProductSize');
+    const selectedSize = (sizeInput && sizeInput.value) ? sizeInput.value : 'Custom / Not Specified';
+    
+    const colorInput = document.getElementById('selectedProductColor');
+    const selectedColor = (colorInput && colorInput.value) ? colorInput.value : 'Original Shade';
+
+    const msg = 
+`Hello Buller Leather Concierge,
+
+I want to inquire about a *Customize / Bulk Order* for this product:
+
+📦 *Product:* ${prodTitle}
+🏷 *SKU / Lot:* ${prodSku}
+📏 *Selected Size:* ${selectedSize}
+🎨 *Selected Leather:* ${selectedColor}
+💰 *Price:* ${prodPrice}
+🔗 *Link:* ${prodUrl}
+
+I would like assistance with:
+- Bespoke custom sizing & fittings
+- Corporate / Bulk order quantities & pricing
+- Custom logo embossing / monogramming
+
+Please share the pricing, MOQ, and lead time. Thank you!`;
+
+    return 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+}
+
+function openWhatsAppBulkInquiry(event) {
+    if (event) event.preventDefault();
+    const url = getBulkOrderWhatsAppUrl();
+    window.open(url, '_blank');
+}
+
+function updateBulkOrderWhatsAppUrl() {
+    const btn = document.getElementById('btnBulkCustomOrder');
+    if (btn) {
+        btn.href = getBulkOrderWhatsAppUrl();
+    }
 }
 
 // Select product colorway & dynamically switch photos assigned to this color
@@ -1297,6 +1371,7 @@ function selectProductColor(button, colorName) {
     if (colorLabel) colorLabel.textContent = colorName;
     const colorInput = document.getElementById('selectedProductColor');
     if (colorInput) colorInput.value = colorName;
+    updateBulkOrderWhatsAppUrl();
 
     // Filter gallery photos for this color
     const targetColor = colorName.toLowerCase().trim();
@@ -1597,6 +1672,8 @@ function toggleLightboxFullscreen() {
 
 // Attach Event Listeners on DOM Load
 document.addEventListener('DOMContentLoaded', () => {
+    updateBulkOrderWhatsAppUrl();
+
     const canvas = document.getElementById('lightboxCanvas');
     const img = document.getElementById('lightboxActiveImg');
     if (!canvas || !img) return;
