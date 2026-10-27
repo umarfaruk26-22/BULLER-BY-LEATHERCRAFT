@@ -56,19 +56,6 @@ require __DIR__ . '/../layouts/header.php';
                     <div id="mainProductPhotoContainer" class="position-relative product-photo-stage-wrapper p-2 p-md-4 shadow-soft mb-2 mb-md-3" onclick="openPhotoLightbox(document.getElementById('mainProductPhoto').src)" title="Click photo to inspect craftsmanship & high-resolution details">
                         <img id="mainProductPhoto" src="<?= asset($product['primary_image']) ?>" alt="<?= e($product['title']) ?>" class="img-fluid w-100" style="max-height: 580px; object-fit: contain; transition: transform 0.3s ease;">
                         
-                        <!-- Luxury Product Badges -->
-                        <div class="product-badges pdp-badges">
-                            <?php if ($pricing['is_discounted']): ?>
-                                <span class="badge-luxury badge-sale mb-1 shadow-sm">-<?= $pricing['discount_percent'] ?>% Special Discount</span>
-                            <?php endif; ?>
-                            <?php if ($product['is_bestseller']): ?>
-                                <span class="badge-luxury badge-bestseller mb-1 shadow-sm"><i class="bi bi-award-fill me-1"></i> Signature Masterpiece</span>
-                            <?php endif; ?>
-                            <span class="badge-luxury mb-1 shadow-sm badge-hide" style="background: rgba(26, 18, 11, 0.88); color: var(--color-gold); border: 1px solid var(--color-gold);">
-                                <i class="bi bi-shield-check me-1"></i> 100% Full-Grain Hide
-                            </span>
-                        </div>
-
                         <!-- Zoom hint clickable pill (Visible on Mobile & Desktop) -->
                         <div class="pdp-zoom-pill" onclick="event.stopPropagation(); openPhotoLightbox(document.getElementById('mainProductPhoto').src);" title="Open zoomable full-screen gallery">
                             <i class="bi bi-arrows-fullscreen"></i>
@@ -734,11 +721,6 @@ require __DIR__ . '/../layouts/header.php';
                                     <a href="<?= url('product?slug=' . urlencode($rel['slug'])) ?>">
                                         <img src="<?= asset($rel['primary_image']) ?>" alt="<?= e($rel['title']) ?>" class="w-100 h-100" style="object-fit: cover; transition: transform 0.4s ease;">
                                     </a>
-                                    <?php if ($relPrice['is_discounted']): ?>
-                                        <div class="product-badges">
-                                            <span class="badge-luxury badge-sale">-<?= $relPrice['discount_percent'] ?>%</span>
-                                        </div>
-                                    <?php endif; ?>
                                 </div>
 
                                 <div class="flex-grow-1">

@@ -81,13 +81,6 @@ $activeCountry = MarketContext::getCountry();
                             <a href="<?= url('product?slug=' . urlencode($p['slug'])) ?>" class="product-image-link">
                                 <img src="<?= asset($p['primary_image']) ?>" alt="<?= e($p['title']) ?>" loading="lazy">
                             </a>
-                            
-                            <div class="product-badges">
-                                <?php if ($pricing['is_discounted']): ?>
-                                    <span class="badge-luxury badge-sale">-<?= $pricing['discount_percent'] ?>%</span>
-                                <?php endif; ?>
-                                <span class="badge-luxury badge-bestseller d-none d-sm-inline-block">Bestseller</span>
-                            </div>
 
                             <button class="wishlist-toggle-btn <?= $isWishlisted ? 'active' : '' ?>" data-product-id="<?= $p['id'] ?>" title="Save to Wishlist">
                                 <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>

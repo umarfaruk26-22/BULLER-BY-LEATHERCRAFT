@@ -795,14 +795,9 @@ a:hover {
     transform: scale(1.05);
 }
 
-.product-badges {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+.product-badges,
+.pdp-badges {
+    display: none !important;
 }
 
 .badge-luxury {
@@ -1526,9 +1521,7 @@ table td.text-end {
         font-size: 0.72rem !important;
     }
     .product-card .product-badges {
-        top: 6px !important;
-        left: 6px !important;
-        gap: 3px !important;
+        display: none !important;
     }
     .badge-luxury {
         font-size: 0.58rem !important;
