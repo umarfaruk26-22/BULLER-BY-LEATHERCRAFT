@@ -29,22 +29,22 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
 
     <!-- Master Stage Sequence Container -->
     <div class="buller-intro-stage-container">
-        <div class="buller-intro-zoom-lockup" id="bullerIntroZoomLockup" aria-label="BULLER BY LEATHERCRAFT">
-            <!-- Bull Head Crest Logo -->
-            <div class="buller-intro-zoom-icon-wrap">
-                <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Heritage Crest" class="buller-intro-zoom-icon" width="1976" height="1853">
-            </div>
+        
+        <!-- STAGE 1: Standalone 3D Bull Head Icon (Phases 2 & 3: Reveal, Hover, Depth Exit) -->
+        <div class="buller-intro-stage-bull" id="bullerIntroStageBull" aria-hidden="true">
+            <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Heritage Crest" class="buller-intro-bull-icon" width="1976" height="1853">
+        </div>
 
-            <!-- Brand Typography -->
-            <div class="buller-intro-zoom-text-wrap">
-                <div class="buller-intro-zoom-main">BULLER</div>
-                <div class="buller-intro-zoom-sub">
-                    <span class="buller-zoom-line line-left"></span>
-                    <span class="buller-zoom-tagline">BY LEATHERCRAFT</span>
-                    <span class="buller-zoom-line line-right"></span>
-                </div>
+        <!-- STAGE 2: Harmonious Typography Reveal (Baad me Name) -->
+        <div class="buller-intro-stage-text" id="bullerIntroStageText" aria-label="BULLER BY LEATHERCRAFT">
+            <div class="buller-intro-wordmark">BULLER</div>
+            <div class="buller-intro-tagline-wrapper">
+                <span class="buller-intro-line line-left"></span>
+                <span class="buller-intro-tagline">BY LEATHERCRAFT</span>
+                <span class="buller-intro-line line-right"></span>
             </div>
         </div>
+
     </div>
 </div>
 

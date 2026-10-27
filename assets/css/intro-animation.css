@@ -47,8 +47,8 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
     pointer-events: all !important;
     opacity: 1 !important;
     visibility: visible !important;
-    -webkit-transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
+    -webkit-transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s ease;
+    transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s ease;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     will-change: opacity;
@@ -64,8 +64,8 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
     background: linear-gradient(90deg, #c5a880, #dfc298, #c5a880);
     box-shadow: 0 0 12px rgba(223, 194, 152, 0.7);
     z-index: 100;
-    -webkit-animation: bullerProgressFlow 2.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation: bullerProgressFlow 2.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    -webkit-animation: bullerProgressFlow 2.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: bullerProgressFlow 2.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @-webkit-keyframes bullerProgressFlow {
@@ -173,206 +173,246 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 1100px;
+    max-width: 900px;
     padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
-    overflow: visible;
 }
 
 /* --------------------------------------------------------------------------
-   CINEMATIC ZOOM-THROUGH LOCKUP: LOGO + NAME EXPAND TO FULLSCREEN & DISSOLVE
-   "logo and name dono saamne aave to bade hote hote puri screen pe aave and gayab ho jaave"
+   STAGE 1: STANDALONE BULL ICON (Phases 2 & 3: 0.05s – 1.05s)
    -------------------------------------------------------------------------- */
-.buller-intro-zoom-lockup {
+.buller-intro-stage-bull {
+    position: absolute;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
     pointer-events: none;
-    -webkit-transform-origin: center center;
-    transform-origin: center center;
+    opacity: 0;
+    -webkit-transform: scale(0.18);
+    transform: scale(0.18);
+    filter: drop-shadow(0 18px 38px rgba(99, 52, 27, 0.22));
+    -webkit-filter: drop-shadow(0 18px 38px rgba(99, 52, 27, 0.22));
+    -webkit-animation: bullerIconCinematic 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
+    animation: bullerIconCinematic 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    will-change: transform, opacity, filter;
-    -webkit-animation: bullerCinematicZoomThrough 2.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation: bullerCinematicZoomThrough 2.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
 }
 
-/* Bull Head Icon Container */
-.buller-intro-zoom-icon-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    filter: drop-shadow(0 14px 28px rgba(99, 52, 27, 0.18));
-    -webkit-filter: drop-shadow(0 14px 28px rgba(99, 52, 27, 0.18));
-    margin-bottom: clamp(12px, 2.4vh, 22px);
-}
-
-.buller-intro-zoom-icon {
-    width: clamp(100px, 15vw, 155px);
+.buller-intro-stage-bull img {
+    width: clamp(140px, 24vw, 240px);
     height: auto;
-    aspect-ratio: 1976 / 1853;
-    max-height: 28vh;
+    aspect-ratio: 1976 / 1853; /* Crucial for iOS Safari intrinsic ratio calculation */
+    max-height: 38vh;
     display: block;
     object-fit: contain;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
 }
 
-/* Typography Container */
-.buller-intro-zoom-text-wrap {
+@-webkit-keyframes bullerIconCinematic {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.18);
+        transform: scale(0.18);
+    }
+    22% {
+        opacity: 1;
+    }
+    58% {
+        opacity: 1;
+        -webkit-transform: scale(1.03);
+        transform: scale(1.03);
+    }
+    72% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    85% {
+        opacity: 0.85;
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(0.55);
+        transform: scale(0.55);
+        visibility: hidden;
+    }
+}
+
+@keyframes bullerIconCinematic {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.18);
+        transform: scale(0.18);
+    }
+    22% {
+        opacity: 1;
+    }
+    58% {
+        opacity: 1;
+        -webkit-transform: scale(1.03);
+        transform: scale(1.03);
+    }
+    72% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    85% {
+        opacity: 0.85;
+        -webkit-transform: scale(0.85);
+        transform: scale(0.85);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(0.55);
+        transform: scale(0.55);
+        visibility: hidden;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 2: HARMONIOUS TYPOGRAPHY REVEAL (Phases 4 & 5: 1.05s – 2.05s)
+   -------------------------------------------------------------------------- */
+.buller-intro-stage-text {
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    -webkit-transform: scale(0.94);
+    transform: scale(0.94);
+    -webkit-animation: bullerTextSequence 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.05s;
+    animation: bullerTextSequence 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.05s;
+    will-change: transform, opacity;
 }
 
-/* "BULLER" Brand Wordmark */
-.buller-intro-zoom-main {
+/* "BULLER" Wordmark */
+.buller-intro-wordmark {
     font-family: var(--font-brand, 'Cinzel', serif);
-    font-size: clamp(2.2rem, 6.2vw, 4.4rem);
+    font-size: clamp(2.2rem, 7.5vw, 4.2rem);
     font-weight: 700;
     color: #120b06;
     letter-spacing: 0.32em;
     margin-right: -0.32em;
     line-height: 1;
     text-shadow: 0 4px 18px rgba(18, 11, 6, 0.08);
+    opacity: 0;
+    -webkit-transform: translateY(10px) scale(0.95);
+    transform: translateY(10px) scale(0.95);
+    -webkit-animation: bullerWordmarkIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.08s;
+    animation: bullerWordmarkIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.08s;
 }
 
-/* "BY LEATHERCRAFT" Tagline with Flanking Rules */
-.buller-intro-zoom-sub {
+@-webkit-keyframes bullerWordmarkIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(14px) scale(0.93);
+        transform: translateY(14px) scale(0.93);
+        letter-spacing: 0.20em;
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1);
+        letter-spacing: 0.32em;
+    }
+}
+@keyframes bullerWordmarkIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(14px) scale(0.93);
+        transform: translateY(14px) scale(0.93);
+        letter-spacing: 0.20em;
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1);
+        letter-spacing: 0.32em;
+    }
+}
+
+/* "BY LEATHERCRAFT" Tagline with Flanking Golden Rules */
+.buller-intro-tagline-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(10px, 2.2vw, 20px);
-    margin-top: clamp(8px, 1.6vw, 15px);
+    gap: clamp(10px, 2.5vw, 22px);
+    margin-top: clamp(8px, 1.8vw, 16px);
     width: 100%;
+    opacity: 0;
+    -webkit-animation: bullerTaglineIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.25s;
+    animation: bullerTaglineIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.25s;
 }
 
-.buller-zoom-tagline {
+.buller-intro-tagline {
     font-family: var(--font-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
-    font-size: clamp(0.60rem, 1.4vw, 0.88rem);
+    font-size: clamp(0.62rem, 1.6vw, 0.92rem);
     font-weight: 600;
-    letter-spacing: 0.34em;
-    margin-right: -0.34em;
+    letter-spacing: 0.32em;
+    margin-right: -0.32em;
     text-transform: uppercase;
     color: #9e7d4e;
     white-space: nowrap;
 }
 
-.buller-zoom-line {
+.buller-intro-line {
     display: inline-block;
     height: 1px;
-    width: clamp(24px, 7vw, 55px);
+    width: clamp(24px, 8vw, 60px);
     background: linear-gradient(90deg, rgba(197, 168, 128, 0.1), #c5a880);
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transform-origin: center right;
+    transform-origin: center right;
+    -webkit-animation: bullerLineExpand 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.35s;
+    animation: bullerLineExpand 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.35s;
 }
 
-.buller-zoom-line.line-right {
+.buller-intro-line.line-right {
     background: linear-gradient(90deg, #c5a880, rgba(197, 168, 128, 0.1));
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
 }
 
-/* --------------------------------------------------------------------------
-   KEYFRAME: DYNAMIC EXPLOSIVE ZOOM-THROUGH & DISSOLVE
-   1. Starts centered and reveals gracefully (0% -> 22%)
-   2. Majestic showcase hold (22% -> 48%)
-   3. Rapid acceleration into full screen (48% -> 68%)
-   4. Massive scale beyond viewport edges with motion blur & dissolve (68% -> 100%)
-   -------------------------------------------------------------------------- */
-@-webkit-keyframes bullerCinematicZoomThrough {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(0.65) translate3d(0, 14px, 0);
-        transform: scale(0.65) translate3d(0, 14px, 0);
-        -webkit-filter: blur(3px);
-        filter: blur(3px);
-    }
-    22% {
-        opacity: 1;
-        -webkit-transform: scale(0.98) translate3d(0, 0, 0);
-        transform: scale(0.98) translate3d(0, 0, 0);
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    48% {
-        opacity: 1;
-        -webkit-transform: scale(1.04) translate3d(0, 0, 0);
-        transform: scale(1.04) translate3d(0, 0, 0);
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    72% {
-        opacity: 0.98;
-        -webkit-transform: scale(2.6) translate3d(0, 0, 0);
-        transform: scale(2.6) translate3d(0, 0, 0);
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    88% {
-        opacity: 0.40;
-        -webkit-transform: scale(6.2) translate3d(0, 0, 0);
-        transform: scale(6.2) translate3d(0, 0, 0);
-        -webkit-filter: blur(2px);
-        filter: blur(2px);
-    }
-    100% {
-        opacity: 0;
-        -webkit-transform: scale(10.5) translate3d(0, 0, 0);
-        transform: scale(10.5) translate3d(0, 0, 0);
-        -webkit-filter: blur(6px);
-        filter: blur(6px);
-        visibility: hidden;
-    }
+@-webkit-keyframes bullerTaglineIn {
+    0% { opacity: 0; -webkit-transform: translateY(8px); transform: translateY(8px); }
+    100% { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
+}
+@keyframes bullerTaglineIn {
+    0% { opacity: 0; -webkit-transform: translateY(8px); transform: translateY(8px); }
+    100% { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
 }
 
-@keyframes bullerCinematicZoomThrough {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(0.65) translate3d(0, 14px, 0);
-        transform: scale(0.65) translate3d(0, 14px, 0);
-        -webkit-filter: blur(3px);
-        filter: blur(3px);
-    }
-    22% {
-        opacity: 1;
-        -webkit-transform: scale(0.98) translate3d(0, 0, 0);
-        transform: scale(0.98) translate3d(0, 0, 0);
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    48% {
-        opacity: 1;
-        -webkit-transform: scale(1.04) translate3d(0, 0, 0);
-        transform: scale(1.04) translate3d(0, 0, 0);
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    72% {
-        opacity: 0.98;
-        -webkit-transform: scale(2.6) translate3d(0, 0, 0);
-        transform: scale(2.6) translate3d(0, 0, 0);
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    88% {
-        opacity: 0.40;
-        -webkit-transform: scale(6.2) translate3d(0, 0, 0);
-        transform: scale(6.2) translate3d(0, 0, 0);
-        -webkit-filter: blur(2px);
-        filter: blur(2px);
-    }
-    100% {
-        opacity: 0;
-        -webkit-transform: scale(10.5) translate3d(0, 0, 0);
-        transform: scale(10.5) translate3d(0, 0, 0);
-        -webkit-filter: blur(6px);
-        filter: blur(6px);
-        visibility: hidden;
-    }
+@-webkit-keyframes bullerLineExpand {
+    0% { -webkit-transform: scaleX(0); transform: scaleX(0); }
+    100% { -webkit-transform: scaleX(1); transform: scaleX(1); }
+}
+@keyframes bullerLineExpand {
+    0% { -webkit-transform: scaleX(0); transform: scaleX(0); }
+    100% { -webkit-transform: scaleX(1); transform: scaleX(1); }
+}
+
+@-webkit-keyframes bullerTextSequence {
+    0% { opacity: 0; -webkit-transform: scale(0.96); transform: scale(0.96); }
+    25% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+    100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+}
+@keyframes bullerTextSequence {
+    0% { opacity: 0; -webkit-transform: scale(0.96); transform: scale(0.96); }
+    25% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+    100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
 }
 
 /* --------------------------------------------------------------------------
@@ -399,24 +439,25 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
         padding: 0 16px;
     }
 
-    .buller-intro-zoom-icon {
-        width: clamp(90px, 32vw, 130px);
+    .buller-intro-stage-bull img {
+        width: clamp(120px, 42vw, 170px);
+        aspect-ratio: 1976 / 1853;
     }
 
-    .buller-intro-zoom-main {
-        font-size: clamp(2rem, 9.5vw, 2.7rem);
+    .buller-intro-wordmark {
+        font-size: clamp(2rem, 10vw, 2.7rem);
         letter-spacing: 0.26em;
         margin-right: -0.26em;
     }
 
-    .buller-zoom-tagline {
-        font-size: 0.60rem;
+    .buller-intro-tagline {
+        font-size: 0.62rem;
         letter-spacing: 0.22em;
         margin-right: -0.22em;
     }
 
-    .buller-zoom-line {
-        width: 20px;
+    .buller-intro-line {
+        width: 22px;
     }
 
     .buller-intro-skip-btn {
