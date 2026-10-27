@@ -253,9 +253,9 @@ require __DIR__ . '/../layouts/header.php';
                     <!-- 5. Purchase & Bag Action Buttons (Ergonomic & Aligned) -->
                     <div class="pdp-actions-container d-flex flex-column gap-2 mb-3">
                         <!-- Customize / Bulk Order Button (Direct WhatsApp) -->
-                        <div class="pdp-bulk-custom-block mb-1">
+                        <div class="pdp-bulk-custom-block mb-2">
                             <a href="https://wa.me/919033321151" target="_blank" rel="noopener noreferrer" id="btnBulkCustomOrder" onclick="openWhatsAppBulkInquiry(event)" class="btn-bulk-custom-card text-decoration-none d-flex align-items-center justify-content-between" title="Inquire for Customization, Bespoke Sizing or Bulk Orders via WhatsApp">
-                                <div class="d-flex align-items-center gap-2.5 min-w-0">
+                                <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1">
                                     <div class="bulk-custom-icon-wrap">
                                         <i class="bi bi-whatsapp"></i>
                                     </div>
@@ -264,7 +264,7 @@ require __DIR__ . '/../layouts/header.php';
                                         <span class="bulk-custom-sub-title d-block">Bespoke sizing, custom branding & wholesale bulk pricing</span>
                                     </div>
                                 </div>
-                                <div class="bulk-custom-arrow d-flex align-items-center gap-1 flex-shrink-0 ms-2">
+                                <div class="bulk-custom-arrow d-flex align-items-center gap-1 flex-shrink-0 ms-3">
                                     <span class="bulk-inquire-text">INQUIRE</span>
                                     <i class="bi bi-chevron-right fs-6"></i>
                                 </div>
