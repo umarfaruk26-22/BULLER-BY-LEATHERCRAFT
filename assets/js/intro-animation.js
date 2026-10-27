@@ -12,8 +12,8 @@
         // 'session' = Sirf pehli visit par play hoga (sessionStorage)
         playMode: 'always', 
         
-        // Total duration before fade out starts (milliseconds)
-        durationMs: 3100,
+        // Total duration before fade out starts (milliseconds) - 2-Stage Sequence: Logo then Name
+        durationMs: 2300,
         
         // Fade out transition duration
         fadeDurationMs: 450,

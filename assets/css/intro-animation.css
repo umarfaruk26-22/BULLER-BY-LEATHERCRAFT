@@ -64,8 +64,8 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
     background: linear-gradient(90deg, #c5a880, #dfc298, #c5a880);
     box-shadow: 0 0 12px rgba(223, 194, 152, 0.7);
     z-index: 100;
-    -webkit-animation: bullerProgressFlow 3.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation: bullerProgressFlow 3.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    -webkit-animation: bullerProgressFlow 2.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: bullerProgressFlow 2.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @-webkit-keyframes bullerProgressFlow {
@@ -405,152 +405,14 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
 }
 
 @-webkit-keyframes bullerTextSequence {
-    0% { opacity: 1; -webkit-transform: scale(0.96); transform: scale(0.96); }
-    75% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
-    90% { opacity: 0.5; -webkit-transform: scale(1.02); transform: scale(1.02); }
-    100% { opacity: 0; -webkit-transform: scale(1.04); transform: scale(1.04); visibility: hidden; }
+    0% { opacity: 0; -webkit-transform: scale(0.96); transform: scale(0.96); }
+    25% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+    100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
 }
 @keyframes bullerTextSequence {
-    0% { opacity: 1; -webkit-transform: scale(0.96); transform: scale(0.96); }
-    75% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
-    90% { opacity: 0.5; -webkit-transform: scale(1.02); transform: scale(1.02); }
-    100% { opacity: 0; -webkit-transform: scale(1.04); transform: scale(1.04); visibility: hidden; }
-}
-
-/* --------------------------------------------------------------------------
-   STAGE 3: COMPLETE MASTER LOGO LOCKUP (Phase 6: 2.05s – 2.95s)
-   Borderless & Enlarged — perfectly centered
-   -------------------------------------------------------------------------- */
-.buller-intro-stage-master {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    opacity: 0;
-    -webkit-transform: scale(0.94);
-    transform: scale(0.94);
-    -webkit-animation: bullerMasterAssemble 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.05s;
-    animation: bullerMasterAssemble 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.05s;
-    will-change: transform, opacity;
-}
-
-.buller-intro-master-lockup {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(20px, 4.5vw, 40px);
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-}
-
-.buller-intro-master-icon-wrap {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.buller-intro-master-icon {
-    width: clamp(75px, 12vw, 130px);
-    height: auto;
-    aspect-ratio: 1976 / 1853; /* Crucial for iOS Safari */
-    display: block;
-    filter: drop-shadow(0 10px 24px rgba(99, 52, 27, 0.22));
-    -webkit-filter: drop-shadow(0 10px 24px rgba(99, 52, 27, 0.22));
-}
-
-.buller-intro-master-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.05;
-    text-align: center;
-}
-
-.buller-intro-master-main {
-    font-family: var(--font-brand, 'Cinzel', serif);
-    font-size: clamp(2.4rem, 6.2vw, 4.5rem);
-    font-weight: 700;
-    color: #120b06;
-    letter-spacing: 0.28em;
-    margin-right: -0.28em;
-    line-height: 1.02;
-    white-space: nowrap;
-    text-shadow: 0 4px 20px rgba(18, 11, 6, 0.08);
-    text-align: center;
-}
-
-.buller-intro-master-sub {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 8px;
-    font-family: var(--font-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
-    font-size: clamp(0.72rem, 1.6vw, 1.05rem);
-    font-weight: 600;
-    letter-spacing: 0.26em;
-    margin-right: -0.26em;
-    text-transform: uppercase;
-    color: #9e7d4e;
-    margin-top: clamp(8px, 1.5vw, 14px);
-    white-space: nowrap;
-    text-align: center;
-}
-
-.buller-intro-master-sub .sub-dash,
-.buller-intro-master-sub .sub-dot {
-    color: #c5a880;
-    font-size: 0.85em;
-    opacity: 0.85;
-}
-
-@-webkit-keyframes bullerMasterAssemble {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(0.92) translateY(12px);
-        transform: scale(0.92) translateY(12px);
-    }
-    30% {
-        opacity: 1;
-    }
-    60% {
-        opacity: 1;
-        -webkit-transform: scale(1) translateY(0);
-        transform: scale(1) translateY(0);
-    }
-    100% {
-        opacity: 1;
-        -webkit-transform: scale(1) translateY(0);
-        transform: scale(1) translateY(0);
-    }
-}
-@keyframes bullerMasterAssemble {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(0.92) translateY(12px);
-        transform: scale(0.92) translateY(12px);
-    }
-    30% {
-        opacity: 1;
-    }
-    60% {
-        opacity: 1;
-        -webkit-transform: scale(1) translateY(0);
-        transform: scale(1) translateY(0);
-    }
-    100% {
-        opacity: 1;
-        -webkit-transform: scale(1) translateY(0);
-        transform: scale(1) translateY(0);
-    }
+    0% { opacity: 0; -webkit-transform: scale(0.96); transform: scale(0.96); }
+    25% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+    100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
 }
 
 /* --------------------------------------------------------------------------
@@ -596,39 +458,6 @@ body.buller-intro-locked > *:not(#bullerIntroOverlay) {
 
     .buller-intro-line {
         width: 22px;
-    }
-
-    .buller-intro-master-lockup {
-        padding: 0;
-        gap: 16px;
-    }
-
-    .buller-intro-master-icon {
-        width: clamp(58px, 15vw, 78px);
-        aspect-ratio: 1976 / 1853;
-    }
-
-    .buller-intro-master-text {
-        align-items: center;
-        text-align: center;
-    }
-
-    .buller-intro-master-main {
-        font-size: clamp(1.85rem, 6.2vw, 2.5rem);
-        letter-spacing: 0.24em;
-        margin-right: -0.24em;
-        text-align: center;
-    }
-
-    .buller-intro-master-sub {
-        font-size: clamp(0.58rem, 1.8vw, 0.72rem);
-        letter-spacing: 0.22em;
-        margin-right: -0.22em;
-        gap: 5px;
-        margin-top: 6px;
-        width: 100%;
-        justify-content: center;
-        text-align: center;
     }
 
     .buller-intro-skip-btn {

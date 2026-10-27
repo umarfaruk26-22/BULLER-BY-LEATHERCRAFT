@@ -35,30 +35,13 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
             <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Heritage Crest" class="buller-intro-bull-icon" width="1976" height="1853">
         </div>
 
-        <!-- STAGE 2: Harmonious Typography Reveal (Phases 4 & 5: BULLER + BY LEATHERCRAFT + Golden Hairlines) -->
-        <div class="buller-intro-stage-text" id="bullerIntroStageText" aria-hidden="true">
+        <!-- STAGE 2: Harmonious Typography Reveal (Baad me Name) -->
+        <div class="buller-intro-stage-text" id="bullerIntroStageText" aria-label="BULLER BY LEATHERCRAFT">
             <div class="buller-intro-wordmark">BULLER</div>
             <div class="buller-intro-tagline-wrapper">
                 <span class="buller-intro-line line-left"></span>
                 <span class="buller-intro-tagline">BY LEATHERCRAFT</span>
                 <span class="buller-intro-line line-right"></span>
-            </div>
-        </div>
-
-        <!-- STAGE 3: Grand Complete Original Logo Lockup (Phase 6: Bull Icon + BULLER + By leathercraft) -->
-        <div class="buller-intro-stage-master" id="bullerIntroStageMaster" aria-label="BULLER BY LEATHERCRAFT">
-            <div class="buller-intro-master-lockup">
-                <div class="buller-intro-master-icon-wrap">
-                    <img src="<?= asset('assets/images/buller-logo.svg') ?>?v=<?= $introFavVer ?>" alt="Buller Logo Icon" class="buller-intro-master-icon" width="1976" height="1853">
-                </div>
-                <div class="buller-intro-master-text">
-                    <div class="buller-intro-master-main">BULLER</div>
-                    <div class="buller-intro-master-sub">
-                        <span class="sub-dash">&mdash;</span>
-                        <span>BY LEATHERCRAFT</span>
-                        <span class="sub-dash">&mdash;</span>
-                    </div>
-                </div>
             </div>
         </div>
 
