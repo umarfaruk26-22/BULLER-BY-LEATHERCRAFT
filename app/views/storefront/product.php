@@ -250,30 +250,27 @@ require __DIR__ . '/../layouts/header.php';
                         <input type="hidden" id="selectedProductSize" value="Standard Fit">
                     <?php endif; ?>
 
-                    <!-- 4b. Customize / Bulk Order Concierge Button (Direct WhatsApp) -->
-                    <div class="pdp-bulk-custom-block mb-3">
-                        <a href="https://wa.me/919033321151" target="_blank" rel="noopener noreferrer" id="btnBulkCustomOrder" onclick="openWhatsAppBulkInquiry(event)" class="btn-bulk-custom-card text-decoration-none d-flex align-items-center justify-content-between p-2.5 p-sm-3" title="Inquire for Customization, Bespoke Sizing or Bulk Orders via WhatsApp">
-                            <div class="d-flex align-items-center gap-2.5">
-                                <div class="bulk-custom-icon-wrap">
-                                    <i class="bi bi-whatsapp"></i>
-                                </div>
-                                <div class="bulk-custom-text text-start">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="bulk-custom-main-title">Customize / Bulk Order</span>
-                                        <span class="badge-custom-bespoke">Bespoke Concierge</span>
-                                    </div>
-                                    <span class="bulk-custom-sub-title">Bespoke sizing, custom branding & wholesale bulk pricing</span>
-                                </div>
-                            </div>
-                            <div class="bulk-custom-arrow d-flex align-items-center gap-1">
-                                <span class="d-none d-md-inline small fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.05em;">Inquire</span>
-                                <i class="bi bi-chevron-right fs-6"></i>
-                            </div>
-                        </a>
-                    </div>
-
                     <!-- 5. Purchase & Bag Action Buttons (Ergonomic & Aligned) -->
                     <div class="pdp-actions-container d-flex flex-column gap-2 mb-3">
+                        <!-- Customize / Bulk Order Button (Direct WhatsApp) -->
+                        <div class="pdp-bulk-custom-block mb-1">
+                            <a href="https://wa.me/919033321151" target="_blank" rel="noopener noreferrer" id="btnBulkCustomOrder" onclick="openWhatsAppBulkInquiry(event)" class="btn-bulk-custom-card text-decoration-none d-flex align-items-center justify-content-between" title="Inquire for Customization, Bespoke Sizing or Bulk Orders via WhatsApp">
+                                <div class="d-flex align-items-center gap-2.5 min-w-0">
+                                    <div class="bulk-custom-icon-wrap">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </div>
+                                    <div class="bulk-custom-text">
+                                        <span class="bulk-custom-main-title d-block">Customize / Bulk Order</span>
+                                        <span class="bulk-custom-sub-title d-block">Bespoke sizing, custom branding & wholesale bulk pricing</span>
+                                    </div>
+                                </div>
+                                <div class="bulk-custom-arrow d-flex align-items-center gap-1 flex-shrink-0 ms-2">
+                                    <span class="bulk-inquire-text">INQUIRE</span>
+                                    <i class="bi bi-chevron-right fs-6"></i>
+                                </div>
+                            </a>
+                        </div>
+
                         <div class="d-flex align-items-stretch gap-2 pdp-action-group">
                             <!-- Quantity Counter -->
                             <div class="pdp-qty-box d-flex align-items-center border bg-white rounded-1" style="border-color: var(--color-border); height: 46px;">
