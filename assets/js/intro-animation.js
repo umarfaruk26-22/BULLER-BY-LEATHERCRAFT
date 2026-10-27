@@ -12,21 +12,23 @@
         // 'session' = Sirf pehli visit par play hoga (sessionStorage)
         playMode: 'always', 
         
-        // Total duration before fade out starts (milliseconds) - 2-Stage Sequence: Logo then Name
-        durationMs: 2300,
+        // Total duration before fade out starts (milliseconds) - Cinematic Zoom-Through Lockup
+        durationMs: 2100,
         
         // Fade out transition duration
-        fadeDurationMs: 450,
+        fadeDurationMs: 400,
         
         // Session storage key
-        storageKey: 'buller_intro_viewed_v2'
+        storageKey: 'buller_intro_viewed_v3'
     }, window.BULLER_INTRO_CONFIG || {});
 
     // URL parameter overrides:
     // ?intro=1 forces intro replay
+    // ?intro=hold forces intro replay without auto-exit (for visual debugging/testing)
     // ?skip_intro=1 disables intro
     var urlParams = new URLSearchParams(window.location.search);
-    var forcePlay = urlParams.get('intro') === '1';
+    var forcePlay = urlParams.get('intro') === '1' || urlParams.get('intro') === 'hold';
+    var isHold = urlParams.get('intro') === 'hold';
     var forceSkip = urlParams.get('skip_intro') === '1';
 
     var isInitialized = false;
@@ -123,10 +125,12 @@
         }
         document.addEventListener('keydown', onKeyDown);
 
-        // Schedule completion
-        exitTimer = setTimeout(function () {
-            finishIntro();
-        }, window.BULLER_INTRO_CONFIG.durationMs);
+        // Schedule completion (unless holding for visual inspection)
+        if (!isHold) {
+            exitTimer = setTimeout(function () {
+                finishIntro();
+            }, window.BULLER_INTRO_CONFIG.durationMs);
+        }
     }
 
     // Expose replay helper function

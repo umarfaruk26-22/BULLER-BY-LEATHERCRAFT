@@ -23,7 +23,8 @@ if ($uri !== '/' && file_exists($filePath) && !is_dir($filePath)) {
         'woff'  => 'font/woff',
         'woff2' => 'font/woff2',
         'ttf'   => 'font/ttf',
-        'ico'   => 'image/x-icon'
+        'ico'   => 'image/x-icon',
+        'html'  => 'text/html; charset=UTF-8'
     ];
 
     if (isset($mimes[$ext])) {
