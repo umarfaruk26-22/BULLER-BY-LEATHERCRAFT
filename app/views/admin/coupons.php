@@ -134,13 +134,13 @@ require __DIR__ . '/../layouts/admin_header.php';
                                         </span>
                                     <?php else: ?>
                                         <span class="badge bg-primary-subtle text-primary fs-6 fw-bold border border-primary">
-                                            <?= e($cpn['currency_symbol'] ?? '$') . number_format($cpn['discount_value'], 2) ?> OFF
+                                            <?= e($cpn['currency_symbol'] ?? '$') . number_format((float)($cpn['discount_value'] ?? 0), 2) ?> OFF
                                         </span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="small text-muted">
                                     <?php if ((float)$cpn['min_spend'] > 0): ?>
-                                        Min <?= e($cpn['currency_symbol'] ?? '$') . number_format($cpn['min_spend'], 2) ?>
+                                        Min <?= e($cpn['currency_symbol'] ?? '$') . number_format((float)($cpn['min_spend'] ?? 0), 2) ?>
                                     <?php else: ?>
                                         <span class="text-muted fst-italic">No Minimum</span>
                                     <?php endif; ?>

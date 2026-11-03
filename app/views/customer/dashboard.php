@@ -105,7 +105,7 @@ require __DIR__ . '/../layouts/header.php';
                                             <td><strong>#<?= e($ord['order_number']) ?></strong></td>
                                             <td class="small text-muted"><?= date('M d, Y', strtotime($ord['created_at'])) ?></td>
                                             <td class="small"><?= (int)$ord['item_count'] ?> Pieces</td>
-                                            <td class="fw-bold"><?= e($ord['currency_symbol']) . number_format($ord['grand_total'], 2) ?></td>
+                                            <td class="fw-bold"><?= e($ord['currency_symbol']) . number_format((float)($ord['grand_total'] ?? 0), 2) ?></td>
                                             <td>
                                                 <span class="badge bg-<?= ($ord['order_status'] === 'delivered') ? 'success' : 'warning text-dark' ?> text-uppercase small">
                                                     <?= e($ord['order_status']) ?>

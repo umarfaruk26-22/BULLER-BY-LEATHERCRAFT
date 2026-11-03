@@ -84,33 +84,33 @@ $shippingAddress = json_decode($order['shipping_address_json'], true);
                                         </div>
                                     </td>
                                     <td class="text-center"><?= $item['quantity'] ?></td>
-                                    <td class="text-end"><?= e($order['currency_symbol']) . number_format($item['unit_price'], 2) ?></td>
-                                    <td class="text-end fw-bold"><?= e($order['currency_symbol']) . number_format($item['total_price'], 2) ?></td>
+                                    <td class="text-end"><?= e($order['currency_symbol']) . number_format((float)($item['unit_price'] ?? 0), 2) ?></td>
+                                    <td class="text-end fw-bold"><?= e($order['currency_symbol']) . number_format((float)($item['total_price'] ?? 0), 2) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                         <tfoot class="small">
                             <tr>
                                 <th colspan="3" class="text-end">Subtotal:</th>
-                                <td class="text-end"><?= e($order['currency_symbol']) . number_format($order['subtotal'], 2) ?></td>
+                                <td class="text-end"><?= e($order['currency_symbol']) . number_format((float)($order['subtotal'] ?? 0), 2) ?></td>
                             </tr>
                             <?php if ($order['discount_amount'] > 0): ?>
                                 <tr>
                                     <th colspan="3" class="text-end text-success">Discount Applied:</th>
-                                    <td class="text-end text-success">-<?= e($order['currency_symbol']) . number_format($order['discount_amount'], 2) ?></td>
+                                    <td class="text-end text-success">-<?= e($order['currency_symbol']) . number_format((float)($order['discount_amount'] ?? 0), 2) ?></td>
                                 </tr>
                             <?php endif; ?>
                             <tr>
                                 <th colspan="3" class="text-end">Tax / VAT:</th>
-                                <td class="text-end"><?= e($order['currency_symbol']) . number_format($order['tax_amount'], 2) ?></td>
+                                <td class="text-end"><?= e($order['currency_symbol']) . number_format((float)($order['tax_amount'] ?? 0), 2) ?></td>
                             </tr>
                             <tr>
                                 <th colspan="3" class="text-end">International Shipping:</th>
-                                <td class="text-end"><?= ($order['shipping_amount'] == 0) ? 'Complimentary' : e($order['currency_symbol']) . number_format($order['shipping_amount'], 2) ?></td>
+                                <td class="text-end"><?= ($order['shipping_amount'] == 0) ? 'Complimentary' : e($order['currency_symbol']) . number_format((float)($order['shipping_amount'] ?? 0), 2) ?></td>
                             </tr>
                             <tr class="fs-6">
                                 <th colspan="3" class="text-end fw-bold">Grand Total (<?= e($order['currency_code']) ?>):</th>
-                                <td class="text-end fw-bold text-dark font-price" style="font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;"><?= e($order['currency_symbol']) . number_format($order['grand_total'], 2) ?></td>
+                                <td class="text-end fw-bold text-dark font-price" style="font-family: var(--font-price); font-variant-numeric: tabular-nums lining-nums;"><?= e($order['currency_symbol']) . number_format((float)($order['grand_total'] ?? 0), 2) ?></td>
                             </tr>
                         </tfoot>
                     </table>

@@ -90,12 +90,12 @@ require __DIR__ . '/../layouts/admin_header.php';
                                         <?php foreach ($prod['country_prices'] as $cp): ?>
                                             <div class="p-1 px-2 border rounded-1 bg-light small d-flex align-items-center gap-1">
                                                 <?= country_flag($cp['country_code'], $cp['country_name'], 16) ?>
-                                                <strong class="text-dark"><?= e($cp['currency_symbol']) . number_format($cp['original_price'], 0) ?></strong>
+                                                <strong class="text-dark"><?= e($cp['currency_symbol']) . number_format((float)($cp['original_price'] ?? 0), 0) ?></strong>
                                                 <?php if (!empty($cp['discount_price'])): ?>
-                                                    <span class="text-danger fw-bold">(<?= e($cp['currency_symbol']) . number_format($cp['discount_price'], 0) ?>)</span>
+                                                    <span class="text-danger fw-bold">(<?= e($cp['currency_symbol']) . number_format((float)($cp['discount_price'] ?? 0), 0) ?>)</span>
                                                 <?php endif; ?>
-                                                <span class="badge bg-<?= ($cp['stock_quantity'] <= $cp['low_stock_threshold']) ? 'danger' : 'secondary' ?> ms-1" style="font-size: 0.65rem;">
-                                                    <?= (int)$cp['stock_quantity'] ?> left
+                                                <span class="badge bg-<?= (((int)($cp['stock_quantity'] ?? 0)) <= ((int)($cp['low_stock_threshold'] ?? 5))) ? 'danger' : 'secondary' ?> ms-1" style="font-size: 0.65rem;">
+                                                    <?= (int)($cp['stock_quantity'] ?? 0) ?> left
                                                 </span>
                                             </div>
                                         <?php endforeach; ?>

@@ -41,7 +41,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="kpi-label">Regional Gross Sales</div>
-                        <div class="kpi-value"><?= e($currentCountry['currency_symbol']) . number_format($kpis['revenue'] ?? 18450.00, 2) ?></div>
+                        <div class="kpi-value"><?= e($currentCountry['currency_symbol']) . number_format((float)($kpis['revenue'] ?? 0), 2) ?></div>
                         <small class="text-success fw-semibold"><i class="bi bi-wallet2 me-1"></i> In <?= e($currentCountry['currency_code']) ?></small>
                     </div>
                     <div class="kpi-icon-box bg-warning-subtle text-warning-emphasis">
@@ -131,7 +131,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     <small class="text-muted"><?= e($ro['customer_email']) ?></small>
                                 </td>
                                 <td class="small text-muted"><?= date('M d, Y', strtotime($ro['created_at'])) ?></td>
-                                <td class="fw-bold" style="font-variant-numeric: tabular-nums;"><?= e($currentCountry['currency_symbol']) . number_format($ro['grand_total'], 2) ?></td>
+                                <td class="fw-bold" style="font-variant-numeric: tabular-nums;"><?= e($currentCountry['currency_symbol']) . number_format((float)($ro['grand_total'] ?? 0), 2) ?></td>
                                 <td><span class="badge bg-success text-uppercase"><?= e($ro['payment_status']) ?></span></td>
                                 <td>
                                     <span class="badge bg-<?= ($ro['order_status'] === 'delivered') ? 'success' : 'warning text-dark' ?> text-uppercase">

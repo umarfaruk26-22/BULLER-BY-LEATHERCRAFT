@@ -3,9 +3,19 @@
  * BULLER LEATHER — GLOBAL CONFIGURATION
  */
 
-// Error Reporting
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
+// Database & Environment Resolution
+$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false)
+    || (strpos(__DIR__, 'u121474497') !== false);
+
+// Error Reporting (Clean, Production-Ready, PHP 8.1+ Safe)
+if ($isLive) {
+    ini_set('display_errors', '0');
+    ini_set('log_errors', '1');
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_USER_DEPRECATED);
+} else {
+    ini_set('display_errors', '1');
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_USER_DEPRECATED);
+}
 
 // Base Paths & URLs
 define('APP_NAME', 'Buller Leather');
@@ -21,8 +31,6 @@ if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'nexalogictech
 }
 
 // Database Credentials (XAMPP / MySQL & Live Hostinger)
-$isLive = (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'bullerleather.com') !== false)
-    || (strpos(__DIR__, 'u121474497') !== false);
 
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');

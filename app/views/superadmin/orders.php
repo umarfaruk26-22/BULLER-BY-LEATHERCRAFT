@@ -96,7 +96,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                 <td class="small text-muted"><?= date('M d, Y H:i', strtotime($ord['created_at'])) ?></td>
                                 <td>
                                     <strong class="fs-6 fw-bold" style="color: var(--color-espresso-deep); font-variant-numeric: tabular-nums;">
-                                        <?= e($ord['currency_symbol']) . number_format($ord['grand_total'], 2) ?>
+                                        <?= e($ord['currency_symbol']) . number_format((float)($ord['grand_total'] ?? 0), 2) ?>
                                     </strong>
                                 </td>
                                 <td>

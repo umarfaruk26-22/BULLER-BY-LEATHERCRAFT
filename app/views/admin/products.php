@@ -94,11 +94,11 @@ require __DIR__ . '/../layouts/admin_header.php';
                                 </td>
                                 <td>
                                     <div class="fw-bold" style="font-variant-numeric: tabular-nums; font-size: 0.95rem;">
-                                        <?= e($currentCountry['currency_symbol']) . number_format($p['original_price'], 2) ?>
+                                        <?= e($currentCountry['currency_symbol']) . number_format((float)($p['original_price'] ?? 0), 2) ?>
                                     </div>
-                                    <?php if ($p['discount_price']): ?>
+                                    <?php if (!empty($p['discount_price'])): ?>
                                         <div class="text-danger fw-bold small" style="font-variant-numeric: tabular-nums;">
-                                            Sale: <?= e($currentCountry['currency_symbol']) . number_format($p['discount_price'], 2) ?>
+                                            Sale: <?= e($currentCountry['currency_symbol']) . number_format((float)($p['discount_price'] ?? 0), 2) ?>
                                         </div>
                                         <small class="text-muted d-block" style="font-size: 0.7rem;">
                                             <?= e($p['discount_start_date'] ?? 'Immediate') ?> - <?= e($p['discount_end_date'] ?? 'Open') ?>
@@ -106,10 +106,10 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <div class="fw-bold <?= ($p['stock_quantity'] <= $p['low_stock_threshold']) ? 'text-danger' : 'text-success' ?>">
-                                        <?= (int)$p['stock_quantity'] ?> units
+                                    <div class="fw-bold <?= (((int)($p['stock_quantity'] ?? 0)) <= ((int)($p['low_stock_threshold'] ?? 5))) ? 'text-danger' : 'text-success' ?>">
+                                        <?= (int)($p['stock_quantity'] ?? 0) ?> units
                                     </div>
-                                    <small class="text-muted" style="font-size: 0.72rem;">Alert under: <?= (int)$p['low_stock_threshold'] ?></small>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Alert under: <?= (int)($p['low_stock_threshold'] ?? 5) ?></small>
                                 </td>
                                 <td>
                                     <span class="badge bg-<?= ($p['status'] === 'published' && $p['is_available']) ? 'success' : 'secondary' ?>">
@@ -290,11 +290,11 @@ require __DIR__ . '/../layouts/admin_header.php';
                                                 <div class="row g-3 mb-3">
                                                     <div class="col-md-6">
                                                         <label class="form-label small fw-bold">Available Stock Quantity *</label>
-                                                        <input type="number" name="stock_quantity" class="form-control" value="<?= (int)$p['stock_quantity'] ?>" required>
+                                                        <input type="number" name="stock_quantity" class="form-control" value="<?= (int)($p['stock_quantity'] ?? 0) ?>" required>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label small fw-bold">Low Stock Warning Threshold</label>
-                                                        <input type="number" name="low_stock_threshold" class="form-control" value="<?= (int)$p['low_stock_threshold'] ?>">
+                                                        <input type="number" name="low_stock_threshold" class="form-control" value="<?= (int)($p['low_stock_threshold'] ?? 5) ?>">
                                                     </div>
                                                 </div>
 

@@ -163,10 +163,10 @@ require __DIR__ . '/../layouts/admin_header.php';
                             <!-- Shipping & Policy -->
                             <td class="py-3 px-3" style="white-space: nowrap;">
                                 <div class="small text-dark">
-                                    Flat: <strong><?= e($c['currency_symbol']) . number_format($c['flat_shipping_rate'], 0) ?></strong>
+                                    Flat: <strong><?= e($c['currency_symbol']) . number_format((float)($c['flat_shipping_rate'] ?? 0), 0) ?></strong>
                                 </div>
                                 <div class="small text-muted" style="font-size: 0.74rem;">
-                                    Free &gt; <?= e($c['currency_symbol']) . number_format($c['free_shipping_threshold'], 0) ?>
+                                    Free &gt; <?= e($c['currency_symbol']) . number_format((float)($c['free_shipping_threshold'] ?? 0), 0) ?>
                                 </div>
                                 <div class="small text-secondary mt-0.5" style="font-size: 0.72rem;">
                                     <i class="bi bi-arrow-repeat me-0.5"></i> <?= (int)$c['return_window_days'] ?> Days Return

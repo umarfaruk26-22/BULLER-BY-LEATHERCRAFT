@@ -27,7 +27,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="kpi-label">Gross Global Revenue</div>
-                        <div class="kpi-value">$<?= number_format($kpis['gross_revenue'] ?? 48250.00, 2) ?></div>
+                        <div class="kpi-value">$<?= number_format((float)($kpis['gross_revenue'] ?? 0), 2) ?></div>
                         <small class="text-success fw-semibold"><i class="bi bi-graph-up-arrow me-1"></i> Worldwide Transactions</small>
                     </div>
                     <div class="kpi-icon-box bg-warning-subtle text-warning-emphasis">
@@ -124,7 +124,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     <td class="small text-muted"><?= e($cs['tax_name']) ?> (<?= $cs['tax_rate_percent'] ?>%)</td>
                                     <td class="fw-semibold"><?= (int)$cs['order_count'] ?> Orders</td>
                                     <td class="fw-bold" style="color: var(--color-espresso-deep); font-variant-numeric: tabular-nums;">
-                                        <?= e($cs['currency_symbol']) . number_format($cs['total_revenue'], 2) ?>
+                                        <?= e($cs['currency_symbol']) . number_format((float)($cs['total_revenue'] ?? 0), 2) ?>
                                     </td>
                                     <td class="text-end">
                                         <span class="badge bg-<?= $cs['is_active'] ? 'success' : 'secondary' ?>">
