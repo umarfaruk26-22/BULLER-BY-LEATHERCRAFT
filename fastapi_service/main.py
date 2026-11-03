@@ -93,3 +93,4 @@ async def dispatch_email(
 @app.get("/health")
 def health_check():
     return {"status": "ok", "service": "buller-regional-mailer"}
+

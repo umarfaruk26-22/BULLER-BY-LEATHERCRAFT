@@ -23,8 +23,9 @@ class Mailer {
         }
 
         $serviceType = $country['email_service_type'] ?? 'global_default';
-        $senderName = !empty($country['email_sender_name']) ? $country['email_sender_name'] : APP_NAME;
-        $senderEmail = !empty($country['email_sender_address']) ? $country['email_sender_address'] : 'concierge@bullerleather.com';
+        $countryName = $country['name'] ?? '';
+        $senderName = !empty($country['email_sender_name']) ? $country['email_sender_name'] : (APP_NAME . ($countryName ? ' ' . $countryName : ''));
+        $senderEmail = !empty($country['contact_email']) ? $country['contact_email'] : (!empty($country['email_sender_address']) ? $country['email_sender_address'] : 'concierge@bullerleather.com');
 
         // 2. Dispatch via FastAPI if configured for this country
         if ($serviceType === 'fastapi' && !empty($country['email_api_endpoint'])) {
@@ -115,7 +116,7 @@ class Mailer {
      */
     public static function sendOrderConfirmation(int $orderId): bool {
         $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT o.*, c.name as country_name, c.email_sender_name, c.email_sender_address, c.admin_notify_email, c.email_service_type, c.email_api_endpoint, c.email_api_key 
+        $stmt = $db->prepare("SELECT o.*, c.name as country_name, c.contact_email, c.email_sender_name, c.email_sender_address, c.admin_notify_email, c.email_service_type, c.email_api_endpoint, c.email_api_key 
                               FROM orders o 
                               JOIN countries c ON o.country_id = c.id 
                               WHERE o.id = ?");
@@ -185,7 +186,7 @@ class Mailer {
                     </tfoot>
                 </table>
                 <p style=\"color: #64748b; font-size: 12px; margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 16px; text-align: center;\">
-                    For inquiries or custom accommodations, contact our regional desk at " . htmlspecialchars($order['email_sender_address'] ?: 'concierge@bullerleather.com') . "
+                    For inquiries or custom accommodations, contact our regional desk at " . htmlspecialchars($order['contact_email'] ?: ($order['email_sender_address'] ?: 'concierge@bullerleather.com')) . "
                 </p>
             </div>
         </div>
@@ -200,11 +201,12 @@ class Mailer {
             $order['customer_name']
         );
 
-        // Dispatch alert to Regional Admin (if configured)
-        if (!empty($order['admin_notify_email'])) {
+        // Dispatch alert to Regional Store Desk (Single Common Regional Email)
+        $regionalAlertEmail = !empty($order['contact_email']) ? $order['contact_email'] : (!empty($order['admin_notify_email']) ? $order['admin_notify_email'] : null);
+        if (!empty($regionalAlertEmail)) {
             $adminAlertSubject = "[New Order Alert - {$order['country_name']}] #{$order['order_number']} by {$order['customer_name']}";
             self::send(
-                $order['admin_notify_email'],
+                $regionalAlertEmail,
                 $adminAlertSubject,
                 $emailBody,
                 (int)$order['country_id'],

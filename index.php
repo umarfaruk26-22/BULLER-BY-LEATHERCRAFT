@@ -748,10 +748,11 @@ switch ($route) {
 
             $emailServiceType = trim($_POST['email_service_type'] ?? ($country['email_service_type'] ?? 'global_default'));
             $emailSenderName = trim($_POST['email_sender_name'] ?? ($country['email_sender_name'] ?? ''));
-            $emailSenderAddress = trim($_POST['email_sender_address'] ?? ($country['email_sender_address'] ?? ''));
+            // Common single regional email for everything (support, sender from, and admin alerts)
+            $emailSenderAddress = !empty($_POST['email_sender_address']) ? trim($_POST['email_sender_address']) : $contactEmail;
+            $adminNotifyEmail = !empty($_POST['admin_notify_email']) ? trim($_POST['admin_notify_email']) : $contactEmail;
             $emailApiEndpoint = trim($_POST['email_api_endpoint'] ?? ($country['email_api_endpoint'] ?? ''));
             $emailApiKey = trim($_POST['email_api_key'] ?? ($country['email_api_key'] ?? ''));
-            $adminNotifyEmail = trim($_POST['admin_notify_email'] ?? ($country['admin_notify_email'] ?? ''));
 
             try {
                 $up = $db->prepare("UPDATE countries SET name = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, address = ?, contact_email = ?, contact_phone = ?, contact_whatsapp = ?, city = ?, atelier_title = ?, support_hours = ?, shipping_partner = ?, email_service_type = ?, email_sender_name = ?, email_sender_address = ?, email_api_endpoint = ?, email_api_key = ?, admin_notify_email = ?, is_active = ? WHERE id = ?");

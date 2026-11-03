@@ -6,3 +6,4 @@ ADD COLUMN IF NOT EXISTS `email_sender_address` VARCHAR(191) NULL AFTER `email_s
 ADD COLUMN IF NOT EXISTS `email_api_endpoint` VARCHAR(255) NULL AFTER `email_sender_address`,
 ADD COLUMN IF NOT EXISTS `email_api_key` VARCHAR(255) NULL AFTER `email_api_endpoint`,
 ADD COLUMN IF NOT EXISTS `admin_notify_email` VARCHAR(191) NULL AFTER `email_api_key`;
+
