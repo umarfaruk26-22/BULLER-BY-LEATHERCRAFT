@@ -13,6 +13,47 @@ $introFavVer = file_exists($favDiskPath) ? filemtime($favDiskPath) : '2.0.0';
 <!-- Custom Cinematic Intro Stylesheet -->
 <link rel="stylesheet" href="<?= asset('assets/css/intro-animation.css') ?>?v=<?= file_exists(dirname(__DIR__, 3) . '/assets/css/intro-animation.css') ? filemtime(dirname(__DIR__, 3) . '/assets/css/intro-animation.css') : time() ?>">
 
+<!-- Early Internal Navigation & Reload Detection to prevent flicker -->
+<script>
+(function() {
+    try {
+        var isReload = false;
+        if (window.performance) {
+            var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation') : null;
+            if (nav && nav.length > 0) {
+                isReload = (nav[0].type === 'reload');
+            } else if (performance.navigation) {
+                isReload = (performance.navigation.type === 1);
+            }
+        }
+        var isInternal = false;
+        if (window.sessionStorage && sessionStorage.getItem('buller_internal_nav') === 'true') {
+            isInternal = true;
+            sessionStorage.removeItem('buller_internal_nav');
+        }
+        if (!isInternal && document.referrer) {
+            try {
+                var refUrl = new URL(document.referrer);
+                if (refUrl.hostname === window.location.hostname) {
+                    isInternal = true;
+                }
+            } catch (e) {
+                if (document.referrer.indexOf(window.location.hostname) !== -1) {
+                    isInternal = true;
+                }
+            }
+        }
+        var urlParams = new URLSearchParams(window.location.search);
+        var forcePlay = urlParams.get('intro') === '1';
+
+        // If internal click to Home (and NOT a browser reload), skip intro instantly with zero flash
+        if (isInternal && !isReload && !forcePlay) {
+            document.documentElement.classList.add('buller-skip-intro');
+        }
+    } catch (e) {}
+})();
+</script>
+
 <!-- MASTER INTRO OVERLAY -->
 <div id="bullerIntroOverlay" role="dialog" aria-modal="true" aria-label="Buller By Leathercraft Introduction">
     <!-- Top Luxury Animated Progress Indicator -->

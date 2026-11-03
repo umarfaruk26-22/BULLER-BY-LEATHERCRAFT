@@ -61,7 +61,7 @@ switch ($route) {
                                   FROM products p 
                                   JOIN product_country_pricing pcp ON p.id = pcp.product_id 
                                   WHERE pcp.country_id = ? AND pcp.is_available = 1 AND p.is_bestseller = 1 AND p.status = 'published' 
-                                  ORDER BY p.id ASC LIMIT 4");
+                                  ORDER BY p.id DESC LIMIT 8");
         $bestStmt->execute([$countryId]);
         $bestsellerProducts = $bestStmt->fetchAll();
 

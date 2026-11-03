@@ -226,25 +226,35 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
                 </div>
             </div>
 
-            <!-- VISIBILITY & BADGES CHECKBOXES (Exact Match to Reference Image 3) -->
-            <div class="d-flex flex-wrap align-items-center gap-4 py-3 my-4 border-top border-bottom">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="featCheck">
-                    <label class="form-check-label small fw-semibold text-dark" for="featCheck">
-                        Featured in Spotlight
-                    </label>
+            <!-- HOMEPAGE BESTSELLER & DISPLAY CONFIGURATION -->
+            <div class="border rounded-3 p-3 p-md-4 mb-4" style="background: #ffffff; border-color: #e2e8f0;">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+                    <div class="me-3">
+                        <h6 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2" style="font-size: 1rem;">
+                            <span class="text-warning fs-5">★</span> Showcase in Homepage "Best Selling Pieces" Section?
+                        </h6>
+                        <p class="text-muted small mb-0" style="font-size: 0.82rem;">
+                            Chuniye ki is product ko website ke homepage par <strong>"Best Selling Pieces"</strong> section me show karna hai ya nahi.
+                        </p>
+                    </div>
+                    <div class="form-check form-switch fs-4">
+                        <input class="form-check-input cursor-pointer" type="checkbox" name="is_bestseller" value="1" id="bestsellerSwitch">
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="is_new_arrival" value="1" id="newCheck" checked>
-                    <label class="form-check-label small fw-semibold text-dark" for="newCheck">
-                        Mark as New Arrival
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="is_bestseller" value="1" id="bestCheck">
-                    <label class="form-check-label small fw-semibold text-dark" for="bestCheck">
-                        Mark as Icon / Best Seller
-                    </label>
+
+                <div class="d-flex flex-wrap align-items-center gap-4 pt-1">
+                    <div class="form-check">
+                        <input class="form-check-input cursor-pointer" type="checkbox" name="is_featured" value="1" id="featCheck">
+                        <label class="form-check-label small fw-semibold text-dark cursor-pointer" for="featCheck">
+                            Featured in Spotlight
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input cursor-pointer" type="checkbox" name="is_new_arrival" value="1" id="newCheck" checked>
+                        <label class="form-check-label small fw-semibold text-dark cursor-pointer" for="newCheck">
+                            Mark as New Arrival
+                        </label>
+                    </div>
                 </div>
             </div>
 

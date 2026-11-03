@@ -42,6 +42,47 @@
             return;
         }
 
+        // Check for Browser Reload vs Internal Navigation
+        var isReload = false;
+        try {
+            var navEntries = window.performance && performance.getEntriesByType && performance.getEntriesByType('navigation');
+            if (navEntries && navEntries.length > 0) {
+                isReload = (navEntries[0].type === 'reload');
+            } else if (window.performance && performance.navigation) {
+                isReload = (performance.navigation.type === 1);
+            }
+        } catch (e) {}
+
+        var isInternal = false;
+        try {
+            if (window.sessionStorage && sessionStorage.getItem('buller_internal_nav') === 'true') {
+                isInternal = true;
+                sessionStorage.removeItem('buller_internal_nav');
+            }
+        } catch (e) {}
+
+        if (!isInternal && document.referrer) {
+            try {
+                var refUrl = new URL(document.referrer);
+                if (refUrl.hostname === window.location.hostname) {
+                    isInternal = true;
+                }
+            } catch (e) {
+                if (document.referrer.indexOf(window.location.hostname) !== -1) {
+                    isInternal = true;
+                }
+            }
+        }
+
+        // If internal click (and NOT a browser reload and NOT forced ?intro=1), skip intro!
+        if (document.documentElement.classList.contains('buller-skip-intro') || (isInternal && !isReload && !forcePlay)) {
+            overlay.classList.add('buller-intro-hidden');
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            document.documentElement.classList.remove('buller-intro-locked', 'buller-skip-intro');
+            document.body.classList.remove('buller-intro-locked');
+            return;
+        }
+
         // If session mode is requested and user already viewed in this session
         if (!forcePlay && window.BULLER_INTRO_CONFIG.playMode === 'session') {
             try {
@@ -154,4 +195,22 @@
             initIntroAnimation();
         }
     });
+
+    // Global listener to mark internal navigation across all pages
+    document.addEventListener('click', function (e) {
+        var target = e.target;
+        while (target && target.tagName !== 'A') {
+            target = target.parentNode;
+        }
+        if (target && target.href) {
+            try {
+                var targetUrl = new URL(target.href, window.location.origin);
+                if (targetUrl.origin === window.location.origin) {
+                    if (window.sessionStorage) {
+                        sessionStorage.setItem('buller_internal_nav', 'true');
+                    }
+                }
+            } catch (err) {}
+        }
+    }, true);
 })();

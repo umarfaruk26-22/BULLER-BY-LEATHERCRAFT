@@ -1,3 +1,21 @@
+/* Instant Suppression on Internal Navigation (Zero-flicker skip) */
+html.buller-skip-intro #bullerIntroOverlay {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+html.buller-skip-intro.buller-intro-locked,
+html.buller-skip-intro body.buller-intro-locked {
+    overflow: auto !important;
+    height: auto !important;
+}
+html.buller-skip-intro body.buller-intro-locked > *:not(#bullerIntroOverlay) {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
 /* ==========================================================================
    BULLER BY LEATHERCRAFT — UNIVERSAL CINEMATIC LUXURY INTRO ANIMATION
    Universal cross-platform engine with full iOS WebKit/Safari, Android,

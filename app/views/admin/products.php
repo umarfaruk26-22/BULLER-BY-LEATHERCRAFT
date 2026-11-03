@@ -319,18 +319,25 @@ require __DIR__ . '/../layouts/admin_header.php';
                                                     </div>
                                                 </div>
 
-                                                <div class="d-flex flex-wrap gap-4 pt-2">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="feat_<?= $p['id'] ?>" <?= $p['is_featured'] ? 'checked' : '' ?>>
-                                                        <label class="form-check-label small fw-semibold" for="feat_<?= $p['id'] ?>">Featured Collection</label>
+                                                <div class="border rounded-3 p-3 bg-light mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                                                        <div>
+                                                            <strong class="text-dark d-block small"><span class="text-warning">★</span> Homepage "Best Selling Pieces" Section</strong>
+                                                            <small class="text-muted">Show this product in the Bestseller collection on the homepage</small>
+                                                        </div>
+                                                        <div class="form-check form-switch fs-5">
+                                                            <input class="form-check-input cursor-pointer" type="checkbox" name="is_bestseller" value="1" id="best_<?= $p['id'] ?>" <?= $p['is_bestseller'] ? 'checked' : '' ?>>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="is_bestseller" value="1" id="best_<?= $p['id'] ?>" <?= $p['is_bestseller'] ? 'checked' : '' ?>>
-                                                        <label class="form-check-label small fw-semibold" for="best_<?= $p['id'] ?>">Bestseller Badge</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="is_new_arrival" value="1" id="new_<?= $p['id'] ?>" <?= $p['is_new_arrival'] ? 'checked' : '' ?>>
-                                                        <label class="form-check-label small fw-semibold" for="new_<?= $p['id'] ?>">New Arrival Badge</label>
+                                                    <div class="d-flex flex-wrap gap-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="feat_<?= $p['id'] ?>" <?= $p['is_featured'] ? 'checked' : '' ?>>
+                                                            <label class="form-check-label small" for="feat_<?= $p['id'] ?>">Featured in Spotlight</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="is_new_arrival" value="1" id="new_<?= $p['id'] ?>" <?= $p['is_new_arrival'] ? 'checked' : '' ?>>
+                                                            <label class="form-check-label small" for="new_<?= $p['id'] ?>">New Arrival</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

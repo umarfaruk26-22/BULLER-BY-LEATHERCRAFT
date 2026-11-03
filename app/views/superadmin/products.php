@@ -266,14 +266,21 @@ require __DIR__ . '/../layouts/admin_header.php';
                                                     </div>
                                                 </div>
 
-                                                <div class="d-flex gap-4 pt-1">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="s_feat_<?= $prod['id'] ?>" <?= $prod['is_featured'] ? 'checked' : '' ?>>
-                                                        <label class="form-check-label small" for="s_feat_<?= $prod['id'] ?>">Featured</label>
+                                                <div class="border rounded-3 p-3 bg-light mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                                                        <div>
+                                                            <strong class="text-dark d-block small"><span class="text-warning">★</span> Homepage "Best Selling Pieces" Section</strong>
+                                                            <small class="text-muted">Show this product in the Bestseller collection on the homepage</small>
+                                                        </div>
+                                                        <div class="form-check form-switch fs-5">
+                                                            <input class="form-check-input cursor-pointer" type="checkbox" name="is_bestseller" value="1" id="s_best_<?= $prod['id'] ?>" <?= $prod['is_bestseller'] ? 'checked' : '' ?>>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="is_bestseller" value="1" id="s_best_<?= $prod['id'] ?>" <?= $prod['is_bestseller'] ? 'checked' : '' ?>>
-                                                        <label class="form-check-label small" for="s_best_<?= $prod['id'] ?>">Bestseller</label>
+                                                    <div class="d-flex gap-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="s_feat_<?= $prod['id'] ?>" <?= $prod['is_featured'] ? 'checked' : '' ?>>
+                                                            <label class="form-check-label small" for="s_feat_<?= $prod['id'] ?>">Featured in Spotlight</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
