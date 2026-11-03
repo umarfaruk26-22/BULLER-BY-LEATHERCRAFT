@@ -6,6 +6,16 @@ $pageTitle = 'Edit Handcrafted Product — ' . e($product['title']);
 require __DIR__ . '/../layouts/admin_header.php';
 
 $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountry['id']));
+
+$hasPersonalization = !empty($product['has_personalization']);
+$pConfig = [];
+if (!empty($product['personalization_config'])) {
+    $pConfig = json_decode($product['personalization_config'], true) ?: [];
+}
+$pTitle = $pConfig['title'] ?? 'Personalization / Add-On';
+$pDesc = $pConfig['description'] ?? 'Custom personalization and bespoke foil stamping.';
+$pOptions = !empty($pConfig['options']) ? implode(', ', $pConfig['options']) : '24k Gold Hot Foil, Blind Debossed Heat Stamp, Silver Foil Stamp';
+$pPrice = $pConfig['price'] ?? '0.00';
 ?>
 
 <div class="container-fluid py-3" style="max-width: 1060px; margin: 0 auto;">
@@ -158,27 +168,35 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
 
                 <!-- Dynamic Color & Photo Rows Container -->
                 <div id="colorPhotosContainer" class="d-flex flex-column gap-3">
-                    <!-- 1. Existing Uploaded Gallery Photos with Colors -->
-                    <?php foreach ($galleryImages as $gImg): ?>
+                    <!-- 1. Existing Uploaded Gallery Photos with Colors, Angles & Reordering -->
+                    <?php foreach ($galleryImages as $gIdx => $gImg): ?>
                         <div class="color-photo-row p-3 border rounded-3 bg-white shadow-xs" id="existing_row_<?= $gImg['id'] ?>" style="border-color: #e2e8f0;">
                             <div class="row g-3 align-items-end">
-                                <div class="col-md-5">
-                                    <label class="form-label small fw-bold text-dark mb-1">Color Name</label>
-                                    <input type="text" name="existing_color_name[<?= $gImg['id'] ?>]" class="form-control color-name-input" value="<?= e($gImg['color_name'] ?: '') ?>" placeholder="e.g. Emerald Green" oninput="syncFinalColors()">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-dark mb-1">Color Tag</label>
+                                    <input type="text" name="existing_color_name[<?= $gImg['id'] ?>]" class="form-control color-name-input" value="<?= e($gImg['color_name'] ?: '') ?>" placeholder="e.g. Cognac Tan" oninput="syncFinalColors()">
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label small fw-bold text-dark mb-1">Color Photo (Displays when user clicks this color)</label>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-dark mb-1">Angle / Perspective</label>
+                                    <input type="text" name="existing_image_alt[<?= $gImg['id'] ?>]" class="form-control" value="<?= e($gImg['alt_text'] ?: 'Angle ' . ($gIdx + 1)) ?>" placeholder="e.g. Front View, Interior">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold text-dark mb-1">Sort Order</label>
+                                    <input type="number" name="existing_image_sort[<?= $gImg['id'] ?>]" class="form-control" value="<?= (int)($gImg['sort_order'] ?? $gIdx) ?>" min="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-dark mb-1">Replace Photo</label>
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="border rounded bg-light d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs" style="width: 38px; height: 38px; overflow: hidden;" title="Current Saved Photo">
                                             <img src="<?= asset($gImg['image_url']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                         <div class="flex-grow-1">
-                                            <input type="file" name="replace_color_photo[<?= $gImg['id'] ?>]" class="form-control" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewColorRow(this)" title="Choose new file to replace photo">
+                                            <input type="file" name="replace_color_photo[<?= $gImg['id'] ?>]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewColorRow(this)" title="Choose new file to replace photo">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-1 col-auto text-end">
-                                    <button type="button" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; border-radius: 6px;" onclick="markDeleteImage(<?= $gImg['id'] ?>, this)" title="Remove this color & photo">
+                                    <button type="button" class="btn btn-outline-danger d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px; border-radius: 6px;" onclick="markDeleteImage(<?= $gImg['id'] ?>, this)" title="Delete this image">
                                         <i class="bi bi-trash fs-6"></i>
                                     </button>
                                 </div>
@@ -232,11 +250,62 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
                 <input type="text" name="care_instructions" class="form-control" placeholder="e.g. Condition biannually with natural beeswax leather balm; protect from prolonged precipitation." value="<?= e($product['care_instructions'] ?? '') ?>">
             </div>
 
-            <!-- UPLOAD PRODUCT IMAGES (Select multiple) (Exact Match to Reference Image 3) -->
-            <div class="mb-4">
-                <label class="form-label small fw-bold text-dark mb-1">Upload Product Images (Select multiple)</label>
-                <input type="file" name="gallery_images[]" class="form-control" multiple accept="image/jpeg,image/png,image/webp,image/gif">
-                <small class="text-muted d-block mt-1">Upload additional angles. New photos will be added to this garment's gallery.</small>
+
+            <!-- PERSONALIZATION / ADD-ON CONFIGURATION CARD -->
+            <div class="border rounded-3 p-3 p-md-4 mb-4" style="background: #ffffff; border-color: #e2e8f0;">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+                    <div>
+                        <h6 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2" style="font-size: 1rem;">
+                            <span>✨</span> Personalization & Add-On Customization
+                        </h6>
+                        <p class="text-muted small mb-0" style="font-size: 0.82rem;">
+                            Enable custom monogramming, bespoke initials, or add-ons specifically for this garment.
+                        </p>
+                    </div>
+                    <div class="form-check form-switch fs-5">
+                        <input class="form-check-input cursor-pointer" type="checkbox" name="has_personalization" value="1" id="hasPersonalizationSwitch" <?= $hasPersonalization ? 'checked' : '' ?> onchange="document.getElementById('personalizationConfigBox').classList.toggle('d-none', !this.checked)">
+                    </div>
+                </div>
+
+                <div id="personalizationConfigBox" class="<?= $hasPersonalization ? '' : 'd-none' ?>">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Add-On Feature Title</label>
+                            <input type="text" name="personalization_title" class="form-control" value="<?= e($pTitle) ?>" placeholder="Personalization / Add-On">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Add-On Price (0 for Complimentary)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><?= e($currentCountry['currency_symbol'] ?? '$') ?></span>
+                                <input type="number" step="0.01" min="0" name="personalization_price" class="form-control" value="<?= e($pPrice) ?>" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-dark mb-1">Description & Conditions</label>
+                            <input type="text" name="personalization_description" class="form-control" value="<?= e($pDesc) ?>" placeholder="e.g. Max 8 characters. Choose foil style or blind deboss.">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-dark mb-1">Available Finish / Style Options (Comma-separated)</label>
+                            <input type="text" name="personalization_options" class="form-control" value="<?= e($pOptions) ?>" placeholder="24k Gold Hot Foil, Blind Debossed Heat Stamp, Silver Foil Stamp">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPLOAD ADDITIONAL MULTI-ANGLE PRODUCT IMAGES (Front, Back, Interior, Details) -->
+            <div class="border rounded-3 p-3 p-md-4 mb-4" style="background: #ffffff; border-color: #e2e8f0;">
+                <div class="pb-3 mb-3 border-bottom">
+                    <h6 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2" style="font-size: 1rem;">
+                        <span>📸</span> Upload Additional Multi-Angle Photographs
+                    </h6>
+                    <p class="text-muted small mb-0" style="font-size: 0.82rem;">
+                        Add new angle views (interior compartments, back view, zoom details, stitching). All images will be appended to the master photo gallery.
+                    </p>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label small fw-bold text-dark mb-1">Select Multi-Angle Photos</label>
+                    <input type="file" name="gallery_images[]" class="form-control" multiple accept="image/jpeg,image/png,image/webp,image/gif">
+                </div>
             </div>
 
             <!-- VISIBILITY & BADGES CHECKBOXES (Exact Match to Reference Image 3) -->
@@ -273,6 +342,20 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
 
 <!-- Dynamic Script for Colors, Slug, and Live Discount Calculation -->
 <script>
+// Prevent double form submissions
+document.getElementById('productForm').addEventListener('submit', function(e) {
+    if (this.dataset.submitting === 'true') {
+        e.preventDefault();
+        return false;
+    }
+    this.dataset.submitting = 'true';
+    const btn = this.querySelector('button[type="submit"]');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving Product Changes...';
+    }
+});
+
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;

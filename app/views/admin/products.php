@@ -120,15 +120,9 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     <a href="<?= url('admin/products/edit?id=' . $p['id'] . '&country_id=' . $currentCountry['id']) ?>" class="btn btn-sm btn-outline-dark me-1" title="Edit Details, Pricing & Color Photos">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <form action="<?= url('admin/products/delete') ?>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete <?= e(addslashes($p['title'])) ?>? This cannot be undone.');">
-                                        <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
-                                        <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
-                                        <input type="hidden" name="country_id" value="<?= $currentCountry['id'] ?>">
-                                        <input type="hidden" name="redirect_route" value="admin/products?country_id=<?= $currentCountry['id'] ?>">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Product">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteRegionalProdModal_<?= $p['id'] ?>" title="Delete Product">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
 

@@ -140,6 +140,8 @@ CREATE TABLE `products` (
     `short_description` VARCHAR(500) NULL,
     `detailed_description` LONGTEXT NULL,
     `care_instructions` TEXT NULL,
+    `has_personalization` TINYINT(1) NOT NULL DEFAULT 0,
+    `personalization_config` LONGTEXT NULL,
     `primary_image` VARCHAR(255) NULL,
     `is_featured` TINYINT(1) NOT NULL DEFAULT 0,
     `is_bestseller` TINYINT(1) NOT NULL DEFAULT 0,

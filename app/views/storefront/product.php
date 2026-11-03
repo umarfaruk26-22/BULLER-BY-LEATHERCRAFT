@@ -145,9 +145,7 @@ require __DIR__ . '/../layouts/header.php';
                                 </span>
                             <?php endif; ?>
                         </div>
-                        <div class="text-muted small mt-1" style="font-size: 0.74rem;">
-                            <i class="bi bi-shield-check text-success me-1"></i><?= e($activeCountry['tax_name']) ?> Included &bull; <i class="bi bi-airplane text-success me-1"></i>Complimentary Express Air Delivery
-                        </div>
+
                     </div>
 
                     <!-- 3. Curated Leather Shade Selector -->
@@ -254,7 +252,7 @@ require __DIR__ . '/../layouts/header.php';
                     <div class="pdp-actions-container d-flex flex-column gap-2 mb-3">
                         <!-- Customize / Bulk Order Button (Direct WhatsApp) -->
                         <div class="pdp-bulk-custom-block mb-2">
-                            <a href="https://wa.me/919033321151" target="_blank" rel="noopener noreferrer" id="btnBulkCustomOrder" onclick="openWhatsAppBulkInquiry(event)" class="btn-bulk-custom-card text-decoration-none d-flex align-items-center justify-content-between" title="Inquire for Customization, Bespoke Sizing or Bulk Orders via WhatsApp">
+                            <a href="https://wa.me/919638530197" target="_blank" rel="noopener noreferrer" id="btnBulkCustomOrder" onclick="openWhatsAppBulkInquiry(event)" class="btn-bulk-custom-card text-decoration-none d-flex align-items-center justify-content-between" title="Inquire for Customization, Bespoke Sizing or Bulk Orders via WhatsApp">
                                 <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1">
                                     <div class="bulk-custom-icon-wrap">
                                         <i class="bi bi-whatsapp"></i>
@@ -314,52 +312,65 @@ require __DIR__ . '/../layouts/header.php';
                         </div>
                     </div>
 
-                    <!-- 7. Bespoke Monogramming Option -->
-                    <div class="pdp-monogram-block mb-3">
-                        <div class="p-2.5 p-md-3 bg-white border rounded-1 shadow-xs" style="border-color: var(--color-border);">
-                            <div class="form-check m-0">
-                                <input class="form-check-input" type="checkbox" id="monogramToggle" onchange="document.getElementById('monogramBox').classList.toggle('d-none');">
-                                <label class="form-check-label small fw-bold text-dark cursor-pointer" for="monogramToggle" style="font-size: 0.8rem;">
-                                    <i class="bi bi-pen-fill text-warning me-1"></i> Add Complimentary Bespoke Monogramming
-                                </label>
-                            </div>
-                            <div id="monogramBox" class="mt-2 pt-2 border-top d-none">
-                                <div class="row g-2 align-items-center">
-                                    <div class="col-6">
-                                        <label class="form-label small text-muted mb-1" style="font-size: 0.72rem;">Initials (Max 3):</label>
-                                        <input type="text" id="monogramInitials" maxlength="3" class="form-control form-control-sm text-uppercase fw-bold font-monospace" placeholder="e.g. ABL">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label small text-muted mb-1" style="font-size: 0.72rem;">Foil Stamping:</label>
-                                        <select id="monogramStyle" class="form-select form-select-sm" style="font-size: 0.75rem;">
-                                            <option value="gold">24k Gold Hot Foil</option>
-                                            <option value="blind">Blind Debossed Heat Stamp</option>
-                                        </select>
+                    <!-- 7. Product-Specific Personalization / Add-On Option -->
+                    <?php if (!empty($product['has_personalization'])): ?>
+                        <?php
+                        $pConfig = [];
+                        if (!empty($product['personalization_config'])) {
+                            $pConfig = json_decode($product['personalization_config'], true) ?: [];
+                        }
+                        $addonTitle = !empty($pConfig['title']) ? $pConfig['title'] : 'Personalization / Add-On';
+                        $addonDesc = !empty($pConfig['description']) ? $pConfig['description'] : 'Complimentary bespoke debossing or gold foil stamping.';
+                        $addonOptions = !empty($pConfig['options']) ? $pConfig['options'] : ['24k Gold Hot Foil', 'Blind Debossed Heat Stamp', 'Silver Foil Stamp'];
+                        $addonPrice = !empty($pConfig['price']) ? (float)$pConfig['price'] : 0.0;
+                        ?>
+                        <div class="pdp-personalization-block mb-3">
+                            <div class="p-2.5 p-md-3 bg-white border rounded-1 shadow-xs" style="border-color: var(--color-border);">
+                                <div class="form-check m-0">
+                                    <input class="form-check-input" type="checkbox" id="personalizationToggle" onchange="document.getElementById('personalizationBox').classList.toggle('d-none');">
+                                    <label class="form-check-label small fw-bold text-dark cursor-pointer d-flex align-items-center justify-content-between" for="personalizationToggle" style="font-size: 0.84rem;">
+                                        <span><i class="bi bi-pen-fill text-warning me-1"></i> <?= e($addonTitle) ?></span>
+                                        <?php if ($addonPrice > 0): ?>
+                                            <span class="badge bg-light text-dark border">+<?= $pricing['symbol'] . number_format($addonPrice, 2) ?></span>
+                                        <?php else: ?>
+                                            <span class="badge bg-success-subtle text-success small">Available</span>
+                                        <?php endif; ?>
+                                    </label>
+                                </div>
+                                <div id="personalizationBox" class="mt-2 pt-2 border-top d-none">
+                                    <p class="small text-muted mb-2" style="font-size: 0.74rem;"><?= e($addonDesc) ?></p>
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-6">
+                                            <label class="form-label small text-muted mb-1" style="font-size: 0.72rem;">Custom Text / Initials (Max 8):</label>
+                                            <input type="text" id="personalizationText" maxlength="8" class="form-control form-control-sm text-uppercase fw-bold font-monospace" placeholder="e.g. ABL">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label small text-muted mb-1" style="font-size: 0.72rem;">Style / Finish:</label>
+                                            <select id="personalizationStyle" class="form-select form-select-sm" style="font-size: 0.75rem;">
+                                                <?php foreach ($addonOptions as $opt): ?>
+                                                    <option value="<?= e($opt) ?>"><?= e($opt) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
-                    <!-- 8. Atelier Guarantees & Trust -->
-                    <div class="pdp-guarantees-block p-2.5 p-md-3 bg-white border text-muted small shadow-xs mb-3" style="border-color: var(--color-border); border-radius: 4px;">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-shield-check text-warning fs-6"></i>
-                            <div style="font-size: 0.78rem;">
-                                <strong class="text-dark">Lifetime Structural Guarantee</strong> &bull; Full-grain hide & hardware
+                    <!-- 8. Return & Exchange Policy Section -->
+                    <div class="pdp-policy-block p-2.5 p-md-3 bg-white border text-muted small shadow-xs mb-3" style="border-color: var(--color-border); border-radius: 4px;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-arrow-repeat text-dark fs-5"></i>
+                                <div>
+                                    <strong class="text-dark d-block" style="font-size: 0.85rem;">Return & Exchange Policy</strong>
+                                    <span class="small text-muted" style="font-size: 0.75rem;">Eligible for <?= (int)$activeCountry['return_window_days'] ?>-day global return & exchange. Terms apply.</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-airplane text-dark fs-6"></i>
-                            <div style="font-size: 0.78rem;">
-                                <strong class="text-dark">Express Priority Air Cargo</strong> &bull; Customs clearance included
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-arrow-repeat text-dark fs-6"></i>
-                            <div style="font-size: 0.78rem;">
-                                <strong class="text-dark"><?= (int)$activeCountry['return_window_days'] ?>-Day Global Exchanges</strong> &bull; Complimentary customer support
-                            </div>
+                            <button type="button" class="btn btn-outline-dark btn-sm px-2 py-1 text-nowrap" data-bs-toggle="modal" data-bs-target="#returnPolicyModal" style="font-size: 0.75rem;">
+                                View Policy
+                            </button>
                         </div>
                     </div>
 
@@ -386,11 +397,7 @@ require __DIR__ . '/../layouts/header.php';
                         Product Specifications
                     </button>
                 </li>
-                <li class="nav-item">
-                    <button class="nav-link font-serif text-uppercase fw-semibold" id="specsTab-tab" data-bs-toggle="tab" data-bs-target="#specsTab">
-                        Hide & Materials Matrix
-                    </button>
-                </li>
+
                 <li class="nav-item">
                     <button class="nav-link font-serif text-uppercase fw-semibold" id="careTab-tab" data-bs-toggle="tab" data-bs-target="#careTab">
                         Preservation & Care
@@ -420,65 +427,7 @@ require __DIR__ . '/../layouts/header.php';
                             <?= nl2br(e($product['detailed_description'])) ?>
                         </p>
                         
-                        <div class="row g-4 mt-3 pt-3 border-top">
-                            <div class="col-md-4">
-                                <strong class="d-block text-dark font-serif fs-5">01. Hide Selection</strong>
-                                <p class="small text-muted mt-1">Sourced exclusively from certified European organic pastures where livestock graze free from barbed fencing.</p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong class="d-block text-dark font-serif fs-5">02. 60-Day Tanning</strong>
-                                <p class="small text-muted mt-1">Slow-steeped in natural chestnut and mimosa bark infusions to preserve the hide's resilient fibrous matrix.</p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong class="d-block text-dark font-serif fs-5">03. Hand Saddle-Stitch</strong>
-                                <p class="small text-muted mt-1">Hand-threaded with two needles simultaneously using waxed French linen thread that will never unravel.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Tab 2: Specs & Hide Matrix -->
-                <div class="tab-pane fade" id="specsTab">
-                    <div class="max-w-800 mx-auto">
-                        <h4 class="font-serif mb-3" style="color: var(--color-espresso-deep);">Authentic Technical Ledger</h4>
-                        <div class="table-responsive">
-                            <table class="table table-bordered align-middle">
-                                <tbody>
-                                    <tr>
-                                        <th class="bg-light text-muted" style="width: 35%;">Hide Classification</th>
-                                        <td><strong><?= e($product['leather_type'] ?? 'Prime European Full-Grain Hide') ?></strong></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Tannery Provenance</th>
-                                        <td>Santa Croce sull'Arno, Tuscany (Italy) / Northamptonshire (UK)</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Tanning Process</th>
-                                        <td>100% Vegetable Pit-Tanned using organic oak, mimosa, and chestnut barks</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Hardware Casting</th>
-                                        <td><?= e($product['hardware_finish'] ?? 'Solid Cast Antique Brass with Lacquer Protection') ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Hardware Mechanism</th>
-                                        <td>Heavy-Gauge YKK Excella&reg; Polished Dual-Direction Tooth Zippers</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Thread Specification</th>
-                                        <td>Fil Au Chinois Waxed French Linen Thread (#432 Gauge)</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Interior Lining</th>
-                                        <td>Herringbone Woven Heavyweight Cotton Canvas / Japanese Cupro Silk</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="bg-light text-muted">Dimensions & Fit</th>
-                                        <td><?= e($product['dimensions'] ?? 'Bespoke Proportions') ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
 
@@ -486,24 +435,27 @@ require __DIR__ . '/../layouts/header.php';
                 <div class="tab-pane fade" id="careTab">
                     <div class="max-w-800 mx-auto">
                         <h4 class="font-serif mb-3" style="color: var(--color-espresso-deep);">Preserving Your Leather Over Decades</h4>
-                        <p class="text-muted" style="line-height: 1.8;">
-                            <?= nl2br(e($product['care_instructions'] ?? 'Condition bi-annually with natural beeswax balm. Keep away from prolonged excessive heat sources and store in the provided cotton dust cover.')) ?>
-                        </p>
-
-                        <div class="row g-4 mt-2">
-                            <div class="col-md-6">
-                                <div class="p-3 border rounded-1 bg-light">
-                                    <strong class="text-dark d-block mb-1"><i class="bi bi-droplet-half text-primary me-2"></i> Water & Rain Care</strong>
-                                    <p class="small text-muted mb-0">If exposed to rain, allow the hide to dry naturally at ambient room temperature. Never place adjacent to radiators or hairdryers.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3 border rounded-1 bg-light">
-                                    <strong class="text-dark d-block mb-1"><i class="bi bi-sun text-warning me-2"></i> Patina Evolution</strong>
-                                    <p class="small text-muted mb-0">Full-grain vegetable leather absorbs natural oils from your hands, developing a deep, glossy cognac sheen unique to your journey.</p>
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+                        $rawCare = trim($product['care_instructions'] ?? '');
+                        if (empty($rawCare)) {
+                            $rawCare = "Condition bi-annually with natural beeswax leather balm.\nKeep away from prolonged heat sources and direct artificial hot air.\nStore in the breathable cotton dust cover provided with your garment.\nAllow wet leather to dry naturally at ambient room temperature.";
+                        }
+                        $carePoints = array_filter(array_map('trim', preg_split('/[\r\n]+|;\s*|•\s*|-\s*/', $rawCare)));
+                        ?>
+                        <?php if (!empty($carePoints)): ?>
+                            <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                                <?php foreach ($carePoints as $pt): ?>
+                                    <li class="d-flex align-items-start gap-3 p-2.5 rounded-1 bg-light border" style="border-color: #f1f5f9;">
+                                        <i class="bi bi-check-circle-fill text-warning fs-5 flex-shrink-0 mt-0.5"></i>
+                                        <span class="text-dark" style="line-height: 1.7; font-size: 0.95rem;"><?= e($pt) ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p class="text-muted" style="line-height: 1.8;">
+                                <?= nl2br(e($rawCare)) ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -1309,10 +1261,10 @@ function selectProductSize(button, sizeValue) {
 }
 
 // ==========================================================================
-// BULK ORDER & BESPOKE CUSTOMIZATION WHATSAPP CONCIERGE (+91 9033321151)
+// BULK ORDER & BESPOKE CUSTOMIZATION WHATSAPP CONCIERGE (+91 9638530197)
 // ==========================================================================
 function getBulkOrderWhatsAppUrl() {
-    const phone = '919033321151';
+    const phone = '919638530197';
     const prodTitle = <?= json_encode($product['title']) ?>;
     const prodSku = <?= json_encode($product['sku']) ?>;
     const prodPrice = <?= json_encode($pricing['formatted_final']) ?>;

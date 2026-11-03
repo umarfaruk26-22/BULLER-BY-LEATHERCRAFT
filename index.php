@@ -814,6 +814,59 @@ switch ($route) {
         }
         break;
 
+        case 'superadmin/admins/update':
+        if (!Auth::isSuperAdmin()) redirect('admin');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("CSRF error");
+
+            $adminId = (int)($_POST['admin_id'] ?? 0);
+            $name = trim($_POST['full_name'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $phone = trim($_POST['phone'] ?? '');
+            $password = $_POST['password'] ?? '';
+            $assignedCountries = $_POST['assigned_countries'] ?? [];
+
+            if (empty($name) || empty($email) || $adminId <= 0) {
+                flash('admin_error', 'Administrator name and email address are required.');
+                redirect('superadmin/admins');
+            }
+
+            // Check if email already used by another user
+            $chk = $db->prepare("SELECT id FROM users WHERE email = ? AND id != ? LIMIT 1");
+            $chk->execute([$email, $adminId]);
+            if ($chk->fetch()) {
+                flash('admin_error', 'Email address is already in use by another account.');
+                redirect('superadmin/admins');
+            }
+
+            $targetStmt = $db->prepare("SELECT role FROM users WHERE id = ?");
+            $targetStmt->execute([$adminId]);
+            $targetRole = $targetStmt->fetchColumn();
+
+            if (!empty($password)) {
+                $hash = password_hash($password, PASSWORD_BCRYPT);
+                $stmt = $db->prepare("UPDATE users SET full_name = ?, email = ?, phone = ?, password_hash = ? WHERE id = ?");
+                $stmt->execute([$name, $email, $phone, $hash, $adminId]);
+            } else {
+                $stmt = $db->prepare("UPDATE users SET full_name = ?, email = ?, phone = ? WHERE id = ?");
+                $stmt->execute([$name, $email, $phone, $adminId]);
+            }
+
+            // Update country assignments for country_admin
+            if ($targetRole === 'country_admin') {
+                $db->prepare("DELETE FROM admin_country_access WHERE admin_id = ?")->execute([$adminId]);
+                $acaStmt = $db->prepare("INSERT INTO admin_country_access (admin_id, country_id, can_manage_products, can_manage_orders, can_manage_discounts, can_moderate_reviews) VALUES (?, ?, 1, 1, 1, 1)");
+                foreach ($assignedCountries as $cid) {
+                    $acaStmt->execute([$adminId, (int)$cid]);
+                }
+            }
+
+            AuditLogger::log(Auth::id(), 'update_admin', 'users', $adminId, ['email' => $email, 'assigned_countries' => $assignedCountries]);
+            flash('admin_success', "Administrator account for '{$name}' was successfully updated.");
+            redirect('superadmin/admins');
+        }
+        break;
+
     case 'superadmin/admins/toggle':
         if (!Auth::isSuperAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -830,7 +883,7 @@ switch ($route) {
 
     case 'superadmin/products':
         Auth::requireSuperAdmin();
-        $catStmt = $db->query("SELECT p.*, c.name as category_name FROM products p JOIN categories c ON p.category_id = c.id ORDER BY p.id ASC");
+        $catStmt = $db->query("SELECT p.*, COALESCE(c.name, 'Uncategorized') as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.id ASC");
         $catalog = $catStmt->fetchAll();
         $imgStmt = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY sort_order ASC, id ASC");
         foreach ($catalog as &$prod) {
@@ -999,11 +1052,12 @@ switch ($route) {
 
             require __DIR__ . '/app/views/admin/dashboard.php';
         } elseif ($route === 'admin/products') {
-            $prodSql = "SELECT p.*, c.name as category_name, pcp.original_price, pcp.discount_price, pcp.discount_start_date, pcp.discount_end_date, pcp.stock_quantity, pcp.low_stock_threshold, pcp.is_available
+            $prodSql = "SELECT p.*, COALESCE(c.name, 'Uncategorized') as category_name, 
+                               pcp.original_price, pcp.discount_price, pcp.discount_start_date, pcp.discount_end_date, 
+                               pcp.stock_quantity, pcp.low_stock_threshold, pcp.is_available
                         FROM products p
-                        JOIN categories c ON p.category_id = c.id
-                        JOIN product_country_pricing pcp ON p.id = pcp.product_id
-                        WHERE pcp.country_id = ?
+                        LEFT JOIN categories c ON p.category_id = c.id
+                        LEFT JOIN product_country_pricing pcp ON p.id = pcp.product_id AND pcp.country_id = ?
                         ORDER BY p.id ASC";
             $prodStmt = $db->prepare($prodSql);
             $prodStmt->execute([$selectedCountryId]);
@@ -1115,9 +1169,23 @@ switch ($route) {
                 }
             }
 
-            // Insert product with sizes & hardware_finish
-            $insProd = $db->prepare("INSERT INTO products (sku, title, slug, category_id, leather_type, hardware_finish, color, sizes, dimensions, short_description, detailed_description, care_instructions, primary_image, is_featured, is_bestseller, is_new_arrival, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $insProd->execute([$sku, $title, $slug, $categoryId, $leatherType, $hardwareFinish, $color, $sizes, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status]);
+            // Personalization Config
+            $hasPersonalization = isset($_POST['has_personalization']) ? 1 : 0;
+            $personalizationConfig = null;
+            if ($hasPersonalization) {
+                $pConfigData = [
+                    'title' => trim($_POST['personalization_title'] ?? 'Personalization / Add-On') ?: 'Personalization / Add-On',
+                    'description' => trim($_POST['personalization_description'] ?? 'Custom personalization and bespoke foil stamping.') ?: 'Custom personalization and bespoke foil stamping.',
+                    'options' => array_values(array_filter(array_map('trim', explode(',', $_POST['personalization_options'] ?? '24k Gold Hot Foil, Blind Debossed Heat Stamp, Silver Foil Stamp')))),
+                    'price' => (float)($_POST['personalization_price'] ?? 0.0)
+                ];
+                $personalizationConfig = json_encode($pConfigData);
+            }
+
+            $db->beginTransaction();
+            try {
+            $insProd = $db->prepare("INSERT INTO products (sku, title, slug, category_id, leather_type, hardware_finish, color, sizes, dimensions, short_description, detailed_description, care_instructions, has_personalization, personalization_config, primary_image, is_featured, is_bestseller, is_new_arrival, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insProd->execute([$sku, $title, $slug, $categoryId, $leatherType, $hardwareFinish, $color, $sizes, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $hasPersonalization, $personalizationConfig, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status]);
             $productId = (int)$db->lastInsertId();
 
             // Populate product_country_pricing
@@ -1173,8 +1241,13 @@ switch ($route) {
                 }
             }
 
+            $db->commit();
             AuditLogger::log(Auth::id(), 'create_product', 'products', $productId, ['title' => $title, 'sku' => $sku]);
             flash('admin_success', "Product '{$title}' successfully published to the catalog!");
+            } catch (\Throwable $e) {
+                if ($db->inTransaction()) $db->rollBack();
+                flash('admin_error', 'Product creation failed: ' . $e->getMessage());
+            }
             
             $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
             $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;
@@ -1261,9 +1334,22 @@ switch ($route) {
                 }
             }
 
+            // Personalization Config
+            $hasPersonalization = isset($_POST['has_personalization']) ? 1 : 0;
+            $personalizationConfig = null;
+            if ($hasPersonalization) {
+                $pConfigData = [
+                    'title' => trim($_POST['personalization_title'] ?? 'Personalization / Add-On') ?: 'Personalization / Add-On',
+                    'description' => trim($_POST['personalization_description'] ?? 'Custom personalization and bespoke foil stamping.') ?: 'Custom personalization and bespoke foil stamping.',
+                    'options' => array_values(array_filter(array_map('trim', explode(',', $_POST['personalization_options'] ?? '24k Gold Hot Foil, Blind Debossed Heat Stamp, Silver Foil Stamp')))),
+                    'price' => (float)($_POST['personalization_price'] ?? 0.0)
+                ];
+                $personalizationConfig = json_encode($pConfigData);
+            }
+
             // Update master product
-            $upProd = $db->prepare("UPDATE products SET title = ?, slug = ?, sku = ?, category_id = ?, leather_type = ?, hardware_finish = ?, color = ?, sizes = ?, dimensions = ?, short_description = ?, detailed_description = ?, care_instructions = ?, primary_image = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?, status = ? WHERE id = ?");
-            $upProd->execute([$title, $slug, $sku, $categoryId, $leatherType, $hardwareFinish, $color, $sizes, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status, $productId]);
+            $upProd = $db->prepare("UPDATE products SET title = ?, slug = ?, sku = ?, category_id = ?, leather_type = ?, hardware_finish = ?, color = ?, sizes = ?, dimensions = ?, short_description = ?, detailed_description = ?, care_instructions = ?, has_personalization = ?, personalization_config = ?, primary_image = ?, is_featured = ?, is_bestseller = ?, is_new_arrival = ?, status = ? WHERE id = ?");
+            $upProd->execute([$title, $slug, $sku, $categoryId, $leatherType, $hardwareFinish, $color, $sizes, $dimensions, $shortDesc, $detailedDesc, $careInstructions, $hasPersonalization, $personalizationConfig, $primaryImage, $isFeatured, $isBestseller, $isNewArrival, $status, $productId]);
 
             // Update country pricing & stock for current country
             if (isset($_POST['original_price'])) {
@@ -1287,6 +1373,20 @@ switch ($route) {
                 $delStmt = $db->prepare("DELETE FROM product_images WHERE id = ? AND product_id = ?");
                 foreach ($deletedIds as $dId) {
                     $delStmt->execute([(int)$dId, $productId]);
+                }
+            }
+
+            // Update sort order and alt text on existing images
+            if (!empty($_POST['existing_image_sort']) && is_array($_POST['existing_image_sort'])) {
+                $upImgSort = $db->prepare("UPDATE product_images SET sort_order = ? WHERE id = ? AND product_id = ?");
+                foreach ($_POST['existing_image_sort'] as $imgId => $sOrd) {
+                    $upImgSort->execute([(int)$sOrd, (int)$imgId, $productId]);
+                }
+            }
+            if (!empty($_POST['existing_image_alt']) && is_array($_POST['existing_image_alt'])) {
+                $upImgAlt = $db->prepare("UPDATE product_images SET alt_text = ? WHERE id = ? AND product_id = ?");
+                foreach ($_POST['existing_image_alt'] as $imgId => $aTxt) {
+                    $upImgAlt->execute([trim($aTxt), (int)$imgId, $productId]);
                 }
             }
 
@@ -1427,14 +1527,22 @@ switch ($route) {
             $stmt->execute([$productId]);
             $title = $stmt->fetchColumn() ?: 'Product';
 
-            $db->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$productId]);
-            $db->prepare("DELETE FROM product_country_pricing WHERE product_id = ?")->execute([$productId]);
-            $db->prepare("DELETE FROM cart_items WHERE product_id = ?")->execute([$productId]);
-            $db->prepare("DELETE FROM wishlist_items WHERE product_id = ?")->execute([$productId]);
-            $db->prepare("DELETE FROM products WHERE id = ?")->execute([$productId]);
+            try {
+                $db->beginTransaction();
+                $db->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$productId]);
+                $db->prepare("DELETE FROM product_country_pricing WHERE product_id = ?")->execute([$productId]);
+                $db->prepare("DELETE FROM wishlists WHERE product_id = ?")->execute([$productId]);
+                $db->prepare("DELETE FROM product_reviews WHERE product_id = ?")->execute([$productId]);
+                $db->prepare("UPDATE order_items SET product_id = NULL WHERE product_id = ?")->execute([$productId]);
+                $db->prepare("DELETE FROM products WHERE id = ?")->execute([$productId]);
+                $db->commit();
 
-            AuditLogger::log(Auth::id(), 'delete_product', 'products', $productId, ['title' => $title]);
-            flash('admin_success', "Product '{$title}' permanently removed from catalog.");
+                AuditLogger::log(Auth::id(), 'delete_product', 'products', $productId, ['title' => $title]);
+                flash('admin_success', "Product '{$title}' permanently removed from catalog.");
+            } catch (\Throwable $ex) {
+                if ($db->inTransaction()) $db->rollBack();
+                flash('admin_error', "Error deleting product: " . $ex->getMessage());
+            }
 
             $defaultRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
             $redirectTarget = !empty($_POST['redirect_route']) ? $_POST['redirect_route'] : $defaultRedirect;

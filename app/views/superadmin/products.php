@@ -105,16 +105,45 @@ require __DIR__ . '/../layouts/admin_header.php';
                                     <a href="<?= url('admin/products/edit?id=' . $prod['id'] . '&redirect_route=superadmin/products') ?>" class="btn btn-outline-dark btn-sm me-1" title="Edit Master Piece & Photos">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <form action="<?= url('admin/products/delete') ?>" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete <?= e(addslashes($prod['title'])) ?>?');">
-                                        <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
-                                        <input type="hidden" name="product_id" value="<?= $prod['id'] ?>">
-                                        <input type="hidden" name="redirect_route" value="superadmin/products">
-                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Product">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProdModal_<?= $prod['id'] ?>" title="Delete Product">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
+
+                            
+                            <!-- Modal: Delete Confirmation for Product -->
+                            <div class="modal fade" id="deleteProdModal_<?= $prod['id'] ?>" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow-lg">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title font-serif"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Product Deletion</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body p-4 text-start">
+                                            <p class="mb-2">Are you sure you want to permanently delete this master garment from the catalog?</p>
+                                            <div class="p-3 border rounded bg-light mb-3">
+                                                <strong class="d-block text-dark"><?= e($prod['title']) ?></strong>
+                                                <small class="text-muted font-monospace">SKU: <?= e($prod['sku']) ?></small>
+                                            </div>
+                                            <div class="alert alert-warning small mb-0">
+                                                <i class="bi bi-info-circle me-1"></i> This will safely and permanently purge this item, its multi-market pricing matrix, associated gallery photos, and customer wishlist entries.
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer bg-light">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                            <form action="<?= url('admin/products/delete') ?>" method="POST" class="d-inline">
+                                                <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
+                                                <input type="hidden" name="product_id" value="<?= $prod['id'] ?>">
+                                                <input type="hidden" name="redirect_route" value="superadmin/products">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash me-1"></i> Permanently Delete Product
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Edit Master Product Modal -->
                             <div class="modal fade" id="editSuperProductModal_<?= $prod['id'] ?>" tabindex="-1" aria-hidden="true">

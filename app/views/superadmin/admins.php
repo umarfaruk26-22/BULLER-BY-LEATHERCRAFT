@@ -84,7 +84,10 @@ require __DIR__ . '/../layouts/admin_header.php';
                             <td class="small text-muted">
                                 <?= $adm['last_login_at'] ? date('M d, Y H:i', strtotime($adm['last_login_at'])) : 'Never' ?>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end text-nowrap">
+                                <button type="button" class="btn btn-sm btn-outline-dark me-1" data-bs-toggle="modal" data-bs-target="#editAdminModal_<?= $adm['id'] ?>" title="Edit Administrator Profile & Access">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </button>
                                 <?php if ($adm['id'] != Auth::id()): ?>
                                     <form action="<?= url('superadmin/admins/toggle') ?>" method="POST" class="d-inline">
                                         <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
@@ -94,7 +97,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <span class="text-muted small">Current User</span>
+                                    <span class="badge bg-light text-muted border">Current User</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -196,5 +199,81 @@ require __DIR__ . '/../layouts/admin_header.php';
         </div>
     </div>
 </div>
+
+
+<!-- Dynamic Edit Administrator Modals -->
+<?php foreach ($admins as $adm): ?>
+    <?php 
+    $assignedIds = !empty($adm['assigned_countries']) ? array_column($adm['assigned_countries'], 'id') : [];
+    ?>
+    <div class="modal fade" id="editAdminModal_<?= $adm['id'] ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title font-serif">Edit Administrator: <?= e($adm['full_name']) ?></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="<?= url('superadmin/admins/update') ?>" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
+                    <input type="hidden" name="admin_id" value="<?= $adm['id'] ?>">
+
+                    <div class="modal-body p-4 text-start">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Full Legal Name *</label>
+                                <input type="text" name="full_name" class="form-control" required value="<?= e($adm['full_name']) ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Executive Email Address *</label>
+                                <input type="email" name="email" class="form-control" required value="<?= e($adm['email']) ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Direct Phone Number</label>
+                                <input type="tel" name="phone" class="form-control" placeholder="+91..." value="<?= e($adm['phone'] ?? '') ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">New Security Password</label>
+                                <input type="password" name="password" class="form-control" minlength="8" placeholder="Leave blank to retain current password">
+                                <small class="text-muted" style="font-size: 0.72rem;">Only enter a new password if resetting.</small>
+                            </div>
+                        </div>
+
+                        <?php if ($adm['role'] === 'country_admin'): ?>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold d-block text-dark">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> Assigned Geographic Jurisdictions
+                                </label>
+                                <p class="text-muted small mb-2">Check the regional markets this administrator has authority to access.</p>
+                                <div class="row g-2">
+                                    <?php foreach ($allCountries as $ac): ?>
+                                        <div class="col-md-6">
+                                            <div class="form-check border p-2 rounded-1 bg-light">
+                                                <input class="form-check-input ms-1 me-2" type="checkbox" name="assigned_countries[]" value="<?= $ac['id'] ?>" id="edit_chk_<?= $adm['id'] ?>_<?= $ac['id'] ?>" <?= in_array($ac['id'], $assignedIds) ? 'checked' : '' ?>>
+                                                <label class="form-check-label small fw-semibold d-inline-flex align-items-center gap-2" for="edit_chk_<?= $adm['id'] ?>_<?= $ac['id'] ?>">
+                                                    <?= country_flag($ac['code'], $ac['name'], 20) ?> <?= e($ac['name']) ?> (<?= e($ac['currency_code']) ?>)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-secondary small d-flex align-items-center gap-2 mb-0">
+                                <i class="bi bi-shield-lock-fill text-warning fs-5"></i>
+                                <div>
+                                    <strong>Super Administrator Role:</strong> This account has unrestricted global root privileges over all regional markets and databases.
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-dark">Save Administrator Updates</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
 
 <?php require __DIR__ . '/../layouts/admin_footer.php'; ?>

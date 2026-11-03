@@ -166,11 +166,64 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
                 <input type="text" name="care_instructions" class="form-control" placeholder="e.g. Condition biannually with natural beeswax leather balm; protect from prolonged precipitation.">
             </div>
 
-            <!-- UPLOAD PRODUCT IMAGES (Select multiple) (Exact Match to Reference Image 3) -->
-            <div class="mb-4">
-                <label class="form-label small fw-bold text-dark mb-1">Upload Product Images (Select multiple)</label>
-                <input type="file" name="gallery_images[]" class="form-control" multiple accept="image/jpeg,image/png,image/webp,image/gif">
-                <small class="text-muted d-block mt-1">The first uploaded image will automatically serve as the primary storefront image.</small>
+
+            <!-- PERSONALIZATION / ADD-ON CONFIGURATION CARD -->
+            <div class="border rounded-3 p-3 p-md-4 mb-4" style="background: #ffffff; border-color: #e2e8f0;">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+                    <div>
+                        <h6 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2" style="font-size: 1rem;">
+                            <span>✨</span> Personalization & Add-On Customization
+                        </h6>
+                        <p class="text-muted small mb-0" style="font-size: 0.82rem;">
+                            Enable custom monogramming, bespoke initials, or add-ons specifically for this garment.
+                        </p>
+                    </div>
+                    <div class="form-check form-switch fs-5">
+                        <input class="form-check-input cursor-pointer" type="checkbox" name="has_personalization" value="1" id="hasPersonalizationSwitch" onchange="document.getElementById('personalizationConfigBox').classList.toggle('d-none', !this.checked)">
+                    </div>
+                </div>
+
+                <div id="personalizationConfigBox" class="d-none">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Add-On Feature Title</label>
+                            <input type="text" name="personalization_title" class="form-control" value="Personalization / Add-On" placeholder="Personalization / Add-On">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Add-On Price (0 for Complimentary)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><?= e($currentCountry['currency_symbol'] ?? '$') ?></span>
+                                <input type="number" step="0.01" min="0" name="personalization_price" class="form-control" value="0.00" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-dark mb-1">Description & Conditions</label>
+                            <input type="text" name="personalization_description" class="form-control" value="Complimentary bespoke debossing or 24k gold hot foil stamping." placeholder="e.g. Max 8 characters. Choose foil style or blind deboss.">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-dark mb-1">Available Finish / Style Options (Comma-separated)</label>
+                            <input type="text" name="personalization_options" class="form-control" value="24k Gold Hot Foil, Blind Debossed Heat Stamp, Silver Foil Stamp" placeholder="24k Gold Hot Foil, Blind Debossed Heat Stamp, Silver Foil Stamp">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MULTI-ANGLE & GALLERY PRODUCT IMAGES (Different Angles: Front, Back, Interior, Details) -->
+            <div class="border rounded-3 p-3 p-md-4 mb-4" style="background: #ffffff; border-color: #e2e8f0;">
+                <div class="pb-3 mb-3 border-bottom">
+                    <h6 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2" style="font-size: 1rem;">
+                        <span>📸</span> Multi-Angle Gallery Photographs (Angles, Interiors, Close-ups)
+                    </h6>
+                    <p class="text-muted small mb-0" style="font-size: 0.82rem;">
+                        Upload multiple photographs showing different perspectives (Front angle, Back angle, Interior compartments, Close-up leather grain, Hardware). All photos will appear in the customer zoomable gallery!
+                    </p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-dark mb-1">Select Multiple Photographs (Angles & Close-ups)</label>
+                    <input type="file" name="gallery_images[]" class="form-control" multiple accept="image/jpeg,image/png,image/webp,image/gif">
+                    <small class="text-muted d-block mt-1">You can select multiple photos at once. The first photo will serve as primary showcase image.</small>
+                </div>
             </div>
 
             <!-- VISIBILITY & BADGES CHECKBOXES (Exact Match to Reference Image 3) -->
@@ -207,6 +260,20 @@ $redirectRoute = $_GET['redirect_route'] ?? ($isSuper ? 'superadmin/products' : 
 
 <!-- Dynamic Script for Colors, Slug, and Live Discount Calculation -->
 <script>
+// Prevent double form submissions
+document.getElementById('createProductForm').addEventListener('submit', function(e) {
+    if (this.dataset.submitting === 'true') {
+        e.preventDefault();
+        return false;
+    }
+    this.dataset.submitting = 'true';
+    const btn = this.querySelector('button[type="submit"]');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Publishing Garment...';
+    }
+});
+
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
