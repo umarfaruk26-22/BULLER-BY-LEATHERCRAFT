@@ -367,6 +367,13 @@ switch ($route) {
             // Clear Cart
             Cart::clear();
 
+            // Dispatch Country-Specific / FastAPI Order Confirmation
+            try {
+                \App\Core\Mailer::sendOrderConfirmation($orderId);
+            } catch (\Throwable $mailErr) {
+                error_log("Order confirmation email error for order #{$orderId}: " . $mailErr->getMessage());
+            }
+
             // Redirect to Confirmation
             redirect('order/confirmation?id=' . $orderId);
         }
@@ -739,9 +746,16 @@ switch ($route) {
             $shippingPartner = trim($_POST['shipping_partner'] ?? ($country['shipping_partner'] ?? ''));
             $isActive = isset($_POST['is_active']) ? (int)$_POST['is_active'] : $country['is_active'];
 
+            $emailServiceType = trim($_POST['email_service_type'] ?? ($country['email_service_type'] ?? 'global_default'));
+            $emailSenderName = trim($_POST['email_sender_name'] ?? ($country['email_sender_name'] ?? ''));
+            $emailSenderAddress = trim($_POST['email_sender_address'] ?? ($country['email_sender_address'] ?? ''));
+            $emailApiEndpoint = trim($_POST['email_api_endpoint'] ?? ($country['email_api_endpoint'] ?? ''));
+            $emailApiKey = trim($_POST['email_api_key'] ?? ($country['email_api_key'] ?? ''));
+            $adminNotifyEmail = trim($_POST['admin_notify_email'] ?? ($country['admin_notify_email'] ?? ''));
+
             try {
-                $up = $db->prepare("UPDATE countries SET name = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, address = ?, contact_email = ?, contact_phone = ?, contact_whatsapp = ?, city = ?, atelier_title = ?, support_hours = ?, shipping_partner = ?, is_active = ? WHERE id = ?");
-                $up->execute([$name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $address, $contactEmail, $contactPhone, $contactWhatsapp, $city, $atelierTitle, $supportHours, $shippingPartner, $isActive, $countryId]);
+                $up = $db->prepare("UPDATE countries SET name = ?, currency_code = ?, currency_symbol = ?, currency_name = ?, tax_rate_percent = ?, tax_name = ?, flat_shipping_rate = ?, free_shipping_threshold = ?, return_window_days = ?, phone_code = ?, flag_icon = ?, address = ?, contact_email = ?, contact_phone = ?, contact_whatsapp = ?, city = ?, atelier_title = ?, support_hours = ?, shipping_partner = ?, email_service_type = ?, email_sender_name = ?, email_sender_address = ?, email_api_endpoint = ?, email_api_key = ?, admin_notify_email = ?, is_active = ? WHERE id = ?");
+                $up->execute([$name, $currCode, $currSym, $currName, $taxRate, $taxName, $flatShip, $freeThresh, $returnWin, $phoneCode, $flag, $address, $contactEmail, $contactPhone, $contactWhatsapp, $city, $atelierTitle, $supportHours, $shippingPartner, $emailServiceType, $emailSenderName, $emailSenderAddress, $emailApiEndpoint, $emailApiKey, $adminNotifyEmail, $isActive, $countryId]);
 
                 AuditLogger::log(Auth::id(), 'update_country', 'countries', $countryId, ['name' => $name, 'code' => $country['code']]);
                 flash('admin_success', "Regional specifications, address, and support details for '{$name}' updated successfully.");

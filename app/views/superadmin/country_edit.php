@@ -139,7 +139,83 @@ require __DIR__ . '/../layouts/admin_header.php';
                     </div>
                 </div>
 
-                <!-- 3. Fiscal, Tax & Shipping Policy -->
+                <!-- 3. Regional Email & FastAPI Microservice Dispatcher -->
+                <div class="card border-0 shadow-soft rounded-3 mb-4 p-4" style="background: #ffffff; border-top: 4px solid #0284c7 !important;">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(2,132,199,0.1);">
+                                <i class="bi bi-send-check fs-5 text-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold text-dark font-serif mb-0" style="font-size: 1.1rem;">3. Regional Email & FastAPI Microservice Dispatcher</h5>
+                                <small class="text-muted" style="font-size: 0.76rem;">Configure dedicated sender identity, admin alerts, or forward orders via Python FastAPI microservice.</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-info-subtle text-info border border-info-subtle small fw-semibold">
+                            <i class="bi bi-cpu me-1"></i> Regional Routing
+                        </span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Email Delivery Engine</label>
+                            <select name="email_service_type" id="emailServiceTypeSelect" class="form-select fw-semibold" onchange="toggleFastApiFields(this.value)">
+                                <option value="global_default" <?= ($country['email_service_type'] ?? '') === 'global_default' ? 'selected' : '' ?>>🌐 Global Default (Buller Standard Mail)</option>
+                                <option value="fastapi" <?= ($country['email_service_type'] ?? '') === 'fastapi' ? 'selected' : '' ?>>⚡ FastAPI Async Microservice (Custom API)</option>
+                                <option value="smtp" <?= ($country['email_service_type'] ?? '') === 'smtp' ? 'selected' : '' ?>>📧 Regional SMTP / Direct Dispatch</option>
+                            </select>
+                            <small class="text-muted" style="font-size: 0.72rem;">Choose whether this country routes via external FastAPI worker or standard mail.</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Regional Admin Alert Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-warning"><i class="bi bi-bell-fill"></i></span>
+                                <input type="email" name="admin_notify_email" class="form-control" value="<?= e($country['admin_notify_email'] ?? '') ?>" placeholder="regional-manager@bullerleather.com">
+                            </div>
+                            <small class="text-muted" style="font-size: 0.72rem;">Receives instant alert emails whenever a customer places an order in this country.</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Sender Display Name</label>
+                            <input type="text" name="email_sender_name" class="form-control" value="<?= e($country['email_sender_name'] ?? '') ?>" placeholder="e.g. Buller Leather <?= e($country['name']) ?>">
+                            <small class="text-muted" style="font-size: 0.72rem;">Leave blank to default to "Buller Leather".</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark mb-1">Sender Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary"><i class="bi bi-at"></i></span>
+                                <input type="email" name="email_sender_address" class="form-control" value="<?= e($country['email_sender_address'] ?? '') ?>" placeholder="concierge.<?= strtolower($country['code']) ?>@bullerleather.com">
+                            </div>
+                            <small class="text-muted" style="font-size: 0.72rem;">Regional "From" address (e.g. concierge.<?= strtolower($country['code']) ?>@bullerleather.com)</small>
+                        </div>
+
+                        <!-- FastAPI Microservice Details -->
+                        <div id="fastApiConfigFields" class="col-12" style="<?= ($country['email_service_type'] ?? '') === 'fastapi' ? '' : 'display: none;' ?>">
+                            <div class="p-3 rounded-3" style="background: #f0fdf4; border: 1px dashed #86efac;">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="bi bi-lightning-charge-fill text-success fs-5"></i>
+                                    <h6 class="fw-bold text-dark mb-0 font-serif">FastAPI Endpoint Configuration</h6>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label small fw-bold text-dark mb-1">FastAPI Endpoint URL *</label>
+                                        <input type="url" name="email_api_endpoint" id="emailApiEndpointInput" class="form-control font-monospace text-sm" value="<?= e($country['email_api_endpoint'] ?? '') ?>" placeholder="https://api.yourdomain.com/api/v1/send-email">
+                                        <small class="text-muted" style="font-size: 0.72rem;">Async POST endpoint accepting JSON payload with 5s timeout & fallback.</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label small fw-bold text-dark mb-1">API Bearer Secret Token</label>
+                                        <input type="text" name="email_api_key" class="form-control font-monospace" value="<?= e($country['email_api_key'] ?? '') ?>" placeholder="Bearer Token / Secret">
+                                        <small class="text-muted" style="font-size: 0.72rem;">Optional token sent in Authorization header.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Fiscal, Tax & Shipping Policies -->
                 <div class="card border-0 shadow-soft rounded-3 mb-4 p-4" style="background: #ffffff; border-top: 4px solid #c5a880 !important;">
                     <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
@@ -147,7 +223,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                                 <i class="bi bi-receipt fs-5" style="color: #8c4a2f;"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold text-dark font-serif mb-0" style="font-size: 1.1rem;">3. Fiscal, Tax & Shipping Policies</h5>
+                                <h5 class="fw-bold text-dark font-serif mb-0" style="font-size: 1.1rem;">4. Fiscal, Tax & Shipping Policies</h5>
                                 <small class="text-muted" style="font-size: 0.76rem;">Governs automated checkout calculations and statutory invoicing.</small>
                             </div>
                         </div>
@@ -299,6 +375,13 @@ require __DIR__ . '/../layouts/admin_header.php';
 </div>
 
 <script>
+function toggleFastApiFields(val) {
+    const box = document.getElementById('fastApiConfigFields');
+    if (box) {
+        box.style.display = (val === 'fastapi') ? 'block' : 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('editCountryPageForm');
     if (form) {
