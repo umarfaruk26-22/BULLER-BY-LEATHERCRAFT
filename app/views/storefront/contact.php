@@ -31,8 +31,8 @@ $regionalAteliers = [
         'phone_raw' => '+912268429100',
         'phone_code' => '+91',
         'email' => 'support.in@bullerleather.com',
-        'whatsapp' => '+91 98200 48210',
-        'whatsapp_raw' => '919820048210',
+        'whatsapp' => '+91 96385 30197',
+        'whatsapp_raw' => '919638530197',
         'hours' => 'Monday – Saturday: 10:00 AM – 8:00 PM IST',
         'sunday' => 'Sunday: By Prior Appointment Only',
         'shipping_partner' => 'Blue Dart Apex & Air Express (Pre-Insured)',
@@ -458,7 +458,7 @@ require __DIR__ . '/../layouts/header.php';
                                     <span class="input-group-text bg-light border" id="phonePrefixLabel" style="font-weight: 600; color: var(--color-espresso-deep); font-size: 0.88rem;">
                                         <?= e($currentAtelier['phone_code']) ?>
                                     </span>
-                                    <input type="tel" class="form-control luxury-input" id="phoneNum" name="phone" placeholder="98200 48210" value="<?= e($_POST['phone'] ?? '') ?>">
+                                    <input type="tel" class="form-control luxury-input" id="phoneNum" name="phone" placeholder="96385 30197" value="<?= e($_POST['phone'] ?? '') ?>">
                                 </div>
                             </div>
 

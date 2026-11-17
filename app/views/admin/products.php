@@ -352,6 +352,40 @@ require __DIR__ . '/../layouts/admin_header.php';
                                 </div>
                             </div>
 
+                            <!-- Modal: Delete Confirmation for Regional Product -->
+                            <div class="modal fade" id="deleteRegionalProdModal_<?= $p['id'] ?>" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow-lg">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title font-serif"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Product Deletion</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body p-4 text-start">
+                                            <p class="mb-2">Are you sure you want to permanently delete this master garment from the catalog?</p>
+                                            <div class="p-3 border rounded bg-light mb-3">
+                                                <strong class="d-block text-dark"><?= e($p['title']) ?></strong>
+                                                <small class="text-muted font-monospace">SKU: <?= e($p['sku']) ?></small>
+                                            </div>
+                                            <div class="alert alert-warning small mb-0">
+                                                <i class="bi bi-info-circle me-1"></i> This action cannot be undone. All regional pricing, gallery photos, and customer wishlist associations for this product will be permanently purged.
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer bg-light">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                            <form action="<?= url('admin/products/delete') ?>" method="POST" class="d-inline">
+                                                <input type="hidden" name="csrf_token" value="<?= Auth::csrfToken() ?>">
+                                                <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                                                <input type="hidden" name="country_id" value="<?= $currentCountry['id'] ?>">
+                                                <input type="hidden" name="redirect_route" value="admin/products?country_id=<?= $currentCountry['id'] ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash me-1"></i> Permanently Delete Product
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Hidden forms for deleting individual gallery images -->
                             <?php if (!empty($p['gallery_images'])): ?>
                                 <?php foreach ($p['gallery_images'] as $gImg): ?>

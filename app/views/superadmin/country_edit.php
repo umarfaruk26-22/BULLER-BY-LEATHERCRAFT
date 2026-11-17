@@ -125,7 +125,7 @@ require __DIR__ . '/../layouts/admin_header.php';
                             <label class="form-label small fw-bold text-dark mb-1">WhatsApp Concierge Phone</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light text-success"><i class="bi bi-whatsapp"></i></span>
-                                <input type="text" name="contact_whatsapp" class="form-control" value="<?= e($country['contact_whatsapp'] ?? '') ?>" placeholder="+91 98200 48210">
+                                <input type="text" name="contact_whatsapp" class="form-control" value="<?= e($country['contact_whatsapp'] ?? '') ?>" placeholder="+91 96385 30197">
                             </div>
                         </div>
 

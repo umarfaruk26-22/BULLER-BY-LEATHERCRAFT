@@ -1100,35 +1100,48 @@ switch ($route) {
     // ---------------------------------------------------------------------
     // PRODUCT CRUD ACTIONS (COUNTRY ADMIN & SUPER ADMIN)
     // ---------------------------------------------------------------------
+    case 'superadmin/products/create':
     case 'admin/products/create':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCsrfToken($_POST['csrf_token'] ?? '')) die("Security token mismatch.");
 
+            $currentCountryId = (int)($_POST['country_id'] ?? 1);
+            $targetRedirect = Auth::isSuperAdmin() ? 'superadmin/products' : ('admin/products?country_id=' . $currentCountryId);
+
             $title = trim($_POST['title'] ?? '');
             if (empty($title)) {
                 flash('admin_error', 'Product Title is required.');
-                redirect('admin/products');
+                redirect($targetRedirect);
             }
 
-            $slug = slugify(trim($_POST['slug'] ?? '') ?: $title);
             $sku = strtoupper(trim($_POST['sku'] ?? ''));
             if (empty($sku)) {
                 $sku = 'BLR-' . strtoupper(substr(md5(uniqid()), 0, 8));
             }
 
+            // Strict Duplicate Title Check: Prevent duplicate product entries
+            $chkTitle = $db->prepare("SELECT id FROM products WHERE LOWER(title) = LOWER(?) LIMIT 1");
+            $chkTitle->execute([$title]);
+            if ($existingTitle = $chkTitle->fetch()) {
+                flash('admin_error', "A product titled '{$title}' already exists in your catalogue (ID #{$existingTitle['id']}). Duplicate product entries are strictly prevented. Please edit the existing product instead.");
+                redirect($targetRedirect);
+            }
+
+            // Strict Duplicate SKU Check: Prevent duplicate SKU assignments
+            $chkSku = $db->prepare("SELECT id, title FROM products WHERE sku = ? LIMIT 1");
+            $chkSku->execute([$sku]);
+            if ($existingSku = $chkSku->fetch()) {
+                flash('admin_error', "The SKU code '{$sku}' is already assigned to '{$existingSku['title']}' (ID #{$existingSku['id']}). Please assign a unique SKU or edit the existing product.");
+                redirect($targetRedirect);
+            }
+
+            $slug = slugify(trim($_POST['slug'] ?? '') ?: $title);
             // Ensure unique slug
             $chkSlug = $db->prepare("SELECT id FROM products WHERE slug = ? LIMIT 1");
             $chkSlug->execute([$slug]);
             if ($chkSlug->fetch()) {
                 $slug .= '-' . rand(100, 999);
-            }
-
-            // Ensure unique SKU
-            $chkSku = $db->prepare("SELECT id FROM products WHERE sku = ? LIMIT 1");
-            $chkSku->execute([$sku]);
-            if ($chkSku->fetch()) {
-                $sku .= '-' . rand(10, 99);
             }
 
             $categoryId = (int)($_POST['category_id'] ?? 1);
@@ -1288,6 +1301,7 @@ switch ($route) {
         require __DIR__ . '/app/views/admin/product_create.php';
         break;
 
+    case 'superadmin/products/edit':
     case 'admin/products/edit':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -1531,6 +1545,7 @@ switch ($route) {
         require __DIR__ . '/app/views/admin/product_edit.php';
         break;
 
+    case 'superadmin/products/delete':
     case 'admin/products/delete':
         if (!Auth::isCountryAdmin()) redirect('admin');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
